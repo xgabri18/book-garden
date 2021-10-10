@@ -2,8 +2,6 @@ from shared_db import db
 #TODO doplnit nullable
 
 
-
-
 class User(db.Model):
     #id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Unicode(100), primary_key=True)  # this makes more sense than id
@@ -17,10 +15,10 @@ class User(db.Model):
 
     reservations = db.relationship("Reservation", backref="user")
     borrowings = db.relationship("Borrowing", backref="user")
-
-    def __init__(self, email, user_type):
-        self.user_type = user_type
-        self.email = email
+    #
+    # def __init__(self, email, user_type):
+    #     self.user_type = user_type
+    #     self.email = email
 
     def __repr__(self):
         return '<User %r>' % self.email

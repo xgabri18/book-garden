@@ -4,8 +4,8 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from shared_db import db
-from api.resources import BookTitleResource
-from models.models import BookTitle
+from api.resources import BookTitleResource,UserResource,LibraryResource
+from models.models import BookTitle,User,Library
 
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
@@ -22,20 +22,29 @@ admin = Admin(app)
 api = Api(app)
 
 
+class PersionView(ModelView):
+    name = "Person"
+    column_list = ('email', 'user_type', 'username','password','name','surname')
+
 admin.add_view(ModelView(BookTitle,db.session))
+admin.add_view(PersionView(User,db.session))
+admin.add_view(ModelView(Library,db.session))
+
 
 api.add_resource(BookTitleResource, '/api/booktitle/<int:id>')
+api.add_resource(UserResource, '/api/person/<string:email>')
+api.add_resource(LibraryResource, '/api/library/<int:id>')
 
 
 # @app.route('/')
 # def index():
 #     return send_from_directory('frontend/build', 'index.html')
 
-# @app.route("/reset")
-# def reset():
-#     db.drop_all()
-#     db.create_all()
-#     return "resetoval som db"
+@app.route("/reset")
+def reset():
+    db.drop_all()
+    db.create_all()
+    return "resetoval som db"
 
 @app.route("/create")
 def create():

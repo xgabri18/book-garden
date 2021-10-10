@@ -2,20 +2,18 @@ from flask_restful import Resource
 from flask import jsonify,request
 from shared_db import db
 
-
-from models.models import BookTitle
+from models.models import BookTitle,User,Library
 
 
 
 class BookTitleResource(Resource):
     def get(self,id):
-        print(id)
-        data = BookTitle.query.filter_by(id = id).all()
+        booktitle = BookTitle.query.filter_by(id = id).all()
 
-        data = data[0].__dict__
-        del data["_sa_instance_state"]
+        booktitle = booktitle[0].__dict__
+        del booktitle["_sa_instance_state"]
 
-        return jsonify(data)
+        return jsonify(booktitle)
 
 
     def post(self,id):
@@ -27,19 +25,15 @@ class BookTitleResource(Resource):
         description = request.form.get("description")
         rating      = request.form.get("rating")
 
-        print(name)
-        # name        = request["name"]
-        # print(name)
+        booktitle = BookTitle(name        = name,
+                              authors     = authors,
+                              publisher   = publisher,
+                              isbn        = isbn,
+                              genre       = genre,
+                              description = description,
+                              rating      = rating)
 
-        new_data=  BookTitle(name        = name,
-                             authors     = authors,
-                             publisher   = publisher,
-                             isbn        = isbn,
-                             genre       = genre,
-                             description = description,
-                             rating      = rating)
-
-        db.session.add(new_data)
+        db.session.add(booktitle)
         db.session.commit()
 
 
@@ -50,6 +44,8 @@ class BookTitleResource(Resource):
 
     def put(self,id):
 
+        booktitle = BookTitle.query.filter_by(id=id).first()
+
         name        = request.form.get("name")
         authors     = request.form.get("authors")
         publisher   = request.form.get("publisher")
@@ -57,8 +53,6 @@ class BookTitleResource(Resource):
         genre       = request.form.get("genre")
         description = request.form.get("description")
         rating      = request.form.get("rating")
-
-        booktitle = BookTitle.query.filter_by(id=id).first()
 
         booktitle.name        = name
         booktitle.authors     = authors
@@ -71,32 +65,111 @@ class BookTitleResource(Resource):
         db.session.commit()
 
 
+class UserResource(Resource):
+    def get(self,email):
+        user = User.query.filter_by(email = email).all()
 
-#api-file.add_resource(Testando, "/skuska")
+        user = user[0].__dict__
+        del user["_sa_instance_state"]
 
-# class User(db.Model):
-#     #id = db.Column(db.Integer, primary_key=True)
-#     email = db.Column(db.Unicode(100), primary_key=True)  # this makes more sense than id
-#     user_type = db.Column(db.String(20), nullable=False)  # ADMIN/LIBRARIAN/DISTRIBUTOR/LOGUSER - permissions ????
-#     username = db.Column(db.Unicode(100))  # ????
-#     password = db.Column(db.Unicode(100))
-#     #email = db.Column(db.Unicode(100), nullable=False)
-#     name = db.Column(db.Unicode(100))
-#     surname = db.Column(db.Unicode(100))
-#     # profiledesc = db.Column(db.UnicodeText())
-#
-#     reservations = db.relationship("Reservation", backref="user")
-#     borrowings = db.relationship("Borrowing", backref="user")
-#
-#
-# class Library(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.Unicode(100))
-#     city = db.Column(db.Unicode(100))
-#     street = db.Column(db.Unicode(100))
-#     open_hours = db.Column(db.UnicodeText)
-#     description = db.Column(db.UnicodeText)
-#
-#     stocks = db.relationship("Stock", backref="library")
-#
-#
+        return jsonify(user)
+
+
+    def post(self,email):
+        #osetrit ze mail uz je zadany
+        email     = request.form.get("email")
+        user_type = request.form.get("user_type")
+        username  = request.form.get("username")
+        password  = request.form.get("password")
+        name      = request.form.get("name")
+        surname   = request.form.get("surname")
+
+        user = User(email = email,
+                    user_type = user_type,
+                    username = username,
+                    password = password,
+                    name = name,
+                    surname = surname)
+
+        db.session.add(user)
+        db.session.commit()
+
+
+    def delete(self,email):
+        User.query.filter_by(email=email).delete()
+        db.session.commit()
+
+
+    def put(self,email):
+        user = User.query.filter_by(email=email).first()
+
+        email     = request.form.get("email")
+        user_type = request.form.get("user_type")
+        username  = request.form.get("username")
+        password  = request.form.get("password")
+        name      = request.form.get("name")
+        surname   = request.form.get("surname")
+
+
+        user.email = email
+        user.user_type = user_type
+        user.username = username
+        user.password = password
+        user.name = name
+        user.surname = surname
+
+        db.session.commit()
+
+
+class LibraryResource(Resource):
+    def get(self,id):
+        library = Library.query.filter_by(id = id).all()
+
+        library = library[0].__dict__
+        del library["_sa_instance_state"]
+
+        return jsonify(library)
+
+
+    def post(self,id):
+        name        = request.form.get("name")
+        city        = request.form.get("city")
+        street      = request.form.get("street")
+        open_hours  = request.form.get("open_hours")
+        description = request.form.get("description")
+
+
+        library = Library(name        = name,
+                          city        = city,
+                          street      = street,
+                          open_hours  = open_hours,
+                          description = description)
+
+        db.session.add(library)
+        db.session.commit()
+
+
+    def delete(self,id):
+        Library.query.filter_by(id=id).delete()
+        db.session.commit()
+
+
+    def put(self,id):
+        library = Library.query.filter_by(id=id).first()
+
+        name        = request.form.get("name")
+        city        = request.form.get("city")
+        street      = request.form.get("street")
+        open_hours  = request.form.get("open_hours")
+        description = request.form.get("description")
+
+
+        library.name        = name
+        library.city        = city
+        library.street      = street
+        library.open_hours  = open_hours
+        library.description = description
+
+        db.session.commit()
+
+
