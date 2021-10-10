@@ -4,8 +4,8 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from shared_db import db
-from api.resources import Testando,Books
-from models.models import Bitch
+from api.resources import BookTitleResource
+from models.models import BookTitle
 
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
@@ -21,10 +21,10 @@ db.init_app(app)
 admin = Admin(app)
 api = Api(app)
 
-admin.add_view(ModelView(Bitch,db.session))
 
-api.add_resource(Testando, '/api/<name>')
-api.add_resource(Books, '/api/books')
+admin.add_view(ModelView(BookTitle,db.session))
+
+api.add_resource(BookTitleResource, '/api/booktitle/<int:id>')
 
 
 # @app.route('/')
@@ -32,7 +32,7 @@ api.add_resource(Books, '/api/books')
 #     return send_from_directory('frontend/build', 'index.html')
 
 # @app.route("/reset")
-# def create():
+# def reset():
 #     db.drop_all()
 #     db.create_all()
 #     return "resetoval som db"
@@ -44,7 +44,7 @@ def create():
 
 @app.route("/insert")
 def insert():
-    new_post=  Bitch(username = "nibbatron", email = "pussydestroyer420")
+    new_post=  BookTitle(name = "nibbatron", publisher = "pussydestroyer420")
     db.session.add(new_post)
     db.session.commit()
 
@@ -52,7 +52,7 @@ def insert():
 
 @app.route("/data")
 def data():
-    x = Bitch.query.all()
+    x = BookTitle.query.all()
     print(type(x))
     print(str(x))
 
