@@ -5,7 +5,7 @@ from flask_admin.contrib.sqla import ModelView
 
 from shared_db import db
 from api.resources import Testando
-from models.models import Bitch
+from models.models import User
 
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
@@ -21,7 +21,7 @@ db.init_app(app)
 admin = Admin(app)
 api = Api(app)
 
-admin.add_view(ModelView(Bitch,db.session))
+admin.add_view(ModelView(User,db.session))
 
 api.add_resource(Testando, '/api/<name>')
 
