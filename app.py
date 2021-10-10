@@ -4,7 +4,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 from shared_db import db
-from api.resources import Testando
+from api.resources import Testando,Books
 from models.models import Bitch
 
 
@@ -24,6 +24,7 @@ api = Api(app)
 admin.add_view(ModelView(Bitch,db.session))
 
 api.add_resource(Testando, '/api/<name>')
+api.add_resource(Books, '/api/books')
 
 
 # @app.route('/')
@@ -35,6 +36,35 @@ api.add_resource(Testando, '/api/<name>')
 #     db.drop_all()
 #     db.create_all()
 #     return "resetoval som db"
+
+@app.route("/create")
+def create():
+    db.create_all()
+    return "vytvoril som db"
+
+@app.route("/insert")
+def insert():
+    new_post=  Bitch(username = "nibbatron", email = "pussydestroyer420")
+    db.session.add(new_post)
+    db.session.commit()
+
+    return "pridal som demo data"
+
+@app.route("/data")
+def data():
+    x = Bitch.query.all()
+    print(type(x))
+    print(str(x))
+
+    gej = ""
+    for kok in x:
+        kok = kok.__dict__
+        del kok["_sa_instance_state"]
+        print(str(kok))
+        gej += (str(kok) + "<br>" + "\n")
+
+    print(gej)
+    return gej
 
 if __name__ == "__main__":
     app.run(debug=True)
