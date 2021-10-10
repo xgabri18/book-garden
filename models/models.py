@@ -4,7 +4,7 @@ from shared_db import db
 
 
 
-class User(db.Model):
+class Person(db.Model):
     #id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.Unicode(100), primary_key=True)  # this makes more sense than id
     user_type = db.Column(db.String(20), nullable=False)  # ADMIN/LIBRARIAN/DISTRIBUTOR/LOGUSER/USER - permissions ????
@@ -15,8 +15,9 @@ class User(db.Model):
     surname = db.Column(db.Unicode(100))
     # profiledesc = db.Column(db.UnicodeText())
 
-    reservations = db.relationship("Reservation", backref="user")
-    borrowings = db.relationship("Borrowing", backref="user")
+    reservations = db.relationship("Reservation", backref="person")
+    borrowings = db.relationship("Borrowing", backref="person")
+    orders = db.relationship("Order", backref="person")
 
     def __init__(self, email, user_type):
         self.user_type = user_type
@@ -35,6 +36,7 @@ class Library(db.Model):
     description = db.Column(db.UnicodeText)
 
     stocks = db.relationship("Stock", backref="library")
+    orders = db.relationship("Order", backref="library")
 
 
 class BookTitle(db.Model):
@@ -51,6 +53,7 @@ class BookTitle(db.Model):
     rating = db.Column(db.Integer)  # or float???
 
     stocks = db.relationship("Stock", backref="booktitle")
+    orders = db.relationship("Order", backref="booktitle")
 
 # ---------------------Library has books-------------------------------
 
@@ -80,7 +83,7 @@ class Reservation(db.Model):
     reservation_id = db.Column(db.Integer, primary_key=True)
     library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
     booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
-    user_email = db.Column(db.Unicode(100), db.ForeignKey('user.email'))
+    person_email = db.Column(db.Unicode(100), db.ForeignKey('person.email'))
     #date_of_reservation = db.Column(db.Date()) - not so sure how to do this
 
 
@@ -96,7 +99,7 @@ class Borrowing(db.Model):
     borrowing_id = db.Column(db.Integer, primary_key=True)
     library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
     booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
-    user_email = db.Column(db.Unicode(100), db.ForeignKey('user.email'))
+    person_email = db.Column(db.Unicode(100), db.ForeignKey('person.email'))
     #date_borrowed =
     #date_returned =
     fine = db.Column(db.Integer, default=0)
@@ -108,6 +111,7 @@ class Order(db.Model):
     #date =
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
     booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'))
+    person_email = db.Column(db.Unicode(100), db.ForeignKey('person.email'))
     note = db.Column(db.UnicodeText)
 
 
@@ -118,7 +122,7 @@ class Voting(db.Model):
             ['stock.library_id', 'stock.booktitle_id'],
         ),
     )
-    user_email = db.Column(db.Unicode(100), db.ForeignKey('user.email'), primary_key=True)
+    person_email = db.Column(db.Unicode(100), db.ForeignKey('person.email'), primary_key=True)
     library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
     booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
     vote = db.Column(db.String(1))  # tu moze ist asi hocico
