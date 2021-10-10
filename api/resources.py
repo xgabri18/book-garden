@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import jsonify,request
 from shared_db import db
 
-from models.models import BookTitle,User,Library
+from models.models import BookTitle,Person,Library
 
 
 
@@ -65,14 +65,14 @@ class BookTitleResource(Resource):
         db.session.commit()
 
 
-class UserResource(Resource):
+class PersonResource(Resource):
     def get(self,email):
-        user = User.query.filter_by(email = email).all()
+        person = Person.query.filter_by(email = email).all()
 
-        user = user[0].__dict__
-        del user["_sa_instance_state"]
+        person = person[0].__dict__
+        del person["_sa_instance_state"]
 
-        return jsonify(user)
+        return jsonify(person)
 
 
     def post(self,email):
@@ -84,24 +84,24 @@ class UserResource(Resource):
         name      = request.form.get("name")
         surname   = request.form.get("surname")
 
-        user = User(email = email,
-                    user_type = user_type,
-                    username = username,
-                    password = password,
-                    name = name,
-                    surname = surname)
+        person = Person(email     = email,
+                        user_type = user_type,
+                        username  = username,
+                        password  = password,
+                        name      = name,
+                        surname   = surname)
 
-        db.session.add(user)
+        db.session.add(person)
         db.session.commit()
 
 
     def delete(self,email):
-        User.query.filter_by(email=email).delete()
+        Person.query.filter_by(email=email).delete()
         db.session.commit()
 
 
     def put(self,email):
-        user = User.query.filter_by(email=email).first()
+        person = Person.query.filter_by(email=email).first()
 
         email     = request.form.get("email")
         user_type = request.form.get("user_type")
@@ -111,12 +111,12 @@ class UserResource(Resource):
         surname   = request.form.get("surname")
 
 
-        user.email = email
-        user.user_type = user_type
-        user.username = username
-        user.password = password
-        user.name = name
-        user.surname = surname
+        person.email     = email
+        person.user_type = user_type
+        person.username  = username
+        person.password  = password
+        person.name      = name
+        person.surname   = surname
 
         db.session.commit()
 

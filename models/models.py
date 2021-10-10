@@ -19,9 +19,6 @@ class Person(db.Model):
     borrowings = db.relationship("Borrowing", backref="person")
     orders = db.relationship("Order", backref="person")
 
-    def __init__(self, email, user_type):
-        self.user_type = user_type
-        self.email = email
 
     def __repr__(self):
         return '<User %r>' % self.email
