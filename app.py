@@ -32,48 +32,20 @@ admin.add_view(ModelView(Library,db.session))
 
 
 api.add_resource(BookTitleResource, '/api/booktitle/<int:id>')
-api.add_resource(PersonResource, '/api/person/<string:email>')
-api.add_resource(LibraryResource, '/api/library/<int:id>')
+api.add_resource(PersonResource,    '/api/person/<string:email>')
+api.add_resource(LibraryResource,   '/api/library/<int:id>')
 
 
 # @app.route('/')
 # def index():
 #     return send_from_directory('frontend/build', 'index.html')
 
-@app.route("/reset")
-def reset():
-    db.drop_all()
-    db.create_all()
-    return "resetoval som db"
+# @app.route("/reset")
+# def reset():
+#     db.drop_all()
+#     db.create_all()
+#     return "resetoval som db"
 
-@app.route("/create")
-def create():
-    db.create_all()
-    return "vytvoril som db"
-
-@app.route("/insert")
-def insert():
-    new_post=  BookTitle(name = "nibbatron", publisher = "pussydestroyer420")
-    db.session.add(new_post)
-    db.session.commit()
-
-    return "pridal som demo data"
-
-@app.route("/data")
-def data():
-    x = BookTitle.query.all()
-    print(type(x))
-    print(str(x))
-
-    gej = ""
-    for kok in x:
-        kok = kok.__dict__
-        del kok["_sa_instance_state"]
-        print(str(kok))
-        gej += (str(kok) + "<br>" + "\n")
-
-    print(gej)
-    return gej
 
 if __name__ == "__main__":
     app.run(debug=True)
