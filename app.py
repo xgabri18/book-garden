@@ -19,7 +19,7 @@ app.config['SECRET_KEY'] = 'kok420'
 #db = SQLAlchemy(app)
 db.init_app(app)
 admin = Admin(app)
-api = Api(app)
+api = Api(app, prefix="/api")
 
 
 class PersionView(ModelView):
@@ -31,9 +31,9 @@ admin.add_view(PersionView(Person,db.session))
 admin.add_view(ModelView(Library,db.session))
 
 
-api.add_resource(BookTitleResource, '/api/booktitle/<int:id>')
-api.add_resource(PersonResource,    '/api/person/<string:email>')
-api.add_resource(LibraryResource,   '/api/library/<int:id>')
+api.add_resource(BookTitleResource,'/booktitle', '/booktitle/<int:id>')
+api.add_resource(PersonResource,  '/person',  '/person/<string:email>')
+api.add_resource(LibraryResource,  '/library', '/library/<int:id>')
 
 
 # @app.route('/')
