@@ -28,7 +28,7 @@ class BookTitleResource(Resource):
             return jsonify(booktitle)
 
 
-    def post(self,id):
+    def post(self,id = None):
         name        = request.form.get("name")
         authors     = request.form.get("authors")
         publisher   = request.form.get("publisher")
@@ -99,7 +99,7 @@ class PersonResource(Resource):
             return jsonify(person)
 
 
-    def post(self,email):
+    def post(self,email= None):
         #osetrit ze mail uz je zadany
         email     = request.form.get("email")
         user_type = request.form.get("user_type")
@@ -167,7 +167,7 @@ class LibraryResource(Resource):
             return jsonify(library)
 
 
-    def post(self,id):
+    def post(self,id = None):
         name        = request.form.get("name")
         city        = request.form.get("city")
         street      = request.form.get("street")
