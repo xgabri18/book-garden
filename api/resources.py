@@ -79,7 +79,7 @@ class BookTitleResource(Resource):
 
 class PersonResource(Resource):
     def get(self,email = None):
-        if id is None:
+        if email is None:
             person = Person.query.all()
 
             array = []
@@ -107,6 +107,7 @@ class PersonResource(Resource):
         password  = request.form.get("password")
         name      = request.form.get("name")
         surname   = request.form.get("surname")
+
 
         person = Person(email     = email,
                         user_type = user_type,
