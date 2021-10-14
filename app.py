@@ -38,9 +38,9 @@ api.add_resource(PersonResource,  '/person',  '/person/<string:email>')
 api.add_resource(LibraryResource,  '/library', '/library/<int:id>')
 
 
-# @app.route('/')
-# def index():
-#     return send_from_directory('frontend/build', 'index.html')
+@app.route('/')
+def index():
+    return send_from_directory('frontend/build', 'index.html')
 
 # @app.route("/reset")
 # def reset():
