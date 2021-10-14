@@ -1,0 +1,7 @@
+.Footer {
+    @apply text-gray-600 text-center;
+}
+
+.Footer-container {
+    @apply container mx-auto py-8
+}

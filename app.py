@@ -2,13 +2,15 @@ from flask import Flask,send_from_directory
 from flask_restful import Api
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_cors import CORS
 
 from shared_db import db
 from api.resources import BookTitleResource,PersonResource,LibraryResource
 from models.models import BookTitle,Person,Library
 
 
-app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+app = Flask(__name__, static_url_path='', static_folder='frontend/build', debug=True)
+CORS(app)
 
 
 # username:password@server/db

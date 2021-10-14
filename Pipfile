@@ -11,6 +11,7 @@ flask-admin = "*"
 flask-psycopg2 = "*"
 flask-sqlalchemy = "*"
 flask-restful = "*"
+flask-cors = "*"
 
 [dev-packages]
 

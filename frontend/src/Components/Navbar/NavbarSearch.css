@@ -1,0 +1,25 @@
+.Navbar-search {
+    @apply hidden;
+    @apply md:block md:mr-4;
+    @apply bg-white items-center;
+}
+
+.Navbar-search.expanded {
+    @apply flex fixed items-center p-4 rounded-md bg-gray-100;
+    @apply md:block md:relative md:p-0 md:bg-transparent;
+
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    @apply md:bottom-0 md:left-auto md:transform-none;
+}
+
+.Navbar-search .Navbar-search-close {
+    @apply hidden;
+}
+
+.Navbar-search.expanded .Navbar-search-close {
+    @apply block;
+    @apply md:hidden;
+}
