@@ -11,7 +11,7 @@ class Person(db.Model):
     email = db.Column(db.Unicode(100), nullable=False)
     name = db.Column(db.Unicode(100))
     surname = db.Column(db.Unicode(100))
-    # profiledesc = db.Column(db.UnicodeText())
+    profiledesc = db.Column(db.UnicodeText)
 
     reservations = db.relationship("Reservation", backref="person")
     borrowings = db.relationship("Borrowing", backref="person")
@@ -53,8 +53,11 @@ class BookTitle(db.Model):
 
 
 class Stock(db.Model):
-    library_id = db.Column(db.Integer, db.ForeignKey('library.id'), primary_key=True)
-    booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    #library_id = db.Column(db.Integer, db.ForeignKey('library.id'), primary_key=True)
+    #booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'), primary_key=True)
+    library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
+    booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'))
     amount = db.Column(db.Integer)
     availability = db.Column(db.String(30))  # Available/Unavailable/ako sa povie všetko vypožičané
 
@@ -68,29 +71,31 @@ class Stock(db.Model):
 
 class Reservation(db.Model):
     #__table_args__ = (db.UniqueConstraint('library_id', 'booktitle_id', name='unique_library_booktitle'),)
-    __table_args__ = (
-        db.ForeignKeyConstraint(
-            ['library_id', 'booktitle_id'],
-            ['stock.library_id', 'stock.booktitle_id'],
-        ),
-    )
-    reservation_id = db.Column(db.Integer, primary_key=True)
-    library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
-    booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
+    # __table_args__ = (
+    #     db.ForeignKeyConstraint(
+    #         ['library_id', 'booktitle_id'],
+    #         ['stock.library_id', 'stock.booktitle_id'],
+    #     ),
+    # )
+    id = db.Column(db.Integer, primary_key=True)
+    #library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
+    #booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
+    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     #date_of_reservation = db.Column(db.Date()) - not so sure how to do this
 
 
 class Borrowing(db.Model):
-    __table_args__ = (
-        db.ForeignKeyConstraint(
-            ['library_id', 'booktitle_id'],
-            ['stock.library_id', 'stock.booktitle_id'],
-        ),
-    )
-    borrowing_id = db.Column(db.Integer, primary_key=True)
-    library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
-    booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
+    # __table_args__ = (
+    #     db.ForeignKeyConstraint(
+    #         ['library_id', 'booktitle_id'],
+    #         ['stock.library_id', 'stock.booktitle_id'],
+    #     ),
+    # )
+    id = db.Column(db.Integer, primary_key=True)
+    #library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
+    #booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
+    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     #date_borrowed =
     #date_returned =
@@ -98,8 +103,8 @@ class Borrowing(db.Model):
 
 
 class Order(db.Model):
-    order_id = db.Column(db.Integer, primary_key=True)
-    count = db.Column(db.Integer)
+    id = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Integer)
     #date =
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
     booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'))
@@ -108,13 +113,15 @@ class Order(db.Model):
 
 
 class Voting(db.Model):
-    __table_args__ = (
-        db.ForeignKeyConstraint(
-            ['library_id', 'booktitle_id'],
-            ['stock.library_id', 'stock.booktitle_id'],
-        ),
-    )
-    person_id = db.Column(db.Integer, db.ForeignKey('person.id'), primary_key=True)
-    library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
-    booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
+    # __table_args__ = (
+    #     db.ForeignKeyConstraint(
+    #         ['library_id', 'booktitle_id'],
+    #         ['stock.library_id', 'stock.booktitle_id'],
+    #     ),
+    # )
+    id = db.Column(db.Integer, primary_key=True)
+    person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
+    # library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
+    # booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
+    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     vote = db.Column(db.String(1))  # tu moze ist asi hocico
