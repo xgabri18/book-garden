@@ -3,6 +3,7 @@ from shared_db import db
 
 
 class Person(db.Model):
+    #query: db.Query  # adds autocomplete to queries
     id = db.Column(db.Integer, primary_key=True)
     #email = db.Column(db.Unicode(100), primary_key=True)
     user_type = db.Column(db.String(20), nullable=False)  # ADMIN/LIBRARIAN/DISTRIBUTOR/LOGUSER/USER - permissions ????
@@ -22,6 +23,7 @@ class Person(db.Model):
 
 
 class Library(db.Model):
+    #query: db.Query  # adds autocomplete to queries
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(100))
     city = db.Column(db.Unicode(100))
@@ -29,7 +31,7 @@ class Library(db.Model):
     open_hours = db.Column(db.UnicodeText)
     description = db.Column(db.UnicodeText)
 
-    stocks = db.relationship("Stock", backref="library")
+    stocks = db.relationship("Stock", cascade="all,delete,delete-orphan", backref="library")
     orders = db.relationship("Order", backref="library")
 
 
@@ -46,7 +48,7 @@ class BookTitle(db.Model):
     description = db.Column(db.UnicodeText)
     rating = db.Column(db.Integer)  # or float???
 
-    stocks = db.relationship("Stock", backref="booktitle")
+    stocks = db.relationship("Stock", cascade="all,delete,delete-orphan", backref="booktitle")
     orders = db.relationship("Order", backref="booktitle")
 
 # ---------------------Library has books-------------------------------
