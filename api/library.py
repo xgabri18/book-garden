@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import jsonify,request
 from shared_db import db
 
-from models.models import Library
+from models.models import Library,BookTitle,Stock
 
 class LibraryResource(Resource):
     def get(self,id = None):
@@ -42,6 +42,17 @@ class LibraryResource(Resource):
                           description = description)
 
         db.session.add(library)
+        db.session.commit()
+
+        booktitle = BookTitle.query.all()
+        if not booktitle:
+            return
+
+        for row in booktitle:
+            row = row.__dict__
+            stock = Stock(library_id = library.id,booktitle_id = row["id"], amount = 0, availability = "None")
+            db.session.add(stock)
+
         db.session.commit()
 
 
