@@ -4,6 +4,16 @@ from shared_db import db
 
 from models.models import BookTitle,Person,Library
 
+#todo zmenit uzivatel email-id
+# pridat session
+# osetrit ked nic neni v DB
+# implementovat stock
+# knihy v kniznici - dostupne/nedostupne
+# sample data
+
+
+
+
 
 
 class BookTitleResource(Resource):
