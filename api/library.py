@@ -6,13 +6,15 @@ from models.models import Library,BookTitle,Stock
 
 class LibraryResource(Resource):
     def get(self,id = None):
+
+        #get all libraries when ID is not specified
         if id is None:
             library = Library.query.all()
 
             array = []
             for row in library:
                 row = row.__dict__
-                del row["_sa_instance_state"]
+                del row["_sa_instance_state"]   #get rid of _sa_instance_state - idk what it is
                 array.append(row)
 
             return jsonify(array)
@@ -44,6 +46,7 @@ class LibraryResource(Resource):
         db.session.add(library)
         db.session.commit()
 
+        #autostock when added library
         booktitle = BookTitle.query.all()
         if not booktitle:
             return
