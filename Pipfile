@@ -12,6 +12,8 @@ flask-psycopg2 = "*"
 flask-sqlalchemy = "*"
 flask-restful = "*"
 flask-session = "*"
+requests = "*"
+faker = "*"
 
 [dev-packages]
 

@@ -28,7 +28,7 @@ class PersonResource(Resource):
 
 
     def post(self,id= None):
-        #osetrit ze mail uz je zadany
+        #osetrit ze mail uz je zadany + aj username
         email     = request.form.get("email")
         user_type = request.form.get("user_type")
         username  = request.form.get("username")
