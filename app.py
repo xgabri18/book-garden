@@ -9,7 +9,11 @@ from api.book_title import BookTitleResource
 from api.person import PersonResource
 from api.session import SessionResource
 from api.stock import StockResource
-from models.models import BookTitle,Person,Library,Stock
+from api.reservation import ReservationResource
+from api.borrowing import BorrowingResource
+from api.order import OrderResource
+from api.voting import VotingResource
+from models.models import BookTitle,Person,Library,Stock,Reservation,Borrowing,Order,Voting
 
 
 app = Flask(__name__, static_url_path='', static_folder='frontend/build')
@@ -39,17 +43,25 @@ api = Api(app, prefix="/api")
 #     name = "Person"
 #     column_list = ('email', 'user_type', 'username','password','name','surname')
 
-admin.add_view(ModelView(BookTitle,db.session))
-admin.add_view(ModelView(Person,db.session))
-admin.add_view(ModelView(Library,db.session))
-admin.add_view(ModelView(Stock,db.session))
+admin.add_view(ModelView(BookTitle, db.session))
+admin.add_view(ModelView(Person, db.session))
+admin.add_view(ModelView(Library, db.session))
+admin.add_view(ModelView(Stock, db.session))
+admin.add_view(ModelView(Reservation, db.session))
+admin.add_view(ModelView(Borrowing, db.session))
+admin.add_view(ModelView(Order, db.session))
+admin.add_view(ModelView(Voting, db.session))
 
 
-api.add_resource(BookTitleResource,'/booktitle', '/booktitle/<int:id>')
+api.add_resource(BookTitleResource, '/booktitle', '/booktitle/<int:id>')
 api.add_resource(PersonResource,  '/person',  '/person/<int:id>')
 api.add_resource(LibraryResource,  '/library', '/library/<int:id>')
 api.add_resource(SessionResource,  '/session')
 api.add_resource(StockResource,  '/stock', '/stock/<int:id>')
+api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
+api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
+api.add_resource(OrderResource,  '/order', '/order/<int:id>')
+api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
 
 
 
