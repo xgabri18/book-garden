@@ -22,7 +22,7 @@ const NavbarSearch = () => {
           type="text"
           id="search"
           placeholder="Search for books, authors..."
-          className="bg-gray-100 py-1.5 px-4 rounded-md outline-none"
+          className="bg-white md:bg-gray-100 py-1.5 px-4 rounded-md outline-none"
           style={{ minWidth: "300px" }}
         />
 

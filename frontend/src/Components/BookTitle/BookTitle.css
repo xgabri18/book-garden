@@ -1,0 +1,34 @@
+.BookTitle {
+    @apply flex flex-col justify-center w-full m-auto
+    lg:w-1/2
+}
+
+.BookTitle .BookTitle-image {
+    max-width: 400px;
+    @apply m-auto my-4
+}
+
+.BookTitle .BookTitle-name {
+    @apply text-lg lg:text-2xl font-bold
+}
+
+.BookTitle .BookTitle-price {
+    min-width: 100px;
+    @apply text-lg text-gray-600 text-right
+}
+
+.BookTitle .BookTitle-genres {
+    @apply text-sm md:text-base
+}
+
+.BookTitle .BookTitle-rating {
+    @apply flex justify-end text-gray-400
+}
+
+.BookTitle .BookTitle-description {
+    @apply text-left
+}
+
+.BookTitle .BookTitle-libraries {
+    @apply flex flex-col gap-4
+}

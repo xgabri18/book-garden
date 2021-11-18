@@ -1,3 +1,11 @@
 .Form-control {
-    @apply bg-gray-100 py-1.5 px-4 rounded-md outline-none;
+    @apply mb-4
+}
+
+.Form-control .Form-control-label {
+    @apply block mb-1
+}
+
+.Form-control .Form-control-input {
+    @apply block w-full py-1.5 px-4 rounded-md outline-none bg-gray-50
 }

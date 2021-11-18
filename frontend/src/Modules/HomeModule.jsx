@@ -1,5 +1,5 @@
 import header from "../Assets/header.svg";
-import Button from "../Components/Button";
+import { ButtonLink } from "../Components/Ui/Button";
 import { BookOpenIcon } from "@heroicons/react/outline";
 import { LibraryIcon } from "@heroicons/react/solid";
 
@@ -19,16 +19,18 @@ const HomeModule = () => {
         </div>
 
         <div className="flex flex-col gap-4 sm:flex-row md:gap-8">
-          <Button
+          <ButtonLink
             to="/book-titles"
             text="Find a Book"
             variant="primary"
+            size="lg"
             icon={<BookOpenIcon className="h-6 w-6 inline pr-1" />}
           />
-          <Button
+          <ButtonLink
             to="/libraries"
             text="Find a Library"
             variant="secondary"
+            size="lg"
             icon={<LibraryIcon className="h-6 w-6 inline pr-1" />}
           />
         </div>

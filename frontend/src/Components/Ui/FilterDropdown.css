@@ -1,0 +1,30 @@
+.FilterDropdown {
+    @apply border border-gray-200 rounded-b-md rounded-t-md
+}
+
+.FilterDropdown .FilterDropdownItem:not(:first-child) .FilterDropdownItem-header {
+    @apply border-t border-gray-200
+}
+
+.FilterDropdownItem .FilterDropdownItem-header {
+    @apply font-bold p-4 flex justify-between
+}
+
+.FilterDropdownItem.collapsed .FilterDropdownItem-header {
+    @apply border-b
+}
+
+.FilterDropdownItem .FilterDropdownItem-icon {
+    @apply h-6
+}
+
+.FilterDropdownItem .FilterDropdownItem-body {
+    @apply h-0 overflow-hidden transition duration-200 ease-linear
+}
+.FilterDropdownItem.collapsed .FilterDropdownItem-body {
+    @apply h-full p-4 transition duration-200 ease-linear
+}
+
+.FilterDropdownItem-body {
+
+}

@@ -5,10 +5,10 @@
 }
 
 .Navbar-search.expanded {
-    @apply flex fixed items-center p-4 rounded-md bg-gray-100;
-    @apply md:block md:relative md:p-0 md:bg-transparent;
+    @apply flex fixed items-center p-4 rounded-md bg-white shadow-md
+    md:block md:relative md:p-0 md:bg-transparent md:shadow-none
+    bottom-10 z-50;
 
-    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
 

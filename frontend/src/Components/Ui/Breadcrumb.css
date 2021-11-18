@@ -1,0 +1,33 @@
+.Breadcrumb {
+    @apply flex flex-col sm:flex-row mb-4
+}
+
+.Breadcrumb .Breadcrumb-back {
+    max-width: 80px;
+    @apply flex items-center justify-center mb-4 sm:mb-0
+}
+
+.Breadcrumb .Breadcrumb-items {
+    @apply flex sm:ml-4 text-sm sm:text-base
+}
+
+.Breadcrumb .Breadcrumb-items ol {
+    @apply flex items-center
+}
+
+.Breadcrumb .Breadcrumb-item:not(:first-child) {
+    @apply pl-1 flex items-center justify-start
+}
+
+.Breadcrumb .Breadcrumb-item a {
+    @apply transition duration-200 ease-linear hover:text-indigo-700
+}
+
+.Breadcrumb .Breadcrumb-item.active {
+    @apply font-bold
+}
+
+.Breadcrumb .Breadcrumb-item:not(:first-child)::before {
+    content: "/";
+    @apply float-left pr-2 text-gray-400
+}

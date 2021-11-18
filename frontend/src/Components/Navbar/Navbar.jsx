@@ -6,9 +6,9 @@ import { UserIcon } from "@heroicons/react/outline";
 export const Navbar = () => {
   return (
     <nav className="Navbar Container">
-      <div className="Navbar-logo">
+      <Link to="/" className="Navbar-logo">
         <b>BOOK</b>Garden
-      </div>
+      </Link>
       <div className="Navbar-items">
         <NavbarSearch />
 

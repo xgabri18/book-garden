@@ -1,0 +1,23 @@
+.BookTitleItem {
+    @apply block bg-transparent p-2 text-center rounded-md
+    transition ease-linear
+    hover:bg-white hover:shadow-md
+    transform hover:scale-110
+}
+
+.BookTitleItem .BookTitleItem-image {
+    @apply block bg-gray-200 border-0 mb-4 w-full
+}
+
+.BookTitleItem .BookTitleItem-name {
+    @apply font-bold mb-2
+}
+
+.BookTitleItem .BookTitleItem-genres {
+    @apply mb-2
+}
+
+.BookTitleItem .BookTitleItem-price {
+    @apply text-xs text-green-700 bg-green-50
+    inline-block px-2 py-1 rounded-md
+}

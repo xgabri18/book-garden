@@ -1,4 +1,3 @@
 .Main {
-    @apply py-8;
-    @apply md:py-16
+    @apply py-8 md:py-8
 }
