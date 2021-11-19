@@ -6,13 +6,23 @@ from flask_admin.contrib.sqla import ModelView
 from shared_db import db
 from api.library import LibraryResource
 from api.book_title import BookTitleResource
+from api.book_title_unique import BookTitleGenreRes,BookTitleAuthorRes
 from api.person import PersonResource
 from api.session import SessionResource
+
 from api.stock import StockResource
+from api.stock_info import StockInfoResource
+
 from api.reservation import ReservationResource
+from api.reservation_of_person import ReservationOfPersonRes
+
 from api.borrowing import BorrowingResource
+from api.borrowing_of_person import BorrowingOfPersonRes
 from api.order import OrderResource
+
 from api.voting import VotingResource
+from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesPersonVotedStockRes
+
 from models.models import BookTitle,Person,Library,Stock,Reservation,Borrowing,Order,Voting
 
 
@@ -54,14 +64,28 @@ admin.add_view(ModelView(Voting, db.session))
 
 
 api.add_resource(BookTitleResource, '/booktitle', '/booktitle/<int:id>')
+api.add_resource(BookTitleGenreRes, '/booktitle/unique/genres')
+api.add_resource(BookTitleAuthorRes, '/booktitle/unique/authors')
+
 api.add_resource(PersonResource,  '/person',  '/person/<int:id>')
 api.add_resource(LibraryResource,  '/library', '/library/<int:id>')
 api.add_resource(SessionResource,  '/session')
+
 api.add_resource(StockResource,  '/stock', '/stock/<int:id>')
+api.add_resource(StockInfoResource,  '/stockinfo/<int:id>')
+
 api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
+api.add_resource(ReservationOfPersonRes,  '/reservation/personres/<int:identificator>', '/reservation/personres/<string:identificator>')
+
 api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
+api.add_resource(BorrowingOfPersonRes,  '/borrowing/personbor/<int:identificator>','/borrowing/personbor/<string:identificator>')
+
 api.add_resource(OrderResource,  '/order', '/order/<int:id>')
+
 api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
+api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
+api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
+api.add_resource(VotesPersonVotedStockRes,  '/voting/personvotedstock/<int:person_id>/<int:stock_id>')
 
 
 
