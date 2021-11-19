@@ -1,12 +1,17 @@
 from flask_restful import Resource
-from flask import jsonify,request
+from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Order
 
 class OrderResource(Resource):
 
+    # Return list of all existing orders from all libraries
+    # Can be done by Admin and Distributor (librarian sees orders ONLY of his Library)
     def get(self,id = None):
+        if not (session['user_type'] == 5 or session['user_type'] == 3):
+            return "nenenene"
+
         if id is None:
             order = Order.query.all()
 
@@ -27,9 +32,13 @@ class OrderResource(Resource):
 
             return jsonify(order)
 
-
+    # Place new order
+    # Can be done by Admin and Librarian
     def post(self,id = None):
-        library_id   = request.form.get("library_id")
+        if not (session['user_type'] == 5 or session['user_type'] == 4):
+            return "nenenene"
+
+        library_id   = request.form.get("library_id")  # TODO aj toto sa da zistit z knihovnika ale admin by sa zas zvlast musel riesit
         booktitle_id = request.form.get("booktitle_id")
         person_id    = request.form.get("person_id")  # TODO cez session?
         amount       = request.form.get("amount")
@@ -45,12 +54,15 @@ class OrderResource(Resource):
         db.session.add(order)
         db.session.commit()
 
-
+    # Delete any order
+    # Can be done by Admin (Librarian can delete orders of his Library)
     def delete(self,id):
+        if not session['user_type'] == 5:
+            return "nenenene"
         Order.query.filter_by(id=id).delete()
         db.session.commit()
 
-    # TODO transformacia Orderu do Stocku
+    # TODO transformacia Orderu do Stocku, pridat put
     # def put(self,id):
     #     stock = Stock.query.filter_by(id=id).first()
     #

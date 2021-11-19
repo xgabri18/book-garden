@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import jsonify,request
+from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Voting
@@ -15,11 +15,14 @@ class VotesOnStockRes(Resource):
         return jsonify(len(votes))
 
 
-# gets list of stock where user voted
-# todo session asi needed
+# gets list of stocks where user voted
+# Can be done by User with user_id and Admin
 class VotesFromPersonRes(Resource):
 
     def get(self, person_id):
+        if not (session['user_id'] == person_id or session['user_type'] == 5):  # is the right person logged // admin
+            return "nenenene"
+
         votes = Voting.query.filter(Voting.person_id == person_id).all()
 
         array = []

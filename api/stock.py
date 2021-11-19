@@ -1,11 +1,17 @@
 from flask_restful import Resource
-from flask import jsonify,request
+from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Stock
 
 class StockResource(Resource):
+
+    # Get all stocks
+    # Can be used by Admin
     def get(self,id = None):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         if id is None:
             stock = Stock.query.all()
 
@@ -26,8 +32,12 @@ class StockResource(Resource):
 
             return jsonify(stock)
 
-
+    # Adding should not be done manually
+    # In some cases Admin may use
     def post(self,id = None):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         library_id   = request.form.get("library_id")
         booktitle_id = request.form.get("booktitle_id")
         amount       = request.form.get("amount")
@@ -42,13 +52,21 @@ class StockResource(Resource):
         db.session.add(stock)
         db.session.commit()
 
-
+    # Removing should not be done manually
+    # In some cases Admin may use
     def delete(self,id):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         Stock.query.filter_by(id=id).delete()
         db.session.commit()
 
-
+    # Update stock
+    # In some cases Admin may use
     def put(self,id):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         stock = Stock.query.filter_by(id=id).first()
 
         if not stock:

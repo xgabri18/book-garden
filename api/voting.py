@@ -28,7 +28,7 @@ class VotingResource(Resource):
 
             return jsonify(voting)
 
-
+    # TODO ako vobec bude vote fungovat, ked je to len ze ci palec hore alebo ne tak potom bud post alebo put alebo delete nedava zmysel
     def post(self, id=None):
         stock_id  = request.form.get("stock_id")
         person_id = request.form.get("person_id")

@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import jsonify,request
+from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import BookTitle,Library,Stock
@@ -28,8 +28,12 @@ class BookTitleResource(Resource):
 
             return jsonify(booktitle)
 
-
+    # Add book to DB
+    # Can be done by Admin and ?
     def post(self,id = None):
+        if not session['user_type'] == 5: # or session['user_type'] == 4):
+            return "nenenene"
+
         name        = request.form.get("name")
         authors     = request.form.get("authors")
         publisher   = request.form.get("publisher")
@@ -61,12 +65,20 @@ class BookTitleResource(Resource):
 
         db.session.commit()
 
+    # Delete a book from DB
+    # Can be done by Admin
     def delete(self,id):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         BookTitle.query.filter_by(id=id).delete()
         db.session.commit()
 
-
+    # Update any book
+    # Can be done by Admin and ?
     def put(self,id):
+        if not session['user_type'] == 5:
+            return "nenenene"
 
         booktitle = BookTitle.query.filter_by(id=id).first()
 

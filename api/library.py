@@ -1,10 +1,13 @@
 from flask_restful import Resource
-from flask import jsonify,request
+from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Library,BookTitle,Stock
 
 class LibraryResource(Resource):
+
+    # Get all libraries
+    # Can be done by anyone
     def get(self,id = None):
 
         #get all libraries when ID is not specified
@@ -28,8 +31,12 @@ class LibraryResource(Resource):
 
             return jsonify(library)
 
-
+    # Adding a library into DB
+    # Can be done by Admin
     def post(self,id = None):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         name        = request.form.get("name")
         city        = request.form.get("city")
         street      = request.form.get("street")
@@ -58,13 +65,21 @@ class LibraryResource(Resource):
 
         db.session.commit()
 
-
+    # Removing a library from DB
+    # Can be done by Admin
     def delete(self,id):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         Library.query.filter_by(id=id).delete()
         db.session.commit()
 
-
+    # Updating a library
+    # Can be done by Admin
     def put(self,id):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         library = Library.query.filter_by(id=id).first()
 
         if not library:

@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import jsonify,request
+from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Reservation,Borrowing
@@ -7,7 +7,12 @@ from models.models import Reservation,Borrowing
 
 class ReservationResource(Resource):
 
+    # Return list of all existing reservations
+    # Can be done by Admin
     def get(self, id=None):
+        if not session['user_type'] == 5:
+            return "nenenene"
+
         if id is None:
             reservation = Reservation.query.all()
 
@@ -28,7 +33,8 @@ class ReservationResource(Resource):
 
             return jsonify(reservation)
 
-
+    # Create a reservation
+    # TODO kto toto moze robit??
     def post(self, id=None):  # TODO tu sa bude asi person_id zistovat zo session?
         stock_id = request.form.get("stock_id")
         person_id = request.form.get("person_id")

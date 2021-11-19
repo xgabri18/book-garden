@@ -1,13 +1,14 @@
 from shared_db import db
 from datetime import datetime
-#TODO doplnit nullable + unique TRUE
+#TODO doplnit nullable + unique TRUE + cascade delete
 
 
 class Person(db.Model):
     #query: db.Query  # adds autocomplete to queries
     id = db.Column(db.Integer, primary_key=True)
+    library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
     #email = db.Column(db.Unicode(100), primary_key=True)
-    user_type = db.Column(db.String(20), nullable=False)  # ADMIN/LIBRARIAN/DISTRIBUTOR/LOGUSER/USER - permissions ????
+    user_type = db.Column(db.Integer, nullable=False)  # ADMIN-5/LIBRARIAN-4/DISTRIBUTOR-3/LOGUSER - permissions ????
     username = db.Column(db.Unicode(100))  # ????
     password = db.Column(db.Unicode(100))
     email = db.Column(db.Unicode(100), nullable=False)
@@ -35,20 +36,21 @@ class Library(db.Model):
 
     stocks = db.relationship("Stock", cascade="all,delete,delete-orphan", backref="library")
     orders = db.relationship("Order", backref="library")
+    people = db.relationship("Person", backref="library")  # workers-librarians
 
 
 class BookTitle(db.Model):
     __tablename__ = 'booktitle'  # because of CamelCase
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(100))
-    authors = db.Column(db.UnicodeText)
+    author = db.Column(db.UnicodeText)
     publisher = db.Column(db.Unicode(100))
     # photo
     isbn = db.Column(db.String(13))  # ISBN is composed of 10 or 13 numbers
     # date_publication = db.Column(db.Date()) - not so sure how to do this yet
     genre = db.Column(db.Unicode(100))  # mozno tabulka????
     description = db.Column(db.UnicodeText)
-    rating = db.Column(db.Integer)  # or float???
+    rating = db.Column(db.Integer)  # or float??? (value 0-5 / 0-100 or smtn, hardcoded -> critics rating)
 
     stocks = db.relationship("Stock", cascade="all,delete,delete-orphan", backref="booktitle")
     orders = db.relationship("Order", backref="booktitle")
@@ -128,4 +130,4 @@ class Voting(db.Model):
     # library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
     # booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
-    vote = db.Column(db.String(1))  # tu moze ist asi hocico
+    vote = db.Column(db.String(1))  # TODO tu moze ist asi hocico -> mozno bool -> 0-no vote/1-vote
