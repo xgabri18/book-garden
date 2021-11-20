@@ -35,7 +35,7 @@ class BookTitleResource(Resource):
             return "nenenene"
 
         name        = request.form.get("name")
-        authors     = request.form.get("authors")
+        author      = request.form.get("author")
         publisher   = request.form.get("publisher")
         isbn        = request.form.get("isbn")
         genre       = request.form.get("genre")
@@ -43,7 +43,7 @@ class BookTitleResource(Resource):
         rating      = request.form.get("rating")
 
         booktitle = BookTitle(name        = name,
-                              authors     = authors,
+                              author      = author,
                               publisher   = publisher,
                               isbn        = isbn,
                               genre       = genre,
@@ -86,7 +86,7 @@ class BookTitleResource(Resource):
             return
 
         name        = request.form.get("name")
-        authors     = request.form.get("authors")
+        author      = request.form.get("author")
         publisher   = request.form.get("publisher")
         isbn        = request.form.get("isbn")
         genre       = request.form.get("genre")
@@ -94,7 +94,7 @@ class BookTitleResource(Resource):
         rating      = request.form.get("rating")
 
         booktitle.name        = name
-        booktitle.authors     = authors
+        booktitle.author      = author
         booktitle.publisher   = publisher
         booktitle.isbn        = isbn
         booktitle.genre       = genre

@@ -15,9 +15,12 @@ from api.stock_info import StockInfoResource
 
 from api.reservation import ReservationResource
 from api.reservation_of_person import ReservationOfPersonRes
+from api.reservation_of_library import ReservationOfLibraryRes
 
 from api.borrowing import BorrowingResource
 from api.borrowing_of_person import BorrowingOfPersonRes
+from api.borrowing_of_library import BorrowingOfLibraryRes
+
 from api.order import OrderResource
 
 from api.voting import VotingResource
@@ -76,9 +79,13 @@ api.add_resource(StockInfoResource,  '/stockinfo/<int:id>')
 
 api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
 api.add_resource(ReservationOfPersonRes,  '/reservation/personres/<int:identificator>', '/reservation/personres/<string:identificator>')
+api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>')
+
 
 api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
 api.add_resource(BorrowingOfPersonRes,  '/borrowing/personbor/<int:identificator>','/borrowing/personbor/<string:identificator>')
+api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
+
 
 api.add_resource(OrderResource,  '/order', '/order/<int:id>')
 
