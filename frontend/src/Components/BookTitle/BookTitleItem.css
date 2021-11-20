@@ -13,11 +13,6 @@
     @apply font-bold mb-2
 }
 
-.BookTitleItem .BookTitleItem-genres {
-    @apply mb-2
-}
-
-.BookTitleItem .BookTitleItem-price {
-    @apply text-xs text-green-700 bg-green-50
-    inline-block px-2 py-1 rounded-md
+.BookTitleItem .BookTitleItem-genre {
+    @apply mb-2 text-xs mr-2 text-indigo-600
 }

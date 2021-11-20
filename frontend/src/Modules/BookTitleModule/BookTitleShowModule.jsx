@@ -11,7 +11,7 @@ const BookTitleShowModule = () => {
   const bookTitle = {
     id: 1,
     name: "Lorem ipsum dolor sit amet jožo ráž a 20 karkuliek o 5 ráno",
-    genres: ["Adventure", "Sci-fi", "Action"],
+    genre: "Adventure",
     description: "Lorem ipsum dolor sit amet",
     price: 15.0,
     rating: 4,
@@ -42,7 +42,6 @@ const BookTitleShowModule = () => {
     <>
       <Breadcrumb backLink="/book-titles" items={items} />
       <BookTitle bookTitle={bookTitle} />
-      <h1 className="font-bold text-xl text-center mt-4">SIMILAR</h1>
     </>
   );
 };

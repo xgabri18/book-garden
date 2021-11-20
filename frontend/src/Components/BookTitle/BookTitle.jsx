@@ -9,21 +9,15 @@ export const BookTitle = ({ bookTitle }) => {
       <div className="BookTitle-image">
         <img src={bookTitle.image} alt={bookTitle.name} />
       </div>
+      <div className="BookTitle-name">{bookTitle.name}</div>
       <div className="w-full flex flex-row justify-between items-center my-2">
-        <div className="BookTitle-name">{bookTitle.name}</div>
-        <div className="BookTitle-price">{bookTitle.price.toFixed(2)} €</div>
-      </div>
-      <div className="w-full flex flex-row justify-between items-center my-2">
-        <div className="BookTitle-genres">
-          {bookTitle.genres.map((genre, index) => (
-            <Link
-              to={`/genre/${genre}`}
-              key={index}
-              className="Link mr-2 transform hover:scale-105 transition duration-200 ease-linear"
-            >
-              {genre}
-            </Link>
-          ))}
+        <div className="BookTitle-genre">
+          <Link
+            to={`/genre/${bookTitle.genre}`}
+            className="Link mr-2 transform hover:scale-105 transition duration-200 ease-linear"
+          >
+            {bookTitle.genre}
+          </Link>
         </div>
         <div className="BookTitle-rating">
           <Rating rating={bookTitle.rating} className="h-6" />

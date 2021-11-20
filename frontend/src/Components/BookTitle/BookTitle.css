@@ -9,15 +9,10 @@
 }
 
 .BookTitle .BookTitle-name {
-    @apply text-lg lg:text-2xl font-bold
+    @apply text-lg lg:text-2xl font-bold my-4
 }
 
-.BookTitle .BookTitle-price {
-    min-width: 100px;
-    @apply text-lg text-gray-600 text-right
-}
-
-.BookTitle .BookTitle-genres {
+.BookTitle .BookTitle-genre {
     @apply text-sm md:text-base
 }
 

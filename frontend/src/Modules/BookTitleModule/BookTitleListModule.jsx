@@ -14,46 +14,48 @@ const BookTitleListModule = () => {
     {
       id: 1,
       name: "Lorem ipsum",
-      genres: ["Adventure", "Sci-fi", "Action"],
+      genre: "Adventure",
       price: 15.0,
       rating: 4,
     },
     {
       id: 2,
       name: "Lorem ipsum",
-      genres: ["Adventure", "Sci-fi", "Action"],
+      genre: "Adventure",
       price: 15.0,
       rating: 4,
     },
     {
       id: 3,
       name: "Lorem ipsum",
-      genres: ["Adventure", "Sci-fi", "Action"],
+      genre: "Sci-Fi",
       price: 15.0,
       rating: 4,
     },
     {
       id: 4,
       name: "Lorem ipsum",
-      genres: ["Adventure", "Sci-fi", "Action"],
+      genre: "Sci-Fi",
       price: 15.0,
       rating: 4,
     },
     {
       id: 5,
       name: "Lorem ipsum",
-      genres: ["Adventure", "Sci-fi", "Action"],
+      genre: "Action",
       price: 15.0,
       rating: 4,
     },
     {
       id: 6,
       name: "Lorem ipsum",
-      genres: ["Adventure", "Sci-fi", "Action"],
+      genre: "Action",
       price: 15.0,
       rating: 4,
     },
   ];
+
+  const genres = ["Adventure", "Action", "Sci-fi"];
 
   return (
     <div className="flex flex-row flex-wrap">
@@ -71,7 +73,7 @@ const BookTitleListModule = () => {
             </select>
           </FilterDropdownItem>
           <FilterDropdownItem title="Genres">
-            {bookTitles[0].genres.map((genre, index) => (
+            {genres.map((genre, index) => (
               <div className="inline-block mr-2">
                 <input type="checkbox" id={`genre-${index}`} className="mr-1" />
                 <label htmlFor={`genre-${index}`}>{genre}</label>
