@@ -11,8 +11,8 @@ class ReservationOfPersonRes(Resource):
 
     def get(self, identificator):
 
-        if not session['user_id']:  # no session - no one is logged
-            return "nenenene"
+        # if not session['user_id']:  # no session - no one is logged
+        #     return "nenenene"
 
 
         if type(identificator) == int:
@@ -26,8 +26,8 @@ class ReservationOfPersonRes(Resource):
             reservations = Reservation.query.filter_by(person_id = person_id[0][0]).all()
 
         #reservations = Reservation.query.filter(Reservation.person_id == person_id).all()
-        if not (session['user_id'] == person_id or (session['user_type'] == 5 or session['user_type'] == 4)):  # is the right person logged // no librarian/admin
-            return "nenenene"
+        # if not (session['user_id'] == person_id or (session['user_type'] == 5 or session['user_type'] == 4)):  # is the right person logged // no librarian/admin
+        #     return "nenenene"
 
         array = []
         for row in reservations:

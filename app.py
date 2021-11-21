@@ -22,6 +22,7 @@ from api.borrowing_of_person import BorrowingOfPersonRes
 from api.borrowing_of_library import BorrowingOfLibraryRes
 
 from api.order import OrderResource
+from api.order_of_library import OrderOfLibResource
 
 from api.voting import VotingResource
 from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesPersonVotedStockRes
@@ -78,16 +79,17 @@ api.add_resource(StockResource,  '/stock', '/stock/<int:id>')
 api.add_resource(StockInfoResource,  '/stockinfo/<int:id>')
 
 api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
-api.add_resource(ReservationOfPersonRes,  '/reservation/personres/<int:identificator>', '/reservation/personres/<string:identificator>')
+api.add_resource(ReservationOfPersonRes,  '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>')
 api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>')
 
 
 api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
-api.add_resource(BorrowingOfPersonRes,  '/borrowing/personbor/<int:identificator>','/borrowing/personbor/<string:identificator>')
+api.add_resource(BorrowingOfPersonRes,  '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>')
 api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
 
 
 api.add_resource(OrderResource,  '/order', '/order/<int:id>')
+api.add_resource(OrderOfLibResource,  '/order/library/<int:id>')
 
 api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
 api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
