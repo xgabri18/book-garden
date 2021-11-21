@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request
 from shared_db import db
 
@@ -7,7 +7,7 @@ from models.models import Stock, Library, BookTitle
 
 # takes stock ID and returns Library name and Book Name
 # session not needed
-class StockInfoResource(Resource):
+class StockInfoResource(MasterResource):
     def get(self,id ):
 
         stock = Stock.query.filter_by(id = id).all()[0].__dict__

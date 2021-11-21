@@ -1,11 +1,11 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Reservation,Borrowing
 
 
-class ReservationResource(Resource):
+class ReservationResource(MasterResource):
 
     # Return list of all existing reservations
     # Can be done by Admin

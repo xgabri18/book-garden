@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 from datetime import datetime
@@ -8,7 +8,7 @@ from models.models import Reservation,Borrowing,Person
 # gets list of users borrowings
 # todo session asi needed
 # TODO knihovnik by nemal vidiet veci z inych kniznic (vidi len borrowings z jeho kniznice) - potom upravim session
-class BorrowingOfPersonRes(Resource):
+class BorrowingOfPersonRes(MasterResource):
 
     # either person_id or persons e-mail
     def get(self, identificator):

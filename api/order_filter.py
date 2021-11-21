@@ -1,10 +1,10 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Order
 
-class OrderFilterResource(Resource):
+class OrderFilterResource(MasterResource):
 
 
     # todo session

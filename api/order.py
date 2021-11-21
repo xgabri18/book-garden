@@ -1,10 +1,10 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Order
 
-class OrderResource(Resource):
+class OrderResource(MasterResource):
 
     # Return list of all existing orders from all libraries
     # Can be done by Admin and Distributor (librarian sees orders ONLY of his Library)

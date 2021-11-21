@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
@@ -7,7 +7,7 @@ from models.models import Reservation,Stock
 
 # gets list of users reservation
 # todo session
-class ReservationOfLibraryRes(Resource):
+class ReservationOfLibraryRes(MasterResource):
 
     def get(self, library_id):
         #todo - moze to iba librarian - mozno aj admin?????

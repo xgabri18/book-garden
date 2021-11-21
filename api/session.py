@@ -1,9 +1,9 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from models.models import Person
 
 
-class SessionResource(Resource):
+class SessionResource(MasterResource):
     def get(self):
         return jsonify(session.get("user_id"), session.get("user_type"))
 

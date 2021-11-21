@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
@@ -7,7 +7,7 @@ from models.models import Reservation,Borrowing,Person
 
 # gets list of users reservation
 # todo session asi needed
-class ReservationOfPersonRes(Resource):
+class ReservationOfPersonRes(MasterResource):
 
     def get(self, identificator):
 

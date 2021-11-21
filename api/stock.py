@@ -1,10 +1,10 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Stock
 
-class StockResource(Resource):
+class StockResource(MasterResource):
 
     # Get all stocks
     # Can be used by Admin

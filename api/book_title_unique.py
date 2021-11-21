@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request
 from shared_db import db
 
@@ -8,7 +8,7 @@ from models.models import BookTitle,Library,Stock
 
 # gets all unique genres from booktitles
 # everyone can acess it, session not needed
-class BookTitleGenreRes(Resource):
+class BookTitleGenreRes(MasterResource):
     def get(self):
         genres = []
 
@@ -19,7 +19,7 @@ class BookTitleGenreRes(Resource):
 
 # gets all unique authors from booktitles
 # everyone can acess it, session not needed
-class BookTitleAuthorRes(Resource):
+class BookTitleAuthorRes(MasterResource):
     def get(self):
         authors = []
 

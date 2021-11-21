@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 from datetime import datetime
@@ -7,7 +7,7 @@ from models.models import Reservation,Borrowing
 # TODO ako sa bude riesit zaznam v tabulke pri vymazani stocku
 # TODO resourcy pre knihovnika zvlast alebo sem?
 
-class BorrowingResource(Resource):
+class BorrowingResource(MasterResource):
 
     # Return list of all existing borrowings from all libraries
     # Can be done by Admin

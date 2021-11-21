@@ -1,12 +1,11 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import BookTitle,Library,Stock
 
 
-
-class BookTitleResource(Resource):
+class BookTitleResource(MasterResource):
     def get(self,id = None):
         if id is None:
             booktitle = BookTitle.query.all()

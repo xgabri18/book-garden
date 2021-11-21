@@ -1,10 +1,10 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Person
 
-class PersonResource(Resource):
+class PersonResource(MasterResource):
 
     # TODO k tomuto treba debatu (profil alebo jak?/ admin?)
     def get(self,id = None):

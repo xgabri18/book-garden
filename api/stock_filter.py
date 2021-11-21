@@ -1,11 +1,11 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 from urllib import parse
 
 from models.models import Stock,BookTitle
 
-class StockFilterResource(Resource):
+class StockFilterResource(MasterResource):
 
     # Filter stocks
     # todo session

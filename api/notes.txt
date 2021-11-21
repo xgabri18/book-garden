@@ -54,6 +54,9 @@ Links: '/reservation/person/<int:identificator>', '/reservation/person/<string:i
 Rezervácie zadanej knižnice (používa knihovník)
 Links: '/reservation/of/lib/<int:library_id>'
 
+Potvrdenie rezervacie (Librarian a Admin)
+Links: '/reservation/confirm/<int:id>'
+
 
 #########################################################
 CRUDE Borrowing
@@ -76,6 +79,9 @@ Links: '/order/library/<int:id>'
 Filtrovanie order pomocou arguments
 Params: library_id, booktitle_id
 Links: '/order/filter'
+
+Potvrdenie orderu (Distributor a Admin)
+Links: '/order/confirm/<int:id>'
 
 
 #########################################################

@@ -1,10 +1,10 @@
-from flask_restful import Resource
+from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
 from models.models import Library,BookTitle,Stock
 
-class LibraryResource(Resource):
+class LibraryResource(MasterResource):
 
     # Get all libraries
     # Can be done by anyone
