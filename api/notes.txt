@@ -1,0 +1,97 @@
+
+Zoznam links pre API
+
+niketoré su napriamo, napr /booktitle/<int:id> - prístup ako /booktitle/1
+iné (filtre) sú pomocou arguments ako ?name=nibb&age=69
+
+
+prefix: [url]/api
+#########################################################
+CRUDE Booktitle
+Links: '/booktitle', '/booktitle/<int:id>'
+
+Získanie unikátnych žánrov
+Links: '/booktitle/unique/genres'
+
+Získanie unikátnych autorov
+Links: '/booktitle/unique/authors'
+
+
+#########################################################
+CRUDE Person
+Links: '/person',  '/person/<int:id>'
+
+
+#########################################################
+CRUDE Library
+Links: '/library', '/library/<int:id>'
+
+
+#########################################################
+CRUDE Session
+Links: '/session'
+
+
+#########################################################
+CRUDE Stock
+Links: '/stock', '/stock/<int:id>'
+
+Získanie Library name a Book title zo Stock ID
+Links: '/stockinfo/<int:id>'
+
+Filtrovanie stocku pomocou arguments
+Params: availability, library_id, booktitle_id, author, genre, name
+Links: '/stock/filter'
+
+
+#########################################################
+CRUDE Reservation
+Links: '/reservation', '/reservation/<int:id>'
+
+Získanie rezervácii osoby - buď pomocou ID alebo emailu - napriamo, nie cez params
+Links: '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>'
+
+Rezervácie zadanej knižnice (používa knihovník)
+Links: '/reservation/of/lib/<int:library_id>'
+
+
+#########################################################
+CRUDE Borrowing
+Links: '/borrowing', '/borrowing/<int:id>'
+
+Získanie požíčiek osoby - buď pomocou ID alebo emailu - napriamo, nie cez params
+Links: '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>'
+
+Požičky zadanej knižnice (používa knihovník)
+Links: '/borrowing/of/lib/<int:library_id>'
+
+
+#########################################################
+CRUDE Order
+Links: '/order', '/order/<int:id>'
+
+Objednávky zadanej knižnice
+Links: '/order/library/<int:id>'
+
+Filtrovanie order pomocou arguments
+Params: library_id, booktitle_id
+Links: '/order/filter'
+
+
+#########################################################
+CRUDE Voting
+Links: '/voting', '/voting/<int:id>'
+
+Získanie počtu hlasov na stocku
+Links: '/voting/stockvotes/<int:stock_id>'
+
+Zoznam hlasov kam dal užívatel hlas
+Links: '/voting/votesofperson/<int:person_id>'
+
+Zistenie či zadaný užívateľ hlasoval za zadaný stock
+Vracia True/False
+Links: '/voting/person/voted/stock/<int:person_id>/<int:stock_id>'
+
+
+
+

@@ -12,6 +12,7 @@ from api.session import SessionResource
 
 from api.stock import StockResource
 from api.stock_info import StockInfoResource
+from api.stock_filter import StockFilterResource
 
 from api.reservation import ReservationResource
 from api.reservation_of_person import ReservationOfPersonRes
@@ -23,6 +24,7 @@ from api.borrowing_of_library import BorrowingOfLibraryRes
 
 from api.order import OrderResource
 from api.order_of_library import OrderOfLibResource
+from api.order_filter import OrderFilterResource
 
 from api.voting import VotingResource
 from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesPersonVotedStockRes
@@ -77,6 +79,8 @@ api.add_resource(SessionResource,  '/session')
 
 api.add_resource(StockResource,  '/stock', '/stock/<int:id>')
 api.add_resource(StockInfoResource,  '/stockinfo/<int:id>')
+api.add_resource(StockFilterResource,  '/stock/filter') #params
+
 
 api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
 api.add_resource(ReservationOfPersonRes,  '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>')
@@ -90,11 +94,14 @@ api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
 
 api.add_resource(OrderResource,  '/order', '/order/<int:id>')
 api.add_resource(OrderOfLibResource,  '/order/library/<int:id>')
+api.add_resource(OrderFilterResource,  '/order/filter')
+
+
 
 api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
 api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
 api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
-api.add_resource(VotesPersonVotedStockRes,  '/voting/personvotedstock/<int:person_id>/<int:stock_id>')
+api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:person_id>/<int:stock_id>')
 
 
 
