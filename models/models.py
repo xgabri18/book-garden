@@ -1,5 +1,5 @@
 from shared_db import db
-from datetime import datetime
+from datetime import datetime, timedelta
 #TODO doplnit nullable + unique TRUE + cascade delete
 
 
@@ -65,7 +65,8 @@ class Stock(db.Model):
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
     booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'))
     amount = db.Column(db.Integer)
-    availability = db.Column(db.String(30))  # Available/Unavailable/ako sa povie všetko vypožičané
+    #availability = db.Column(db.String(30))  # Available/Unavailable/ako sa povie všetko vypožičané
+    availability = db.Column(db.Boolean, default=False)
 
     reservations = db.relationship("Reservation", cascade="all,delete,delete-orphan", backref="stock") #foreign_keys="[Reservation.library_id]"
     borrowings = db.relationship("Borrowing", backref="stock")
@@ -88,7 +89,7 @@ class Reservation(db.Model):
     #booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
-    date_of_reservation = db.Column(db.DateTime, default=datetime.utcnow)  # not so sure how to do this
+    date_of_reservation = db.Column(db.DateTime, default=datetime.now)  # not so sure how to do this
 
 
 class Borrowing(db.Model):
@@ -103,15 +104,15 @@ class Borrowing(db.Model):
     #booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
-    date_borrowed = db.Column(db.DateTime, default=datetime.utcnow)
-    date_returned = db.Column(db.DateTime)
+    date_borrowed = db.Column(db.DateTime, default=datetime.now)
+    date_returned = db.Column(db.DateTime, default=lambda: datetime.now() + timedelta(days=60))  # when to return a book
     fine = db.Column(db.Integer, default=0)
 
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer)
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)
+    date_added = db.Column(db.DateTime, default=datetime.now)
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
     booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
@@ -130,4 +131,4 @@ class Voting(db.Model):
     # library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
     # booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
-    vote = db.Column(db.String(1))  # TODO tu moze ist asi hocico -> mozno bool -> 0-no vote/1-vote
+    # vote = db.Column(db.String(1))

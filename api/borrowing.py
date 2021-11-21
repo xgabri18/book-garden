@@ -52,7 +52,7 @@ class BorrowingResource(Resource):
 
     # Remove borrowing (user returned a book,...) in any library
     # Can be done by Admin
-    def delete(self, id):
+    def delete(self, id):  # TODO zmena stocku
         if not session['user_type'] == 5:
             return "nenenene"
 

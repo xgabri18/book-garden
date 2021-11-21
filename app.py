@@ -17,6 +17,7 @@ from api.stock_filter import StockFilterResource
 from api.reservation import ReservationResource
 from api.reservation_of_person import ReservationOfPersonRes
 from api.reservation_of_library import ReservationOfLibraryRes
+from api.reservation_to_borrow import ReservationConfirmRes
 
 from api.borrowing import BorrowingResource
 from api.borrowing_of_person import BorrowingOfPersonRes
@@ -25,6 +26,7 @@ from api.borrowing_of_library import BorrowingOfLibraryRes
 from api.order import OrderResource
 from api.order_of_library import OrderOfLibResource
 from api.order_filter import OrderFilterResource
+from api.order_to_stock import OrderConfirmRes
 
 from api.voting import VotingResource
 from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesPersonVotedStockRes
@@ -85,6 +87,7 @@ api.add_resource(StockFilterResource,  '/stock/filter') #params
 api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
 api.add_resource(ReservationOfPersonRes,  '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>')
 api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>')
+api.add_resource(ReservationConfirmRes, '/reservation/confirm/<int:id>')
 
 
 api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
@@ -95,6 +98,7 @@ api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
 api.add_resource(OrderResource,  '/order', '/order/<int:id>')
 api.add_resource(OrderOfLibResource,  '/order/library/<int:id>')
 api.add_resource(OrderFilterResource,  '/order/filter')
+api.add_resource(OrderConfirmRes, '/order/confirm/<int:id>')
 
 
 

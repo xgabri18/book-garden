@@ -36,6 +36,7 @@ class ReservationResource(Resource):
     # Create a reservation
     # TODO kto toto moze robit??
     def post(self, id=None):  # TODO tu sa bude asi person_id zistovat zo session?
+        # TODO rezervacia rovnakej knihy
         stock_id = request.form.get("stock_id")
         person_id = request.form.get("person_id")
 
