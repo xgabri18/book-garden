@@ -20,8 +20,8 @@ class VotesOnStockRes(MasterResource):
 class VotesFromPersonRes(MasterResource):
 
     def get(self, person_id):
-        if not (session['user_id'] == person_id or session['user_type'] == 5):  # is the right person logged // admin
-            return "nenenene"
+        if not (self.is_logged() and (self.is_admin() or self.is_user(person_id))):  # is the right person logged //librarian/admin
+            return self.response_error("Unauthorised action!")
 
         votes = Voting.query.filter(Voting.person_id == person_id).all()
 

@@ -34,8 +34,8 @@ class LibraryResource(MasterResource):
     # Adding a library into DB
     # Can be done by Admin
     def post(self,id = None):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         name        = request.form.get("name")
         city        = request.form.get("city")
@@ -60,7 +60,7 @@ class LibraryResource(MasterResource):
 
         for row in booktitle:
             row = row.__dict__
-            stock = Stock(library_id = library.id,booktitle_id = row["id"], amount = 0, availability = "None")
+            stock = Stock(library_id = library.id,booktitle_id = row["id"], amount = 0, availability = False)
             db.session.add(stock)
 
         db.session.commit()
@@ -68,8 +68,8 @@ class LibraryResource(MasterResource):
     # Removing a library from DB
     # Can be done by Admin
     def delete(self,id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         Library.query.filter_by(id=id).delete()
         db.session.commit()
@@ -77,8 +77,8 @@ class LibraryResource(MasterResource):
     # Updating a library
     # Can be done by Admin
     def put(self,id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         library = Library.query.filter_by(id=id).first()
 

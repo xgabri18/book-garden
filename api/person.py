@@ -31,8 +31,8 @@ class PersonResource(MasterResource):
     # Register
     # Can be done if no session is active
     def post(self,id= None):
-        if session["user_id"]:
-            return "nenene"
+        if self.is_logged():
+            return self.response_error("Action not allowed for current session!")  # TODO co tu
 
         #osetrit ze mail uz je zadany + aj username
         email     = request.form.get("email")
@@ -55,21 +55,21 @@ class PersonResource(MasterResource):
 
     # Remove user
     # Can be done by Admin
-    def delete(self,id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+    def delete(self, id):
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
         Person.query.filter_by(id=id).delete()
         db.session.commit()
 
     # Edit user
     # Can be done by Admin and User(can edit his info) TODO moze user editovat vsetko? (user_type urcite nope)
-    def put(self,id):
-        if not (session['user_id'] == id or session['user_type'] == 5):  # is the right person logged // admin
-            return "nenenene"
+    def put(self, id):
+        if not (self.is_logged() and (self.is_admin() or self.is_user(id))):  # is the right person logged //admin
+            return self.response_error("Unauthorised action!")
 
         person = Person.query.filter_by(id=id).first()
 
-        if not person:
+        if not person:  # user non existent -> err?
             return
 
         email     = request.form.get("email")

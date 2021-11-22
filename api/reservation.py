@@ -10,8 +10,8 @@ class ReservationResource(MasterResource):
     # Return list of all existing reservations
     # Can be done by Admin
     def get(self, id=None):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         if id is None:
             reservation = Reservation.query.all()
@@ -34,9 +34,11 @@ class ReservationResource(MasterResource):
             return jsonify(reservation)
 
     # Create a reservation
-    # TODO kto toto moze robit??
+    # Logged user can do
     def post(self, id=None):  # TODO tu sa bude asi person_id zistovat zo session?
         # TODO rezervacia rovnakej knihy
+        if not self.is_logged():
+            return self.response_error("Unauthorised action!")
         stock_id = request.form.get("stock_id")
         person_id = request.form.get("person_id")
 
@@ -46,12 +48,11 @@ class ReservationResource(MasterResource):
         db.session.add(reservation)
         db.session.commit()
 
-
-    def delete(self, id):  # TODO premeni rezervaciu na pozicku potom delete ... asi do PUT (rez. sa moze vymazat aj len tak)
-        # reservation = Reservation.query.filter_by(id=id).first()
-        # person_id = reservation.person_id
-        # stock_id = reservation.stock_id
-        # db.session.add(Borrowing(stock_id=stock_id, person_id=person_id))
+    # Remove any reservation
+    # Can be done by Admin
+    def delete(self, id):  # TODO user and ?librarian? remove
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
         Reservation.query.filter_by(id=id).delete()
         db.session.commit()
 

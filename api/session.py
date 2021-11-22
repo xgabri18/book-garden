@@ -19,12 +19,14 @@ class SessionResource(MasterResource):
         if user:
             session['user_id'] = user.id
             session['user_type'] = user.user_type
-            return "Logged in successfully"
+            return self.response_ok("Logged in successfully")
         else:
-            return "Username or password incorrect!"
+            return self.response_error("Username or password incorrect!")
 
     # Logout
     def delete(self):
+        if not self.is_logged():
+            return self.response_error("No session present!")
         del session['user_id']
         del session['user_type']
 

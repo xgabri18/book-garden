@@ -13,9 +13,6 @@ class BorrowingOfPersonRes(MasterResource):
     # either person_id or persons e-mail
     def get(self, identificator):
 
-        if not session['user_id']:  # no session - no one is logged
-            return "nenenene"
-
         if type(identificator) == int:
             person_id = identificator
             borrowings = Borrowing.query.filter_by(person_id = person_id).all()
@@ -26,8 +23,8 @@ class BorrowingOfPersonRes(MasterResource):
             #todo osetrit ze person exituje
             borrowings = Borrowing.query.filter_by(person_id = person_id[0][0]).all()
 
-        if not (session['user_id'] == person_id or (session['user_type'] == 5 or session['user_type'] == 4)):  # is the right person logged // no librarian/admin
-            return "nenenene"
+        if not (self.is_logged() and (self.is_admin() or self.is_user(person_id))):  # is the right person logged //librarian/admin
+            return self.response_error("Unauthorised action!")
 
 
         array = []

@@ -9,8 +9,9 @@ class OrderOfLibResource(MasterResource):
     #
     # todo session
     def get(self,library_id = None):
-        # if not (session['user_type'] == 5 or session['user_type'] == 3):
-        #     return "nenenene"
+        if not (self.is_logged() and (self.is_admin() or self.is_librarian()) or self.is_distributor()):
+            return self.response_error("Action not allowed for current session!")
+        # TODO kontrola librariana
 
         orders = Order.query.filter_by(library_id = library_id).all()
 

@@ -15,6 +15,11 @@ class BorrowingOfLibraryRes(MasterResource):
         # if not session['user_id']:  # no session - no one is logged
         #     return "nenenene"
 
+        if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
+            return self.response_error("Unauthorised action!")
+        # if self.is_librarian():
+        #     # Kontrola ci librarian ziada veci zo svojej lib
+
         # ziskanie pola stock id ktore su napojene na library
         # potom query na borrowings ktore su napojene na tieto stocks
         # todo otestovat

@@ -12,8 +12,8 @@ class BorrowingResource(MasterResource):
     # Return list of all existing borrowings from all libraries
     # Can be done by Admin
     def get(self, id=None):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         if id is None:
             borrowing = Borrowing.query.all()
@@ -38,8 +38,8 @@ class BorrowingResource(MasterResource):
     # Create a Borrowing manually in any library
     # Can be done by Admin
     def post(self, id=None):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         stock_id = request.form.get("stock_id")
         person_id = request.form.get("person_id")
@@ -53,8 +53,8 @@ class BorrowingResource(MasterResource):
     # Remove borrowing (user returned a book,...) in any library
     # Can be done by Admin
     def delete(self, id):  # TODO zmena stocku
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         Borrowing.query.filter_by(id=id).delete()
         db.session.commit()
@@ -62,8 +62,8 @@ class BorrowingResource(MasterResource):
     # Changing fine or date when the book should be returned in any library
     # Can be done by Admin
     def put(self, id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         borrowing = Borrowing.query.filter_by(id=id).first()
 

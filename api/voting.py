@@ -32,11 +32,9 @@ class VotingResource(MasterResource):
     def post(self, id=None):
         stock_id  = request.form.get("stock_id")
         person_id = request.form.get("person_id")
-        vote      = request.form.get("vote")
 
         voting = Voting(stock_id        = stock_id,
-                        person_id       = person_id,
-                        vote            = vote)
+                        person_id       = person_id)
 
         db.session.add(voting)
         db.session.commit()

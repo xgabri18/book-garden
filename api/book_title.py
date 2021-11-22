@@ -28,10 +28,10 @@ class BookTitleResource(MasterResource):
             return jsonify(booktitle)
 
     # Add book to DB
-    # Can be done by Admin and ?
+    # Can be done by Admin and Distributor
     def post(self,id = None):
-        if not session['user_type'] == 5: # or session['user_type'] == 4):
-            return "nenenene"
+        if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
+            return self.response_error("Unauthorised action!")
 
         name        = request.form.get("name")
         author      = request.form.get("author")
@@ -66,18 +66,18 @@ class BookTitleResource(MasterResource):
 
     # Delete a book from DB
     # Can be done by Admin
-    def delete(self,id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+    def delete(self, id):
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         BookTitle.query.filter_by(id=id).delete()
         db.session.commit()
 
     # Update any book
-    # Can be done by Admin and ?
+    # Can be done by Admin and Distributor
     def put(self,id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
+            return self.response_error("Unauthorised action!")
 
         booktitle = BookTitle.query.filter_by(id=id).first()
 

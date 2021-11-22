@@ -9,8 +9,9 @@ class StockResource(MasterResource):
     # Get all stocks
     # Can be used by Admin
     def get(self,id = None):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
+
 
         if id is None:
             stock = Stock.query.all()
@@ -35,8 +36,8 @@ class StockResource(MasterResource):
     # Adding should not be done manually
     # In some cases Admin may use
     def post(self,id = None):
-        if not session['user_type'] == 5:
-            return "nenenene"
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         library_id   = request.form.get("library_id")
         booktitle_id = request.form.get("booktitle_id")
@@ -54,18 +55,18 @@ class StockResource(MasterResource):
 
     # Removing should not be done manually
     # In some cases Admin may use
-    def delete(self,id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+    def delete(self, id):
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         Stock.query.filter_by(id=id).delete()
         db.session.commit()
 
     # Update stock
     # In some cases Admin may use
-    def put(self,id):
-        if not session['user_type'] == 5:
-            return "nenenene"
+    def put(self, id):
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         stock = Stock.query.filter_by(id=id).first()
 
