@@ -44,6 +44,11 @@ class StockResource(MasterResource):
         amount       = request.form.get("amount")
         availability = request.form.get("availability")
 
+        if availability.lower() == "true":
+            availability = True
+        else:
+            availability = False
+
 
         stock = Stock(library_id   = library_id,
                       booktitle_id = booktitle_id,
@@ -77,6 +82,12 @@ class StockResource(MasterResource):
         booktitle_id = request.form.get("booktitle_id")
         amount       = request.form.get("amount")
         availability = request.form.get("availability")
+
+        if availability.lower() == "true":
+            availability = True
+        else:
+            availability = False
+
 
         stock.library_id   = library_id
         stock.booktitle_id = booktitle_id

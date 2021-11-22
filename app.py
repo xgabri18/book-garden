@@ -112,22 +112,22 @@ api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:per
 # @app.route('/')
 # def index():
 #     return send_from_directory('frontend/build', 'index.html')
+# #
 
 # @app.route("/reset")
 # def reset():
 #     db.drop_all()
 #     db.create_all()
+#     person = Person(email       = "admin@admin.com",
+#                     user_type   = 5,
+#                     username    = "admin",
+#                     password    = "admin")
+#
+#     db.session.add(person)
+#     db.session.commit()
+#
 #     return "resetoval som db"
 
-#
-# @app.route('/set/<value>')
-# def set_session(value):
-#     session['user_type'] = value
-#     return f'The value you set is: { value }'
-#
-# @app.route('/get')
-# def get_session():
-#     return f'The value in the session is: { session.get("user_type") }'
 
 
 if __name__ == "__main__":

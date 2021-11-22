@@ -31,24 +31,27 @@ class PersonResource(MasterResource):
     # Register
     # Can be done if no session is active
     def post(self,id= None):
-        if self.is_logged():
+        if self.is_logged() and not self.is_admin():
             return self.response_error("Action not allowed for current session!")  # TODO co tu
 
         #osetrit ze mail uz je zadany + aj username
-        email     = request.form.get("email")
-        user_type = request.form.get("user_type")
-        username  = request.form.get("username")
-        password  = request.form.get("password")
-        name      = request.form.get("name")
-        surname   = request.form.get("surname")
+        email       = request.form.get("email")
+        user_type   = request.form.get("user_type")
+        username    = request.form.get("username")
+        password    = request.form.get("password")
+        name        = request.form.get("name")
+        surname     = request.form.get("surname")
+        library_id  = request.form.get("library_id")
+        profiledesc = request.form.get("profiledesc")
 
-
-        person = Person(email     = email,
-                        user_type = user_type,
-                        username  = username,
-                        password  = password,
-                        name      = name,
-                        surname   = surname)
+        person = Person(email       = email,
+                        user_type   = user_type,
+                        username    = username,
+                        password    = password,
+                        name        = name,
+                        surname     = surname,
+                        library_id  = library_id,
+                        profiledesc = profiledesc)
 
         db.session.add(person)
         db.session.commit()
@@ -72,20 +75,26 @@ class PersonResource(MasterResource):
         if not person:  # user non existent -> err?
             return
 
-        email     = request.form.get("email")
-        user_type = request.form.get("user_type")
-        username  = request.form.get("username")
-        password  = request.form.get("password")
-        name      = request.form.get("name")
-        surname   = request.form.get("surname")
+        email       = request.form.get("email")
+        user_type   = request.form.get("user_type")
+        username    = request.form.get("username")
+        password    = request.form.get("password")
+        name        = request.form.get("name")
+        surname     = request.form.get("surname")
+        library_id  = request.form.get("library_id")
+        profiledesc = request.form.get("profiledesc")
+
+        print(library_id)
 
 
-        person.email     = email
-        person.user_type = user_type
-        person.username  = username
-        person.password  = password
-        person.name      = name
-        person.surname   = surname
+        person.email       = email
+        person.user_type   = user_type
+        person.username    = username
+        person.password    = password
+        person.name        = name
+        person.surname     = surname
+        person.library_id  = library_id
+        person.profiledesc = profiledesc
 
         db.session.commit()
 

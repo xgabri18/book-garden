@@ -60,7 +60,7 @@ class LibraryResource(MasterResource):
 
         for row in booktitle:
             row = row.__dict__
-            stock = Stock(library_id = library.id,booktitle_id = row["id"], amount = 0, availability = False)
+            stock = Stock(library_id = library.id,booktitle_id = row["id"], amount = 0)
             db.session.add(stock)
 
         db.session.commit()

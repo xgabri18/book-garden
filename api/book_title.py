@@ -40,6 +40,8 @@ class BookTitleResource(MasterResource):
         genre       = request.form.get("genre")
         description = request.form.get("description")
         rating      = request.form.get("rating")
+        photo       = request.form.get("rating")
+        date_publication = request.form.get("date_publication")
 
         booktitle = BookTitle(name        = name,
                               author      = author,
@@ -47,7 +49,9 @@ class BookTitleResource(MasterResource):
                               isbn        = isbn,
                               genre       = genre,
                               description = description,
-                              rating      = rating)
+                              rating      = rating,
+                              photo       = photo,
+                              date_publication = date_publication)
 
         db.session.add(booktitle)
         db.session.commit()
@@ -59,7 +63,7 @@ class BookTitleResource(MasterResource):
 
         for row in libraries:
             row = row.__dict__
-            stock = Stock(library_id=row["id"], booktitle_id=booktitle.id, amount=0, availability="None")
+            stock = Stock(library_id=row["id"], booktitle_id=booktitle.id, amount=0)
             db.session.add(stock)
 
         db.session.commit()
@@ -91,6 +95,8 @@ class BookTitleResource(MasterResource):
         genre       = request.form.get("genre")
         description = request.form.get("description")
         rating      = request.form.get("rating")
+        photo       = request.form.get("rating")
+        date_publication = request.form.get("date_publication")
 
         booktitle.name        = name
         booktitle.author      = author
@@ -99,6 +105,8 @@ class BookTitleResource(MasterResource):
         booktitle.genre       = genre
         booktitle.description = description
         booktitle.rating      = rating
+        booktitle.photo       = photo
+        booktitle.date_publication = date_publication
 
         db.session.commit()
 

@@ -21,7 +21,12 @@ class StockFilterResource(MasterResource):
         stock = Stock.query
 
         if availability is not None:
-            stock = stock.filter_by(availability = availability)
+            if availability.lower() == "true":
+                availability = True
+            else:
+                availability = False
+
+        stock = stock.filter_by(availability = availability)
 
         if library_id is not None:
             stock = stock.filter_by(library_id = library_id)
