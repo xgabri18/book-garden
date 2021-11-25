@@ -56,63 +56,9 @@ app.config['SESSION_SQLALCHEMY'] = db
 
 api = Api(app, prefix="/api")
 
-
-# class PersionView(ModelView):
-#     name = "Person"
-#     column_list = ('email', 'user_type', 'username','password','name','surname')
-
-admin.add_view(ModelView(BookTitle, db.session))
-admin.add_view(ModelView(Person, db.session))
-admin.add_view(ModelView(Library, db.session))
-admin.add_view(ModelView(Stock, db.session))
-admin.add_view(ModelView(Reservation, db.session))
-admin.add_view(ModelView(Borrowing, db.session))
-admin.add_view(ModelView(Order, db.session))
-admin.add_view(ModelView(Voting, db.session))
-
-
-api.add_resource(BookTitleResource, '/booktitle', '/booktitle/<int:id>')
-api.add_resource(BookTitleGenreRes, '/booktitle/unique/genres')
-api.add_resource(BookTitleAuthorRes, '/booktitle/unique/authors')
-
-api.add_resource(PersonResource,  '/person',  '/person/<int:id>')
-api.add_resource(LibraryResource,  '/library', '/library/<int:id>')
-api.add_resource(SessionResource,  '/session')
-
-api.add_resource(StockResource,  '/stock', '/stock/<int:id>')
-api.add_resource(StockInfoResource,  '/stockinfo/<int:id>')
-api.add_resource(StockFilterResource,  '/stock/filter') #params
-
-
-api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
-api.add_resource(ReservationOfPersonRes,  '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>')
-api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>')
-api.add_resource(ReservationConfirmRes, '/reservation/confirm/<int:id>')
-
-
-api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
-api.add_resource(BorrowingOfPersonRes,  '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>')
-api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
-
-
-api.add_resource(OrderResource,  '/order', '/order/<int:id>')
-api.add_resource(OrderOfLibResource,  '/order/library/<int:id>')
-api.add_resource(OrderFilterResource,  '/order/filter')
-api.add_resource(OrderConfirmRes, '/order/confirm/<int:id>')
-
-
-
-api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
-api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
-api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
-api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:person_id>/<int:stock_id>')
-
-
-
-# @app.route('/')
-# def index():
-#     return send_from_directory('frontend/build', 'index.html')
-# #
+@app.route('/')
+def index():
+    return send_from_directory('frontend/build', 'index.html')
 
 @app.route('/jozef')
 def index():
@@ -133,6 +79,49 @@ def index():
 #     return "resetoval som db"
 
 
+# class PersionView(ModelView):
+#     name = "Person"
+#     column_list = ('email', 'user_type', 'username','password','name','surname')
+
+admin.add_view(ModelView(BookTitle, db.session))
+admin.add_view(ModelView(Person, db.session))
+admin.add_view(ModelView(Library, db.session))
+admin.add_view(ModelView(Stock, db.session))
+admin.add_view(ModelView(Reservation, db.session))
+admin.add_view(ModelView(Borrowing, db.session))
+admin.add_view(ModelView(Order, db.session))
+admin.add_view(ModelView(Voting, db.session))
+
+api.add_resource(BookTitleResource, '/booktitle', '/booktitle/<int:id>')
+api.add_resource(BookTitleGenreRes, '/booktitle/unique/genres')
+api.add_resource(BookTitleAuthorRes, '/booktitle/unique/authors')
+
+api.add_resource(PersonResource,  '/person',  '/person/<int:id>')
+api.add_resource(LibraryResource,  '/library', '/library/<int:id>')
+api.add_resource(SessionResource,  '/session')
+
+api.add_resource(StockResource,  '/stock', '/stock/<int:id>')
+api.add_resource(StockInfoResource,  '/stockinfo/<int:id>')
+api.add_resource(StockFilterResource,  '/stock/filter') #params
+
+api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
+api.add_resource(ReservationOfPersonRes,  '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>')
+api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>')
+api.add_resource(ReservationConfirmRes, '/reservation/confirm/<int:id>')
+
+api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
+api.add_resource(BorrowingOfPersonRes,  '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>')
+api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
+
+api.add_resource(OrderResource,  '/order', '/order/<int:id>')
+api.add_resource(OrderOfLibResource,  '/order/library/<int:id>')
+api.add_resource(OrderFilterResource,  '/order/filter')
+api.add_resource(OrderConfirmRes, '/order/confirm/<int:id>')
+
+api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
+api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
+api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
+api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:person_id>/<int:stock_id>')
 
 if __name__ == "__main__":
     app.run(debug=True)
