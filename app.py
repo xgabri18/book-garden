@@ -42,6 +42,10 @@ api.add_resource(LibraryResource,  '/library', '/library/<int:id>')
 def index():
     return send_from_directory('frontend/build', 'index.html')
 
+@app.route('/jozef')
+def index():
+    return "Jozef"
+
 # @app.route("/reset")
 # def reset():
 #     db.drop_all()
