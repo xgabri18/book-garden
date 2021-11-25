@@ -34,7 +34,7 @@ from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesPersonVote
 from models.models import BookTitle,Person,Library,Stock,Reservation,Borrowing,Order,Voting
 
 
-app = Flask(__name__, static_url_path='', static_folder='frontend/build')
+app = Flask(__name__, static_url_path='/', static_folder='frontend/build')
 
 
 # username:password@server/db
@@ -124,10 +124,13 @@ api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
 api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
 api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:person_id>/<int:stock_id>')
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return send_from_directory(app.static_folder, 'index.html')
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
+
+@app.route('/')
+def index(path):
+    return app.send_static_file('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
