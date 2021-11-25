@@ -56,7 +56,11 @@ app.config['SESSION_SQLALCHEMY'] = db
 def not_found(e):
     return app.send_static_file('index.html')
 
-@app.route("/", defaults={'path':''})
+@app.errorhandler(500)
+def internal_error(e):
+    return app.send_static_file('index.html')
+
+@app.route('/')
 def index():
     return app.send_static_file('index.html')
 
