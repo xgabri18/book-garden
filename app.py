@@ -56,9 +56,10 @@ app.config['SESSION_SQLALCHEMY'] = db
 
 api = Api(app, prefix="/api")
 
-@app.route("/", defaults={'path':''})
-def serve(path):
-    return send_from_directory(app.static_folder, 'index.html')
+# Toto fungovalo
+# @app.route("/", defaults={'path':''})
+# def serve(path):
+#     return send_from_directory(app.static_folder, 'index.html')
 
 # @app.route('/jozef')
 # def index():
@@ -122,6 +123,11 @@ api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
 api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
 api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
 api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:person_id>/<int:stock_id>')
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
