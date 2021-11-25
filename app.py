@@ -52,7 +52,13 @@ admin = Admin(app)
 
 app.config['SESSION_SQLALCHEMY'] = db
 
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
 
+@app.route('/')
+def index(path):
+    return app.send_static_file('index.html')
 
 api = Api(app, prefix="/api")
 
@@ -123,14 +129,6 @@ api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
 api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
 api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
 api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:person_id>/<int:stock_id>')
-
-@app.errorhandler(404)
-def not_found(e):
-    return app.send_static_file('index.html')
-
-@app.route('/')
-def index(path):
-    return app.send_static_file('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
