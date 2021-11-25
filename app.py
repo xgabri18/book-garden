@@ -114,6 +114,10 @@ api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:per
 #     return send_from_directory('frontend/build', 'index.html')
 # #
 
+@app.route('/jozef')
+def index():
+    return "Jozef"
+
 # @app.route("/reset")
 # def reset():
 #     db.drop_all()
