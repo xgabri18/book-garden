@@ -56,8 +56,8 @@ app.config['SESSION_SQLALCHEMY'] = db
 def not_found(e):
     return app.send_static_file('index.html')
 
-@app.route('/')
-def index(path):
+@app.route("/", defaults={'path':''})
+def index():
     return app.send_static_file('index.html')
 
 api = Api(app, prefix="/api")
