@@ -11,6 +11,10 @@ flask-admin = "*"
 flask-psycopg2 = "*"
 flask-sqlalchemy = "*"
 flask-restful = "*"
+flask-session = "*"
+requests = "*"
+faker = "*"
+selenium = "*"
 
 [dev-packages]
 
