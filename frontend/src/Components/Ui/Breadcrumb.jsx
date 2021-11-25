@@ -21,7 +21,10 @@ export const Breadcrumb = (props) => {
             <Link to="/">Home</Link>
           </li>
           {props.items.map((item, index) => (
-            <li className={`Breadcrumb-item ${item.active ? "active" : ""}`}>
+            <li
+              key={index}
+              className={`Breadcrumb-item ${item.active ? "active" : ""}`}
+            >
               {item.active ? item.name : <Link to={item.url}>{item.name}</Link>}
             </li>
           ))}

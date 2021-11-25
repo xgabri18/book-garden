@@ -1,5 +1,5 @@
 import FormControl from "../../Components/Forms/FormControl";
-import { Button, ButtonLink } from "../../Components/Ui/Button";
+import { Button } from "../../Components/Ui/Button";
 import { Link } from "react-router-dom";
 
 const AccountLoginModule = () => {
@@ -20,8 +20,9 @@ const AccountLoginModule = () => {
           placeholder="Password"
         />
       </div>
+
       <Button
-        to="submit"
+        to="button"
         variant="primary"
         text="Login"
         className="block w-full"

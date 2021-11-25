@@ -10,6 +10,8 @@ export const Button = ({
   size = "",
   style = {},
   className = "",
+  hideTextSm = false,
+  onClick,
 }) => {
   if (icon) {
     return (
@@ -17,9 +19,10 @@ export const Button = ({
         type={type}
         className={`Button ${variant} ${size} ${className}`}
         style={style}
+        onClick={onClick}
       >
         {icon}
-        {text}
+        <span className={hideTextSm ? "hidden md:block" : ""}>{text}</span>
       </button>
     );
   }
@@ -29,6 +32,7 @@ export const Button = ({
       type={type}
       className={`Button ${variant} ${size} ${className}`}
       style={style}
+      onClick={onClick}
     >
       {text}
     </button>
@@ -43,6 +47,7 @@ export const ButtonLink = ({
   size = "",
   style = {},
   className = "",
+  hideTextSm = false,
 }) => {
   if (icon) {
     return (
@@ -52,13 +57,17 @@ export const ButtonLink = ({
         style={style}
       >
         {icon}
-        {text}
+        <span className={hideTextSm ? "hidden md:block" : ""}>{text}</span>
       </Link>
     );
   }
 
   return (
-    <Link to={to} className={`Button ${variant} ${size}`} style={style}>
+    <Link
+      to={to}
+      className={`Button ${variant} ${size} ${className}`}
+      style={style}
+    >
       {text}
     </Link>
   );

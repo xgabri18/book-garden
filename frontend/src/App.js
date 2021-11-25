@@ -3,11 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./Layout/Header";
 import Main from "./Layout/Main";
 import Footer from "./Layout/Footer";
-import HomeModule from "./Modules/HomeModule";
-import BookTitleModule from "./Modules/BookTitleModule";
-import LibraryModule from "./Modules/LibraryModule";
-import AccountModule from "./Modules/AccountModule";
-import AdminModule from "./Modules/AdminModule";
+import { routes } from "./routes";
+import User from "./auth";
 
 function App() {
   return (
@@ -15,11 +12,19 @@ function App() {
       <Header />
       <Main>
         <Switch>
-          <Route path="/" component={HomeModule} exact />
-          <Route path="/book-titles" component={BookTitleModule} />
-          <Route path="/libraries" component={LibraryModule} />
-          <Route path="/account" component={AccountModule} />
-          <Route path="/admin" component={AdminModule} />
+          {routes.map((route, index) => (
+            <Route
+              path={route.url}
+              component={route.component}
+              exact={route.exact}
+              key={index}
+            />
+          ))}
+          {/*<Route path="/" component={HomeModule} exact />*/}
+          {/*<Route path="/book-titles" component={BookTitleModule} />*/}
+          {/*<Route path="/libraries" component={LibraryModule} />*/}
+          {/*<Route path="/account" component={AccountModule} />*/}
+          {/*<Route path="/admin" component={AdminModule} />*/}
         </Switch>
       </Main>
       <Footer />

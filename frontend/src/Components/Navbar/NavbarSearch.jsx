@@ -35,7 +35,7 @@ const NavbarSearch = () => {
       </div>
 
       <button
-        className="Navbar-link block md:hidden"
+        className="Navbar-link flex md:hidden"
         onClick={() => setSearchExpanded(!searchExpanded)}
       >
         <SearchIcon className="h-6" />

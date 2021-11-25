@@ -1,15 +1,33 @@
-import { Route, Switch, useRouteMatch } from "react-router-dom";
-import { DashboardModule } from "./DashboardModule";
+import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
+import { AdminRoute, authenticated, role } from "../../middlewares";
+import { adminRoutes } from "../../routes";
+import User from "../../auth";
+import { NotAuthorizedError } from "../../Components/Errors/NotAuthorizedError";
 
 const AdminModule = () => {
   const { path } = useRouteMatch();
 
-  /** todo: Check if logged in && check permissions */
-
   return (
     <Switch>
-      <Route path={`${path}/dashboard`} component={DashboardModule} />
+      <Route exact path={path} component={AdminSessionHandler} />
+      {adminRoutes.map((route, index) => (
+        <AdminRoute
+          key={index}
+          path={path + route.url}
+          component={route.component}
+          roles={route.roles}
+          exact={route.exact}
+        />
+      ))}
     </Switch>
+  );
+};
+
+const AdminSessionHandler = () => {
+  return !authenticated || role === "customer" ? (
+    <NotAuthorizedError />
+  ) : (
+    <Redirect to={`/admin/dashboard`} />
   );
 };
 

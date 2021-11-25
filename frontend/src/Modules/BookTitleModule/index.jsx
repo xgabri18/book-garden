@@ -7,7 +7,7 @@ const BookTitleModule = () => {
 
   return (
     <Switch>
-      <Route path={`${path}`} component={BookTitleListModule} exact />
+      <Route path={path} component={BookTitleListModule} exact />
       <Route path={`${path}/:id`} component={BookTitleShowModule} />
     </Switch>
   );

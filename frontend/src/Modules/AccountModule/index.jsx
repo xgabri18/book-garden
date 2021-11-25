@@ -1,19 +1,27 @@
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import AccountLoginModule from "./AccountLoginModule";
 import AccountRegisterModule from "./AccountRegisterModule";
 import AccountProfileModule from "./AccountProfileModule";
+import { authenticated, AuthRoute } from "../../middlewares";
 
 const AccountModule = () => {
   const { path } = useRouteMatch();
-
-  /** @TODO: Check if logged in */
 
   return (
     <Switch>
       <Route path={`${path}/login`} component={AccountLoginModule} />
       <Route path={`${path}/register`} component={AccountRegisterModule} />
-      <Route path={`${path}/profile`} component={AccountProfileModule} />
+      <AuthRoute path={`${path}/profile`} component={AccountProfileModule} />
+      <Route path="/" component={AccountSessionHandler} />
     </Switch>
+  );
+};
+
+const AccountSessionHandler = () => {
+  return authenticated ? (
+    <Redirect to={`account/profile`} />
+  ) : (
+    <Redirect to={`account/login`} />
   );
 };
 

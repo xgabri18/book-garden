@@ -23,7 +23,7 @@ const FormControl = ({ id, type, label, placeholder, hideLabel }) => {
         {label}
       </label>
       <input
-        type="text"
+        type={type}
         id={id}
         placeholder={placeholder}
         className="Form-control-input"
