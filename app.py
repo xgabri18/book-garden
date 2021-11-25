@@ -56,13 +56,13 @@ app.config['SESSION_SQLALCHEMY'] = db
 
 api = Api(app, prefix="/api")
 
-@app.route('/')
-def index():
-    return send_from_directory('frontend/build', 'index.html')
+@app.route("/", defaults={'path':''})
+def serve(path):
+    return send_from_directory(app.static_folder, 'index.html')
 
-@app.route('/jozef')
-def index():
-    return "Jozef"
+# @app.route('/jozef')
+# def index():
+#     return "Jozef"
 
 # @app.route("/reset")
 # def reset():
