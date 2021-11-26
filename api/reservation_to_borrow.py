@@ -17,16 +17,15 @@ class ReservationConfirmRes(MasterResource):
         #     return self.response_error("Action not allowed for current session!")
 
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Action not allowed for current session!")
+            return self.response_error("Unauthorised action!")
 
         reservation = Reservation.query.filter_by(id=id).first()
         if reservation:
             # Librarian can confirm only reservations in his/her library
             if self.is_librarian():
                 lib = self.stock_in_which_lib(reservation.stock_id)
-                # TODO toto sa Romana opytat ci mi posle lib_id alebo ne
-                # if lib != lib_id:
-                #     return self.response_error("Missing permissions!")
+                if lib != self.librarian_in_which_lib(session['user_id']):
+                    return self.response_error("Unauthorised action!")
 
             person_id = reservation.person_id
             stock_id = reservation.stock_id
@@ -38,8 +37,8 @@ class ReservationConfirmRes(MasterResource):
             # Delete reservation
             Reservation.query.filter_by(id=id).delete()
             db.session.commit()
-            # Change stock count
-            return self.response_ok({})  # TODO idk ako a ci vobec
+            # Done
+            return self.response_ok("Committed to db")  # TODO idk ako a ci vobec
         else:
             return self.response_error("Not in DB!")
 

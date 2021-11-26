@@ -1,6 +1,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
+from sqlalchemy.exc import IntegrityError
 
 from models.models import BookTitle,Library,Stock
 
@@ -45,18 +46,23 @@ class BookTitleResource(MasterResource):
         photo       = request.form.get("rating")
         date_publication = request.form.get("date_publication")
 
-        booktitle = BookTitle(name        = name,
-                              author      = author,
-                              publisher   = publisher,
-                              isbn        = isbn,
-                              genre       = genre,
-                              description = description,
-                              rating      = rating,
-                              photo       = photo,
-                              date_publication = date_publication)
+        try:
+            booktitle = BookTitle(name        = name,
+                                  author      = author,
+                                  publisher   = publisher,
+                                  isbn        = isbn,
+                                  genre       = genre,
+                                  description = description,
+                                  rating      = rating,
+                                  photo       = photo,
+                                  date_publication = date_publication)
 
-        db.session.add(booktitle)
-        db.session.commit()
+            db.session.add(booktitle)
+            db.session.commit()
+
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error("Database refused push (check if ISBN is unique)!" + '\n' + e.orig.diag.message_detail)  # TODO
 
         # autostock
         libraries = Library.query.all()
@@ -106,17 +112,22 @@ class BookTitleResource(MasterResource):
         photo       = request.form.get("rating")
         date_publication = request.form.get("date_publication")
 
-        booktitle.name        = name
-        booktitle.author      = author
-        booktitle.publisher   = publisher
-        booktitle.isbn        = isbn
-        booktitle.genre       = genre
-        booktitle.description = description
-        booktitle.rating      = rating
-        booktitle.photo       = photo
-        booktitle.date_publication = date_publication
+        try:
+            booktitle.name        = name
+            booktitle.author      = author
+            booktitle.publisher   = publisher
+            booktitle.isbn        = isbn
+            booktitle.genre       = genre
+            booktitle.description = description
+            booktitle.rating      = rating
+            booktitle.photo       = photo
+            booktitle.date_publication = date_publication
 
-        db.session.commit()
+            db.session.commit()
+
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
 
         return self.response_ok("Committed to db")
 

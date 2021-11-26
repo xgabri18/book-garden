@@ -12,7 +12,7 @@ from models.models import Reservation,Borrowing
 
 class BorrowingResource(MasterResource):
 
-    # Return list of all existing borrowings from all libraries
+    # Return list of all existing borrowings from all libraries or a specific borrowing
     # Can be done by Admin
     def get(self, id=None):
         if not (self.is_logged() and self.is_admin()):

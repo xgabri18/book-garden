@@ -1,6 +1,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
+from sqlalchemy.exc import IntegrityError
 
 from models.models import Stock
 
@@ -52,14 +53,18 @@ class StockResource(MasterResource):
         else:
             availability = False
 
+        try:
+            stock = Stock(library_id   = library_id,
+                          booktitle_id = booktitle_id,
+                          amount       = amount,
+                          availability = availability)
 
-        stock = Stock(library_id   = library_id,
-                      booktitle_id = booktitle_id,
-                      amount       = amount,
-                      availability = availability)
+            db.session.add(stock)
+            db.session.commit()
 
-        db.session.add(stock)
-        db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
 
         return self.response_ok("Committed to db")
 
@@ -97,13 +102,17 @@ class StockResource(MasterResource):
         else:
             availability = False
 
+        try:
+            stock.library_id   = library_id
+            stock.booktitle_id = booktitle_id
+            stock.amount       = amount
+            stock.availability = availability
 
-        stock.library_id   = library_id
-        stock.booktitle_id = booktitle_id
-        stock.amount       = amount
-        stock.availability = availability
+            db.session.commit()
 
-        db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
 
         return self.response_ok("Committed to db")
 

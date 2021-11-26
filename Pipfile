@@ -15,6 +15,7 @@ flask-session = "*"
 requests = "*"
 faker = "*"
 selenium = "*"
+sqlalchemy = "*"
 
 [dev-packages]
 

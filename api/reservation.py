@@ -1,6 +1,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
+from sqlalchemy.exc import IntegrityError
 
 from models.models import Reservation,Borrowing
 
@@ -46,19 +47,28 @@ class ReservationResource(MasterResource):
         stock_id = request.form.get("stock_id")
         person_id = request.form.get("person_id")
 
-        reservation = Reservation(stock_id        = stock_id,
-                                  person_id       = person_id)
+        try:
+            reservation = Reservation(stock_id        = stock_id,
+                                      person_id       = person_id)
 
-        db.session.add(reservation)
-        db.session.commit()
+            db.session.add(reservation)
+            db.session.commit()
+
+        except IntegrityError as e:  # uniqueness control
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
 
         return self.response_ok("Committed to db")
 
-    # Remove any reservation
-    # Can be done by Admin
+    # Remove any reservation or yours
+    # Can be done by Admin (User can remove only his reservation)
     def delete(self, id):  # TODO user and ?librarian? remove
 
-        if not (self.is_logged() and self.is_admin()):
+        if not self.is_logged():
+            return self.response_error("Unauthorised action!")
+
+        reservation = Reservation.query.filter_by(id=id).first()
+        if not (self.is_admin() or self.is_user(reservation.person_id)):
             return self.response_error("Unauthorised action!")
 
         Reservation.query.filter_by(id=id).delete()

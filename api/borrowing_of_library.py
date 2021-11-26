@@ -8,20 +8,18 @@ from models.models import Borrowing,Stock
 # SET response_error a response_ok
 # osetrene
 
-# gets list of users borrowings
-# todo session
+
 class BorrowingOfLibraryRes(MasterResource):
 
-    # either person_id or persons e-mail
+    # Get list of all borrowings inside a specific library
     def get(self, library_id):
-        #todo - moze to iba librarian - mozno aj admin?????
-        # if not session['user_id']:  # no session - no one is logged
-        #     return "nenenene"
 
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
             return self.response_error("Unauthorised action!")
-        # if self.is_librarian():
-        #     # Kontrola ci librarian ziada veci zo svojej lib
+
+        if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+            if library_id != self.librarian_in_which_lib(session['user_id']):
+                return self.response_error("Unauthorised action!")
 
         # ziskanie pola stock id ktore su napojene na library
         # potom query na borrowings ktore su napojene na tieto stocks
