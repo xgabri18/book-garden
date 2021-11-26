@@ -111,6 +111,7 @@ def generate_distributors(url,s,n):
         r = s.post(url = url+spec, data = data)
         print(r)
 
+
 def generate_users(url,s,n):
     spec = "/person"
     fake = Faker()
@@ -143,6 +144,7 @@ def generate_people(url,s,distributors,users):
     generate_distributors(url,s,distributors)
     generate_users(url,s,users)
 
+
 def randomize_stock(url,s):
     spec = "/stock"
     fake = Faker()
@@ -158,7 +160,6 @@ def randomize_stock(url,s):
             stock["amount"] = random.randrange(0,15)
             x = s.put(url + spec + "/" + str(stock["id"]), stock)
             print(x)
-
 
 
 def random_votes(url,s,low,high):
@@ -183,7 +184,6 @@ def random_votes(url,s,low,high):
             for chosen in stock_id_array:
                 x = s.post(url + spec, {"person_id" : person["id"], "stock_id" : chosen})
                 print(x)
-
 
 
 def random_orders(url,s,low,high):
@@ -223,6 +223,7 @@ def random_orders(url,s,low,high):
 
                 x = s.post(url + spec,order)
                 print(x)
+
 
 def random_reservations(url,s,low,high):
     spec = "/reservation"
@@ -281,33 +282,18 @@ def random_borrowings(url,s,low,high):
 
 
 
-
 url = "http://127.0.0.1:5000/api"
 s = requests.Session()
 r = s.post(url = url+"/session", data = {"username" : "admin", "password" : "admin", })
 
 
-# generate_books(url,s)
-# generate_libraries(url,s,3)
-# generate_people(url,s,2,3)
-# randomize_stock(url,s)
-# random_votes(url,s,10,15)
-# random_orders(url,s,1,4)
-# random_reservations(url,s,1,4)
-random_borrowings(url,s,1,4)
+generate_books(     url,s      )
+generate_libraries( url,s, 3   ) # num of libs
+generate_people(    url,s, 2,3 ) # distributors, users
+randomize_stock(    url,s      )
+random_votes(       url,s,10,15) # random votes        between set numbers
+random_orders(      url,s, 1,4 ) # random orders       between set numbers
+random_reservations(url,s, 1,4 ) # random reservations between set numbers
+random_borrowings(  url,s, 1,4 ) # random borrowings   between set numbers
 
-
-
-# stock = s.get(url + "/stock/filter?availability=False")
-# stock = json.loads(stock.text)
-# stock_list = list(json.loads(stock.text))
-# stock_set  = set(json.loads(stock.text))
-# for i in range(100):
-#     x = random.sample([d['id'] for d in stock],k = random.randrange(18,20))
-#     x.sort()
-#     a = list(x)
-#     b = set(x)
-#     print(len(a) == len(b))
-#     print(x)
-#print([d['id'] for d in json.loads(stock.text)])
 

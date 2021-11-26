@@ -5,6 +5,9 @@ from datetime import datetime
 
 from models.models import Borrowing,Stock
 
+# SET response_error a response_ok
+# osetrene
+
 # gets list of users borrowings
 # todo session
 class BorrowingOfLibraryRes(MasterResource):
@@ -39,4 +42,4 @@ class BorrowingOfLibraryRes(MasterResource):
             del row["_sa_instance_state"]
             array.append(row)
 
-        return jsonify(array)
+        return self.response_ok(array)

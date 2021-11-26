@@ -4,6 +4,9 @@ from shared_db import db
 
 from models.models import Stock
 
+# SET response_error a response_ok
+# osetrene
+
 class StockResource(MasterResource):
 
     # Get all stocks
@@ -22,7 +25,7 @@ class StockResource(MasterResource):
                 del row["_sa_instance_state"]
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             stock = Stock.query.filter_by(id = id).all()
@@ -31,7 +34,7 @@ class StockResource(MasterResource):
                 stock = stock[0].__dict__
                 del stock["_sa_instance_state"]
 
-            return jsonify(stock)
+            return self.response_ok(stock)
 
     # Adding should not be done manually
     # In some cases Admin may use
@@ -58,6 +61,9 @@ class StockResource(MasterResource):
         db.session.add(stock)
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
+
     # Removing should not be done manually
     # In some cases Admin may use
     def delete(self, id):
@@ -66,6 +72,9 @@ class StockResource(MasterResource):
 
         Stock.query.filter_by(id=id).delete()
         db.session.commit()
+
+        return self.response_ok("Committed to db")
+
 
     # Update stock
     # In some cases Admin may use
@@ -76,7 +85,7 @@ class StockResource(MasterResource):
         stock = Stock.query.filter_by(id=id).first()
 
         if not stock:
-            return
+            return self.response_error("Stock doesnt exist")
 
         library_id   = request.form.get("library_id")
         booktitle_id = request.form.get("booktitle_id")
@@ -96,4 +105,5 @@ class StockResource(MasterResource):
 
         db.session.commit()
 
+        return self.response_ok("Committed to db")
 

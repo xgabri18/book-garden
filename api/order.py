@@ -4,6 +4,10 @@ from shared_db import db
 
 from models.models import Order
 
+# SET response_error a response_ok
+# osetrene
+
+
 class OrderResource(MasterResource):
 
     # Return list of all existing orders from all libraries
@@ -21,7 +25,7 @@ class OrderResource(MasterResource):
                 del row["_sa_instance_state"]
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             order = Order.query.filter_by(id = id).all()
@@ -30,7 +34,7 @@ class OrderResource(MasterResource):
                 order = order[0].__dict__
                 del order["_sa_instance_state"]
 
-            return jsonify(order)
+            return self.response_ok(order)
 
     # Place new order
     # Can be done by Admin and Librarian
@@ -55,13 +59,19 @@ class OrderResource(MasterResource):
         db.session.add(order)
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
     # Delete any order
     # Can be done by Admin (Librarian can delete orders of his Library)
     def delete(self, id):
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
+
         Order.query.filter_by(id=id).delete()
         db.session.commit()
+
+        return self.response_ok("Committed to db")
 
     # transformacia Orderu do Stocku, pridat put
     # def put(self,id):

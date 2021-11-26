@@ -4,6 +4,9 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
+
+#needs chromedriver.exe
+
 class MartinusDownloader():
     def __init__(self):
         self.name = "//*[@id=\"page-container\"]/main/div[1]/div[1]/section[2]/div/div/article/h1"

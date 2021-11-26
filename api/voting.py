@@ -4,6 +4,8 @@ from shared_db import db
 
 from models.models import Voting
 
+# SET response_error a response_ok
+# osetrene
 
 class VotingResource(MasterResource):
 
@@ -17,7 +19,7 @@ class VotingResource(MasterResource):
                 del row["_sa_instance_state"]
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             voting = Voting.query.filter_by(id=id).all()
@@ -26,7 +28,7 @@ class VotingResource(MasterResource):
                 voting = voting[0].__dict__
                 del voting["_sa_instance_state"]
 
-            return jsonify(voting)
+            return self.response_ok(voting)
 
     # TODO ako vobec bude vote fungovat, ked je to len ze ci palec hore alebo ne tak potom bud post alebo put alebo delete nedava zmysel
     def post(self, id=None):
@@ -39,18 +41,24 @@ class VotingResource(MasterResource):
         db.session.add(voting)
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
 
     def delete(self, id):
         Voting.query.filter_by(id=id).delete()
         db.session.commit()
+
+        return self.response_ok("Committed to db")
 
 
     def put(self, id):  # vote changed
         voting = Voting.query.filter_by(id=id).first()
 
         if not voting:
-            return
+            return self.response_error("Voting doesnt exist")
 
         voting.fine = request.form.get("vote")
 
         db.session.commit()
+
+        return self.response_ok("Committed to db")

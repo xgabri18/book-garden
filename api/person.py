@@ -4,6 +4,10 @@ from shared_db import db
 
 from models.models import Person
 
+# SET response_error a response_ok
+# osetrene
+
+
 class PersonResource(MasterResource):
 
     # TODO k tomuto treba debatu (profil alebo jak?/ admin?)
@@ -17,7 +21,7 @@ class PersonResource(MasterResource):
                 del row["_sa_instance_state"]
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             person = Person.query.filter_by(id = id).all()
@@ -26,7 +30,7 @@ class PersonResource(MasterResource):
                 person = person[0].__dict__
                 del person["_sa_instance_state"]
 
-            return jsonify(person)
+            return self.response_ok(person)
 
     # Register
     # Can be done if no session is active
@@ -56,13 +60,21 @@ class PersonResource(MasterResource):
         db.session.add(person)
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
+
     # Remove user
     # Can be done by Admin
     def delete(self, id):
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
+
         Person.query.filter_by(id=id).delete()
         db.session.commit()
+
+        return self.response_ok("Committed to db")
+
 
     # Edit user
     # Can be done by Admin and User(can edit his info) TODO moze user editovat vsetko? (user_type urcite nope)
@@ -73,7 +85,7 @@ class PersonResource(MasterResource):
         person = Person.query.filter_by(id=id).first()
 
         if not person:  # user non existent -> err?
-            return
+            return self.response_error("Person doesnt exist")
 
         email       = request.form.get("email")
         user_type   = request.form.get("user_type")
@@ -84,7 +96,7 @@ class PersonResource(MasterResource):
         library_id  = request.form.get("library_id")
         profiledesc = request.form.get("profiledesc")
 
-        print(library_id)
+       #print(library_id)
 
 
         person.email       = email
@@ -97,4 +109,6 @@ class PersonResource(MasterResource):
         person.profiledesc = profiledesc
 
         db.session.commit()
+
+        return self.response_ok("Committed to db")
 

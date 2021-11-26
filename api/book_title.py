@@ -4,6 +4,8 @@ from shared_db import db
 
 from models.models import BookTitle,Library,Stock
 
+# SET response_error a response_ok
+# osetrene
 
 class BookTitleResource(MasterResource):
     def get(self,id = None):
@@ -16,7 +18,7 @@ class BookTitleResource(MasterResource):
                 del row["_sa_instance_state"]
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             booktitle = BookTitle.query.filter_by(id = id).all()
@@ -25,7 +27,7 @@ class BookTitleResource(MasterResource):
                 booktitle = booktitle[0].__dict__
                 del booktitle["_sa_instance_state"]
 
-            return jsonify(booktitle)
+            return self.response_ok(booktitle)
 
     # Add book to DB
     # Can be done by Admin and Distributor
@@ -68,25 +70,31 @@ class BookTitleResource(MasterResource):
 
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
     # Delete a book from DB
     # Can be done by Admin
     def delete(self, id):
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
         BookTitle.query.filter_by(id=id).delete()
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
     # Update any book
     # Can be done by Admin and Distributor
     def put(self,id):
+
         if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
             return self.response_error("Unauthorised action!")
 
         booktitle = BookTitle.query.filter_by(id=id).first()
 
         if not booktitle:
-            return
+            return self.response_error("Booktitle doesnt exist")
 
         name        = request.form.get("name")
         author      = request.form.get("author")
@@ -109,4 +117,6 @@ class BookTitleResource(MasterResource):
         booktitle.date_publication = date_publication
 
         db.session.commit()
+
+        return self.response_ok("Committed to db")
 

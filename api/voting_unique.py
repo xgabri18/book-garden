@@ -12,7 +12,7 @@ class VotesOnStockRes(MasterResource):
     def get(self, stock_id):
         votes = Voting.query.filter(Voting.stock_id == stock_id).all()
 
-        return jsonify(len(votes))
+        return self.response_ok(len(votes))
 
 
 # gets list of stocks where user voted
@@ -31,7 +31,7 @@ class VotesFromPersonRes(MasterResource):
             del row["_sa_instance_state"]
             array.append(row)
 
-        return jsonify(array)
+        return self.response_ok(array)
 
 
 # gets list of stock where user voted
@@ -42,9 +42,9 @@ class VotesPersonVotedStockRes(MasterResource):
         vote = Voting.query.filter(Voting.person_id == person_id, Voting.stock_id == stock_id).all()
 
         if not vote:
-            return jsonify(False)
+            return self.response_ok(False)
         else:
-            return jsonify(True)
+            return self.response_ok(True)
 
 
 

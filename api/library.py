@@ -4,6 +4,10 @@ from shared_db import db
 
 from models.models import Library,BookTitle,Stock
 
+
+# SET response_error a response_ok
+# osetrene
+
 class LibraryResource(MasterResource):
 
     # Get all libraries
@@ -20,7 +24,7 @@ class LibraryResource(MasterResource):
                 del row["_sa_instance_state"]   #get rid of _sa_instance_state - idk what it is
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             library = Library.query.filter_by(id = id).all()
@@ -29,7 +33,7 @@ class LibraryResource(MasterResource):
                 library = library[0].__dict__
                 del library["_sa_instance_state"]
 
-            return jsonify(library)
+            return self.response_ok(library)
 
     # Adding a library into DB
     # Can be done by Admin
@@ -65,25 +69,33 @@ class LibraryResource(MasterResource):
 
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
+
     # Removing a library from DB
     # Can be done by Admin
     def delete(self,id):
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
         Library.query.filter_by(id=id).delete()
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
+
     # Updating a library
     # Can be done by Admin
     def put(self,id):
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
         library = Library.query.filter_by(id=id).first()
 
         if not library:
-            return
+            return self.response_error("Library doesnt exist")
 
         name        = request.form.get("name")
         city        = request.form.get("city")
@@ -99,5 +111,8 @@ class LibraryResource(MasterResource):
         library.description = description
 
         db.session.commit()
+
+        return self.response_ok("Committed to db")
+
 
 
