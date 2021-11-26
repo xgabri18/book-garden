@@ -33,8 +33,14 @@ from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesPersonVote
 
 from models.models import BookTitle,Person,Library,Stock,Reservation,Borrowing,Order,Voting
 
+# TODO: Remove after final deploy
+from flask_cors import CORS
+
 
 app = Flask(__name__, static_url_path='/', static_folder='frontend/build')
+
+# TODO: Remove after final deploy
+CORS(app)
 
 
 # username:password@server/db
@@ -51,9 +57,6 @@ db.init_app(app)
 admin = Admin(app)
 
 app.config['SESSION_SQLALCHEMY'] = db
-
-# TODO: Remove after final deploy
-CORS(app)
 
 @app.errorhandler(404)
 def not_found(e):
