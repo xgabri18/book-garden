@@ -52,6 +52,9 @@ admin = Admin(app)
 
 app.config['SESSION_SQLALCHEMY'] = db
 
+# TODO: Remove after final deploy
+CORS(app)
+
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
