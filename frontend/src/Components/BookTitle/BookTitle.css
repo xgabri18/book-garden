@@ -12,6 +12,10 @@
     @apply text-lg lg:text-2xl font-bold my-4
 }
 
+.BookTitle .BookTitle-author {
+    @apply text-gray-600
+}
+
 .BookTitle .BookTitle-genre {
     @apply text-sm md:text-base
 }
@@ -22,6 +26,10 @@
 
 .BookTitle .BookTitle-description {
     @apply text-left
+}
+
+.BookTitle .BookTitle-details {
+    @apply flex flex-col gap-2 mt-4 text-sm
 }
 
 .BookTitle .BookTitle-libraries {

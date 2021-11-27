@@ -4,7 +4,7 @@ import { isArray } from "@craco/craco/lib/utils";
 
 /** @todo: DELETE AND GET THIS FROM DB */
 
-export const authenticated = true;
+export const authenticated = false;
 export const username = "user";
 export const role = "admin";
 export const idLibrary = 1;
@@ -21,5 +21,3 @@ export const AdminRoute = ({ roles, ...rest }) => {
     <NotAuthorizedError />
   );
 };
-
-export const authorized = (module) => {};

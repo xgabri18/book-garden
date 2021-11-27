@@ -1,6 +1,9 @@
 import { Redirect } from "react-router-dom";
+import axios from "axios";
+import qs from "querystring";
+import { createAPI } from "./api";
 
-class User {
+class AuthService {
   constructor() {
     this.id = null;
     this.username = "";
@@ -9,18 +12,22 @@ class User {
     this.authenticated = false;
   }
 
-  login(id, username, type, employee) {
-    this.authenticated = true;
-    this.id = id;
-    this.username = username;
-    this.type = type;
-    this.employee = employee;
-
-    return this.employee ? (
-      <Redirect to="/admin" />
-    ) : (
-      <Redirect to="/account/profile" />
-    );
+  login(username, password) {
+    axios
+      .post(createAPI("session"), qs.stringify({ username, password }))
+      .then((response) => {
+        console.log(response.data);
+      });
+    // this.id = id;
+    // this.username = username;
+    // this.type = type;
+    // this.employee = employee;
+    //
+    // return this.employee ? (
+    //   <Redirect to="/admin" />
+    // ) : (
+    //   <Redirect to="/account/profile" />
+    // );
   }
 
   logout() {
@@ -32,6 +39,9 @@ class User {
   }
 
   isAuthenticated() {
+    axios.get(createAPI("session")).then((response) => {
+      console.log(response.data);
+    });
     return this.authenticated;
   }
 
@@ -52,4 +62,4 @@ class User {
   }
 }
 
-export default new User();
+export default new AuthService();

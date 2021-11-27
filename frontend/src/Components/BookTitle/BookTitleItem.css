@@ -1,5 +1,5 @@
 .BookTitleItem {
-    @apply block bg-transparent p-2 text-center rounded-md
+    @apply block bg-transparent p-2 text-center rounded-md h-full
     transition ease-linear
     hover:bg-white hover:shadow-md
     transform hover:scale-110

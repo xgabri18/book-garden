@@ -5,7 +5,7 @@ import {
 } from "../../Components/Ui/FilterDropdown";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { api } from "../../api";
+import { createAPI } from "../../api";
 
 /**
  * @TODO: Replace select with react-select,
@@ -14,14 +14,17 @@ import { api } from "../../api";
 
 const BookTitleListModule = () => {
   const [bookTitles, setBookTitles] = useState([]);
+  const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    axios.get(api.BookTitleList).then((response) => {
-      setBookTitles(response.data);
-    });
-  });
+    axios
+      .get(createAPI("booktitle"))
+      .then((response) => setBookTitles(response.data));
 
-  const genres = ["Adventure", "Action", "Sci-fi"];
+    axios
+      .get(createAPI("booktitle/unique/genres"))
+      .then((response) => setGenres(response.data));
+  }, []);
 
   return (
     <div className="flex flex-row flex-wrap">
@@ -38,7 +41,7 @@ const BookTitleListModule = () => {
           </FilterDropdownItem>
           <FilterDropdownItem title="Genres">
             {genres.map((genre, index) => (
-              <div className="inline-block mr-2" key={index}>
+              <div className="block mr-2" key={index}>
                 <input type="checkbox" id={`genre-${index}`} className="mr-1" />
                 <label htmlFor={`genre-${index}`}>{genre}</label>
               </div>

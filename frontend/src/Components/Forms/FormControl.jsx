@@ -1,6 +1,6 @@
 import "./FormControl.css";
 
-const FormControl = ({ id, type, label, placeholder, hideLabel }) => {
+const FormControl = ({ id, type, label, placeholder, hideLabel, onChange }) => {
   if (hideLabel) {
     return (
       <div className="Form-control">
@@ -12,6 +12,7 @@ const FormControl = ({ id, type, label, placeholder, hideLabel }) => {
           id={id}
           placeholder={placeholder}
           className="Form-control-input"
+          onChange={onChange}
         />
       </div>
     );
@@ -27,6 +28,7 @@ const FormControl = ({ id, type, label, placeholder, hideLabel }) => {
         id={id}
         placeholder={placeholder}
         className="Form-control-input"
+        onChange={onChange}
       />
     </div>
   );
