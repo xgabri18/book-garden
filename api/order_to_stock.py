@@ -11,7 +11,7 @@ class OrderConfirmRes(MasterResource):
     # Can be done by Admin and Distributor
     def get(self, id):
         if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
-            return self.response_error("Action not allowed for current session!")
+            return self.response_error("Unauthorised action!")
 
         order = Order.query.filter_by(id=id).first()
         library_id = order.library_id

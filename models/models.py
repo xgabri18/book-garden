@@ -7,7 +7,7 @@ class Person(db.Model):
     #query: db.Query  # adds autocomplete to queries
     id = db.Column(db.Integer, primary_key=True)
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
-    user_type = db.Column(db.Integer, nullable=False)  # ADMIN-5/LIBRARIAN-4/DISTRIBUTOR-3/LOGUSER-other - permissions
+    user_type = db.Column(db.Integer, nullable=False, default=1)  # ADMIN-5/LIBRARIAN-4/DISTRIBUTOR-3/LOGUSER-other - permissions
     username = db.Column(db.Unicode(100), nullable=False, unique=True)
     password = db.Column(db.Unicode(100), nullable=False)
     email = db.Column(db.Unicode(100), nullable=False, unique=True)
@@ -27,7 +27,7 @@ class Person(db.Model):
 class Library(db.Model):
     #query: db.Query  # adds autocomplete to queries
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.Unicode(100))
+    name = db.Column(db.Unicode(100), nullable=False)
     city = db.Column(db.Unicode(100))
     street = db.Column(db.Unicode(100))
     open_hours = db.Column(db.UnicodeText)
@@ -45,7 +45,7 @@ class BookTitle(db.Model):
     author = db.Column(db.UnicodeText)
     publisher = db.Column(db.Unicode(100))
     photo = db.Column(db.Text)
-    isbn = db.Column(db.String(13), unique=True)  # ISBN is composed of 10 or 13 numbers
+    isbn = db.Column(db.String(13), nullable=False, unique=True)  # ISBN is composed of 10 or 13 numbers
     date_publication = db.Column(db.Integer)
     genre = db.Column(db.Unicode(100))  # mozno tabulka????
     description = db.Column(db.UnicodeText)
@@ -109,7 +109,7 @@ class Borrowing(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Integer)
+    amount = db.Column(db.Integer, default=0)
     date_added = db.Column(db.DateTime, default=datetime.now)
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
     booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'))

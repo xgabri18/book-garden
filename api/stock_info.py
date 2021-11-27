@@ -4,6 +4,8 @@ from shared_db import db
 
 from models.models import Stock, Library, BookTitle
 
+# SET response_error a response_ok
+# osetrene
 
 # takes stock ID and returns Library name and Book Name
 # session not needed
@@ -21,7 +23,7 @@ class StockInfoResource(MasterResource):
 
 
 
-        return jsonify(result)
+        return self.response_ok(result)
 
 
 

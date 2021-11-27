@@ -2,7 +2,7 @@ from flask import jsonify,session
 from flask_restful import Resource
 from shared_db import db
 
-from models.models import Stock
+from models.models import Stock,Person
 
 
 class MasterResource(Resource):  # subclass
@@ -38,6 +38,13 @@ class MasterResource(Resource):  # subclass
         stock = Stock.query.filter_by(id=stock_id).first()
         if stock:  # in some cases it is "guaranteed" the stock exists (if admin didnt break something)
             return stock.library_id
+        else:
+            return None
+
+    def librarian_in_which_lib(self,librarian_id):
+        librarian = Person.query.filter_by(librarian_id=librarian_id).first()
+        if librarian:
+            return librarian.library_id
         else:
             return None
 

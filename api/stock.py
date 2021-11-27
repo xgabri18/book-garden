@@ -1,8 +1,12 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
+from sqlalchemy.exc import IntegrityError
 
 from models.models import Stock
+
+# SET response_error a response_ok
+# osetrene
 
 class StockResource(MasterResource):
 
@@ -22,7 +26,7 @@ class StockResource(MasterResource):
                 del row["_sa_instance_state"]
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             stock = Stock.query.filter_by(id = id).all()
@@ -31,7 +35,7 @@ class StockResource(MasterResource):
                 stock = stock[0].__dict__
                 del stock["_sa_instance_state"]
 
-            return jsonify(stock)
+            return self.response_ok(stock)
 
     # Adding should not be done manually
     # In some cases Admin may use
@@ -49,14 +53,21 @@ class StockResource(MasterResource):
         else:
             availability = False
 
+        try:
+            stock = Stock(library_id   = library_id,
+                          booktitle_id = booktitle_id,
+                          amount       = amount,
+                          availability = availability)
 
-        stock = Stock(library_id   = library_id,
-                      booktitle_id = booktitle_id,
-                      amount       = amount,
-                      availability = availability)
+            db.session.add(stock)
+            db.session.commit()
 
-        db.session.add(stock)
-        db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
+
+        return self.response_ok("Committed to db")
+
 
     # Removing should not be done manually
     # In some cases Admin may use
@@ -67,6 +78,9 @@ class StockResource(MasterResource):
         Stock.query.filter_by(id=id).delete()
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
+
     # Update stock
     # In some cases Admin may use
     def put(self, id):
@@ -76,7 +90,7 @@ class StockResource(MasterResource):
         stock = Stock.query.filter_by(id=id).first()
 
         if not stock:
-            return
+            return self.response_error("Stock doesnt exist")
 
         library_id   = request.form.get("library_id")
         booktitle_id = request.form.get("booktitle_id")
@@ -88,12 +102,17 @@ class StockResource(MasterResource):
         else:
             availability = False
 
+        try:
+            stock.library_id   = library_id
+            stock.booktitle_id = booktitle_id
+            stock.amount       = amount
+            stock.availability = availability
 
-        stock.library_id   = library_id
-        stock.booktitle_id = booktitle_id
-        stock.amount       = amount
-        stock.availability = availability
+            db.session.commit()
 
-        db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
 
+        return self.response_ok("Committed to db")
 
