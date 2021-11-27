@@ -5,7 +5,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { createAdminRoute, createRoute } from "../../../routes";
+import { createAdminRoute } from "../../../routes";
 
 export const BookTitleListModule = () => {
   return (

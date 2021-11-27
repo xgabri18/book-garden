@@ -21,6 +21,7 @@
 .FilterDropdownItem .FilterDropdownItem-body {
     @apply h-0 overflow-hidden transition duration-200 ease-linear
 }
+
 .FilterDropdownItem.collapsed .FilterDropdownItem-body {
     @apply h-full p-4 transition duration-200 ease-linear
 }

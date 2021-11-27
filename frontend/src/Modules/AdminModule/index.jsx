@@ -1,7 +1,6 @@
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import { AdminRoute, authenticated, role } from "../../middlewares";
 import { adminRoutes } from "../../routes";
-import User from "../../auth";
 import { NotAuthorizedError } from "../../Components/Errors/NotAuthorizedError";
 
 const AdminModule = () => {

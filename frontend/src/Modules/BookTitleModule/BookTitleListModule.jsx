@@ -3,6 +3,9 @@ import {
   FilterDropdown,
   FilterDropdownItem,
 } from "../../Components/Ui/FilterDropdown";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { api } from "../../api";
 
 /**
  * @TODO: Replace select with react-select,
@@ -10,50 +13,13 @@ import {
  */
 
 const BookTitleListModule = () => {
-  const bookTitles = [
-    {
-      id: 1,
-      name: "Lorem ipsum",
-      genre: "Adventure",
-      price: 15.0,
-      rating: 4,
-    },
-    {
-      id: 2,
-      name: "Lorem ipsum",
-      genre: "Adventure",
-      price: 15.0,
-      rating: 4,
-    },
-    {
-      id: 3,
-      name: "Lorem ipsum",
-      genre: "Sci-Fi",
-      price: 15.0,
-      rating: 4,
-    },
-    {
-      id: 4,
-      name: "Lorem ipsum",
-      genre: "Sci-Fi",
-      price: 15.0,
-      rating: 4,
-    },
-    {
-      id: 5,
-      name: "Lorem ipsum",
-      genre: "Action",
-      price: 15.0,
-      rating: 4,
-    },
-    {
-      id: 6,
-      name: "Lorem ipsum",
-      genre: "Action",
-      price: 15.0,
-      rating: 4,
-    },
-  ];
+  const [bookTitles, setBookTitles] = useState([]);
+
+  useEffect(() => {
+    axios.get(api.BookTitleList).then((response) => {
+      setBookTitles(response.data);
+    });
+  });
 
   const genres = ["Adventure", "Action", "Sci-fi"];
 
@@ -63,9 +29,7 @@ const BookTitleListModule = () => {
         <FilterDropdown>
           <FilterDropdownItem title="Sorting" collapsed>
             <select id="sorting" className="w-full p-2">
-              <option value="newest" selected>
-                Popular
-              </option>
+              <option value="newest">Popular</option>
               <option value="newest">Newest</option>
               <option value="newest">Oldest</option>
               <option value="newest">Price Ascending</option>
@@ -74,7 +38,7 @@ const BookTitleListModule = () => {
           </FilterDropdownItem>
           <FilterDropdownItem title="Genres">
             {genres.map((genre, index) => (
-              <div className="inline-block mr-2">
+              <div className="inline-block mr-2" key={index}>
                 <input type="checkbox" id={`genre-${index}`} className="mr-1" />
                 <label htmlFor={`genre-${index}`}>{genre}</label>
               </div>

@@ -1,9 +1,7 @@
 import {
   BookOpenIcon,
   ChevronLeftIcon,
-  LibraryIcon,
   SaveIcon,
-  UserIcon,
 } from "@heroicons/react/outline";
 import FormControl from "../../../Components/Forms/FormControl";
 import { Button, ButtonLink } from "../../../Components/Ui/Button";

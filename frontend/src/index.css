@@ -5,28 +5,29 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gray-50 m-0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    @apply bg-gray-50 m-0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 .Container {
-  @apply container mx-auto px-4;
+    @apply container mx-auto px-4;
 }
 
 .Link {
-  @apply inline-block text-indigo-500 transition duration-200 ease-linear
-  hover:text-indigo-700
+    @apply inline-block text-indigo-500 transition duration-200 ease-linear
+    hover:text-indigo-700
 }
 
 .Content {
-  @apply bg-white shadow-md p-8 rounded-md
+    @apply bg-white shadow-md p-8 rounded-md
 }
+
 .Content .Content-Title {
-  @apply mb-4 font-bold text-2xl
+    @apply mb-4 font-bold text-2xl
 }
