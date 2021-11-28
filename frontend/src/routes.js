@@ -14,6 +14,7 @@ import LibraryModule from "./Modules/LibraryModule";
 import AccountModule from "./Modules/AccountModule";
 import AdminModule from "./Modules/AdminModule";
 import { DashboardModule } from "./Modules/AdminModule/DashboardModule";
+import { BookTitleCreateModule } from "./Modules/AdminModule/BookTitle/BookTitleCreateModule";
 
 /**
  * Front end routes
@@ -64,6 +65,12 @@ export const adminRoutes = [
     roles: ["admin", "librarian", "distributor"],
     component: BookTitleListModule,
     exact: true,
+  },
+  {
+    name: "BookTitleCreate",
+    url: "/book-titles/create",
+    roles: ["admin", "librarian", "distributor"],
+    component: BookTitleCreateModule,
   },
   {
     name: "BookTitleEdit",

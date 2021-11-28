@@ -3,31 +3,69 @@ import {
   ChevronLeftIcon,
   ExternalLinkIcon,
   PencilIcon,
+  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
 import { createAdminRoute, createRoute } from "../../../routes";
 import axios from "axios";
 import { createAPI } from "../../../api";
 import { useEffect, useState } from "react";
+import { Alert } from "../../../Components/Ui/Alert";
 
 export const BookTitleListModule = () => {
+  const [alert, setAlert] = useState(null);
   const [bookTitles, setBookTitles] = useState([]);
 
   useEffect(() => {
     axios
       .get(createAPI("booktitle"))
-      .then((response) => setBookTitles(response.data));
-  });
+      .then((response) => setBookTitles(response.data.data));
+  }, [alert]);
+
+  function deleteBook(id) {
+    axios.delete(createAPI("booktitle/:id", { id })).then((response) => {
+      if (response.data.status === "success") {
+        // Book Deleted
+        window.scrollTo(0, 0);
+        setAlert({
+          message: "Book Title Deleted",
+          type: "success",
+        });
+      } else {
+        // Error
+        window.scrollTo(0, 0);
+        setAlert({
+          message: response.data.message,
+          type: "danger",
+        });
+      }
+    });
+  }
 
   return (
     <>
-      <ButtonLink
-        to="/admin"
-        variant="secondary"
-        icon={<ChevronLeftIcon className="h-6" />}
-        text="Back"
-      />
+      <div className="flex justify-between">
+        <ButtonLink
+          to="/admin"
+          variant="secondary"
+          icon={<ChevronLeftIcon className="h-6 mr-1" />}
+          text="Back"
+        />
+        <ButtonLink
+          to={createAdminRoute("BookTitleCreate")}
+          variant="green"
+          icon={<PlusIcon className="h-6 mr-1" />}
+          text="New Book"
+        />
+      </div>
       <div className="Content mt-4">
+        {alert && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClick={() => setAlert(null)}
+          />
+        )}
         <h1 className="Content-Title">Book titles</h1>
 
         <table className="table-auto w-full">
@@ -41,7 +79,7 @@ export const BookTitleListModule = () => {
           </thead>
           <tbody>
             {bookTitles.map((bookTitle, index) => (
-              <tr>
+              <tr key={index}>
                 <td>{bookTitle.id}</td>
                 <td className="w-2/12">
                   <img
@@ -77,6 +115,7 @@ export const BookTitleListModule = () => {
                       icon={<TrashIcon className="h-6 mr-1" />}
                       text="Delete"
                       hideTextSm
+                      onClick={() => deleteBook(bookTitle.id)}
                     />
                   </div>
                 </td>

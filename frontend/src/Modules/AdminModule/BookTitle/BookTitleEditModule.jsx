@@ -21,7 +21,7 @@ export const BookTitleEditModule = () => {
   useEffect(() => {
     axios
       .get(createAPI("booktitle/:id", { id }))
-      .then((response) => setBookTitle(response.data));
+      .then((response) => setBookTitle(response.data.data));
   });
 
   return (
@@ -29,7 +29,7 @@ export const BookTitleEditModule = () => {
       <ButtonLink
         to="/admin/book-titles"
         variant="secondary"
-        icon={<ChevronLeftIcon className="h-6" />}
+        icon={<ChevronLeftIcon className="h-6 mr-1" />}
         text="Back"
       />
       <div className="Content mt-4">
@@ -121,6 +121,7 @@ export const BookTitleEditModule = () => {
               id="date_publication"
               name="date_publication"
               value={bookTitle.date_publication}
+              placeholder="1998"
               label="Publish Date"
             />
             <FormControl
@@ -161,7 +162,7 @@ export const BookTitleEditModule = () => {
               name="description"
               label="Description"
               value={bookTitle.description}
-              placeholder="https://mrtns.eu/tovar/_l/440/l440953.jpg"
+              placeholder="Lorem ipsum..."
             />
 
             <div className="flex items-end">
