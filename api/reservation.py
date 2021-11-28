@@ -10,7 +10,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DBAPIError
 
 from models.models import Reservation,Borrowing
 
@@ -19,11 +19,11 @@ from models.models import Reservation,Borrowing
 
 class ReservationResource(MasterResource):
 
-    # Return list of all existing reservations
+    # Return list of all existing reservations or a specific reservation
     # Can be done by Admin
     def get(self, id=None):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         if id is None:
             reservation = Reservation.query.all()
@@ -51,11 +51,16 @@ class ReservationResource(MasterResource):
         # TODO rezervacia rovnakej knihy
 
         if not self.is_logged():
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
+
 
         stock_id = request.form.get("stock_id")
-        person_id = request.form.get("person_id")
-
+        if self.is_admin():  # admin can create a reservation for anyone
+            person_id = request.form.get("person_id")
+            if person_id == "":
+                person_id = session['user_id']
+        else:
+            person_id = session['user_id']
         try:
             reservation = Reservation(stock_id        = stock_id,
                                       person_id       = person_id)
@@ -63,9 +68,10 @@ class ReservationResource(MasterResource):
             db.session.add(reservation)
             db.session.commit()
 
-        except IntegrityError as e:  # uniqueness control
+        except DBAPIError as e:
             db.session.rollback()
-            return self.response_error(e.orig.diag.message_detail)
+            return self.response_error("Can't create a reservation, make sure You provide valid information!",
+                                       str(e.__dict__.get('orig')))
 
         return self.response_ok("Committed to db")
 
@@ -74,13 +80,14 @@ class ReservationResource(MasterResource):
     def delete(self, id):  # TODO user and ?librarian? remove
 
         if not self.is_logged():
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         reservation = Reservation.query.filter_by(id=id).first()
-        if not (self.is_admin() or self.is_user(reservation.person_id)):
-            return self.response_error("Unauthorised action!")
+        if reservation:
+            if not (self.is_admin() or self.is_user(reservation.person_id)):
+                return self.response_error("Unauthorised action!", "")
 
-        Reservation.query.filter_by(id=id).delete()
+        Reservation.query.filter_by(id=id).delete()  # should work - no cascade
         db.session.commit()
 
         return self.response_ok("Committed to db")

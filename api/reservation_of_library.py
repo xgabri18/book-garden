@@ -24,11 +24,11 @@ class ReservationOfLibraryRes(MasterResource):
     def get(self, library_id):
 
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
             if library_id != self.librarian_in_which_lib(session['user_id']):
-                return self.response_error("Unauthorised action!")
+                return self.response_error("Unauthorised action!", "")
 
 
 
