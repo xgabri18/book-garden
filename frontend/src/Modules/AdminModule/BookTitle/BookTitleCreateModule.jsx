@@ -33,26 +33,13 @@ export const BookTitleCreateModule = () => {
           onSubmit={(e) => {
             e.preventDefault();
             const form = new FormData(e.target);
-            const collection = {};
+            const data = {};
             for (let pair of form.entries()) {
-              collection[pair[0]] = pair[1];
+              data[pair[0]] = pair[1];
             }
 
             axios
-              .post(
-                createAPI("booktitle"),
-                qs.stringify({
-                  name: collection.name,
-                  author: collection.author,
-                  publisher: collection.publisher,
-                  isbn: collection.isbn,
-                  genre: collection.genre,
-                  description: collection.description,
-                  rating: collection.rating,
-                  photo: collection.photo,
-                  date_publication: collection.date_publication,
-                })
-              )
+              .post(createAPI("booktitle"), qs.stringify({ ...data }))
               .then((response) => {
                 if (response.data.status === "success") {
                   // Edited

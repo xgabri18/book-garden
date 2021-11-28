@@ -109,7 +109,7 @@ export const BookTitleListModule = () => {
                         variant="primary"
                         icon={<ExternalLinkIcon className="h-6 mr-1" />}
                         text="Open"
-                        hideTextSm
+                        showText="md"
                         target="_blank"
                       />
                       <ButtonLink
@@ -119,14 +119,14 @@ export const BookTitleListModule = () => {
                         variant="yellow"
                         icon={<PencilIcon className="h-6 mr-1" />}
                         text="Edit"
-                        hideTextSm
+                        showText="md"
                       />
                       <Button
                         type="button"
                         variant="red"
                         icon={<TrashIcon className="h-6 mr-1" />}
                         text="Delete"
-                        hideTextSm
+                        showText="md"
                         onClick={() => deleteBook(bookTitle.id)}
                       />
                     </div>

@@ -1,57 +1,99 @@
 import FormControl from "../../Components/Forms/FormControl";
 import { Button } from "../../Components/Ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import auth from "../../auth";
+import { useState } from "react";
+import { Alert } from "../../Components/Ui/Alert";
 
 const AccountRegisterModule = () => {
+  const history = useHistory();
+  const [alert, setAlert] = useState(null);
+
   return (
     <div className="w-full sm:w-6/12 xl:w-4/12 mx-auto py-16 px-8 bg-white shadow-sm">
       <div className="uppercase text-center font-bold text-lg mb-8">
         Create an account
       </div>
-      <div className="flex flex-col">
-        <div className="flex flex-row">
-          <div className="pr-2">
-            <FormControl
-              type="text"
-              id="first_name"
-              label="First Name"
-              placeholder="Joe"
-            />
+
+      <form
+        method="post"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const form = new FormData(e.target);
+          const data = {};
+
+          for (let pair of form.entries()) {
+            data[pair[0]] = pair[1];
+          }
+
+          auth.register(data).then((response) => {
+            if (response.status === "success") {
+              history.push("/account/login");
+            } else {
+              window.scrollTo(0, 0);
+              setAlert({ message: response.message, type: "danger" });
+            }
+          });
+        }}
+      >
+        {alert && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClick={() => setAlert(null)}
+          />
+        )}
+
+        <div className="flex flex-col">
+          <div className="flex flex-row">
+            <div className="pr-2">
+              <FormControl
+                type="text"
+                id="name"
+                name="name"
+                label="First Name"
+                placeholder="Joe"
+              />
+            </div>
+            <div className="pl-2">
+              <FormControl
+                type="text"
+                id="surname"
+                name="surname"
+                label="Last Name"
+                placeholder="Doe"
+              />
+            </div>
           </div>
-          <div className="pl-2">
-            <FormControl
-              type="text"
-              id="last_name"
-              label="Last Name"
-              placeholder="Doe"
-            />
-          </div>
+          <FormControl
+            type="text"
+            id="username"
+            name="username"
+            label="Username"
+            placeholder="joe.doe"
+          />
+          <FormControl
+            type="email"
+            id="email"
+            name="email"
+            label="Email"
+            placeholder="joe.doe@example.com"
+          />
+          <FormControl
+            type="password"
+            id="password"
+            name="password"
+            label="Password"
+            placeholder="Password"
+          />
         </div>
-        <FormControl
-          type="email"
-          id="email"
-          label="Email"
-          placeholder="joe.doe@example.com"
+        <Button
+          to="submit"
+          variant="primary"
+          text="Register"
+          className="block w-full"
         />
-        <FormControl
-          type="password"
-          id="password"
-          label="Password"
-          placeholder="Password"
-        />
-        <FormControl
-          type="password"
-          id="confirm_password"
-          label="Confirm Password"
-          placeholder="Confirm Password"
-        />
-      </div>
-      <Button
-        to="submit"
-        variant="primary"
-        text="Login"
-        className="block w-full"
-      />
+      </form>
 
       <div className="text-center mt-4">
         Already have an account?

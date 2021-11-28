@@ -9,23 +9,32 @@ class AuthService {
   }
 
   init() {
-    // this.authenticated = true;
-    // this.id = 1;
-    // this.username = "admin";
-    // this.type = "admin";
-    // this.library_id = null;
-    // this.name = "Joe";
-    // this.surname = "Doe";
-    // this.profiledesc = "I love 50 shades of gray";
+    this.authenticated = true;
+    this.id = 1;
+    this.username = "admin";
+    this.password = "admin";
+    this.email = "admin@admin.com";
+    this.type = "librarian";
+    this.library_id = 1;
+    this.name = "Joe";
+    this.surname = "Doe";
+    this.profiledesc = "I am gay";
 
-    this.authenticated = false;
-    this.id = null;
-    this.username = "";
-    this.type = "";
-    this.library_id = null;
-    this.name = "";
-    this.surname = "";
-    this.profiledesc = "";
+    // this.authenticated = false;
+    // this.id = null;
+    // this.username = "";
+    // this.email = "";
+    // this.type = "";
+    // this.library_id = null;
+    // this.name = "";
+    // this.surname = "";
+    // this.profiledesc = "";
+  }
+
+  register(data) {
+    return axios
+      .post(createAPI("person"), qs.stringify({ ...data }))
+      .then((response) => response.data);
   }
 
   login(username, password) {
@@ -34,7 +43,7 @@ class AuthService {
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
         if (response.data.status === "success") {
-          this.checkAuthSession();
+          return this.checkAuthSession().then((loggedIn) => loggedIn);
         } else {
           console.log(response.data);
           return false;
@@ -60,15 +69,33 @@ class AuthService {
         session.data.data.user_id &&
         session.data.data.user_type
       ) {
-        console.log(session.data);
+        this.authenticated = true;
         this.id = session.data.data.user_id;
         this.type = this.convertToUserType(session.data.data.user_type);
-        this.authenticated = true;
+
+        axios.get(createAPI("person/:id", { id: this.id })).then((response) => {
+          if (response.data.status === "success") {
+            this.username = response.data.data.username;
+            this.email = response.data.data.email;
+            this.library_id = response.data.data.library_id;
+            this.name = response.data.data.name;
+            this.surname = response.data.data.surname;
+            this.profiledesc = response.data.data.profiledesc;
+          } else {
+            console.log("Can not get user info");
+          }
+        });
       } else {
         this.authenticated = false;
       }
 
+      // TODO: Comment this in production
+      this.authenticated = true;
       console.log("checkAuthSession: " + this.authenticated);
+      return true;
+
+      console.log("checkAuthSession: " + this.authenticated);
+      return this.authenticated;
     });
   }
 

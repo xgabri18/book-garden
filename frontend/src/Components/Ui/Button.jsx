@@ -10,23 +10,9 @@ export const Button = ({
   size = "",
   style = {},
   className = "",
-  hideTextSm = false,
+  showText,
   onClick,
 }) => {
-  if (icon) {
-    return (
-      <button
-        type={type}
-        className={`Button ${variant} ${size} ${className}`}
-        style={style}
-        onClick={onClick}
-      >
-        {icon}
-        <span className={hideTextSm ? "hidden md:block" : ""}>{text}</span>
-      </button>
-    );
-  }
-
   return (
     <button
       type={type}
@@ -34,7 +20,10 @@ export const Button = ({
       style={style}
       onClick={onClick}
     >
-      {text}
+      {icon}
+      <span className={showText ? "hidden " + showText + ":block" : ""}>
+        {text}
+      </span>
     </button>
   );
 };
@@ -47,23 +36,9 @@ export const ButtonLink = ({
   size = "",
   style = {},
   className = "",
-  hideTextSm = false,
+  showText,
   target,
 }) => {
-  if (icon) {
-    return (
-      <Link
-        to={to}
-        className={`Button ${variant} ${size} ${className}`}
-        style={style}
-        target={target}
-      >
-        {icon}
-        <span className={hideTextSm ? "hidden md:block" : ""}>{text}</span>
-      </Link>
-    );
-  }
-
   return (
     <Link
       to={to}
@@ -71,7 +46,10 @@ export const ButtonLink = ({
       style={style}
       target={target}
     >
-      {text}
+      {icon}
+      <span className={showText ? "hidden " + showText + ":block" : ""}>
+        {text}
+      </span>
     </Link>
   );
 };

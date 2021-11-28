@@ -107,21 +107,21 @@ export const LibraryListModule = () => {
                         variant="primary"
                         icon={<CogIcon className="h-6 mr-1" />}
                         text="Manage"
-                        hideTextSm
+                        showText="md"
                       />
                       <ButtonLink
                         to={createAdminRoute("LibraryEdit", { id: library.id })}
                         variant="yellow"
                         icon={<PencilIcon className="h-6 mr-1" />}
                         text="Edit"
-                        hideTextSm
+                        showText="md"
                       />
                       <Button
                         type="button"
                         variant="red"
                         icon={<TrashIcon className="h-6 mr-1" />}
                         text="Delete"
-                        hideTextSm
+                        showText="md"
                         onClick={() => deleteLibrary(library.id)}
                       />
                     </div>

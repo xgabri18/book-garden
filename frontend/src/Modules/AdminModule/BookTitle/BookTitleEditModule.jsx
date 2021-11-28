@@ -35,8 +35,8 @@ export const BookTitleEditModule = () => {
         text="Back"
       />
       <div className="Content mt-4">
-        <div className="flex items-center">
-          <div className="w-6/12 text-center">
+        <div className="flex flex-col lg:flex-row items-center">
+          <div className="w-full lg:w-6/12 mb-8 lg:mb-0 text-center">
             <img
               src={bookTitle.photo}
               alt={bookTitle.name}
@@ -49,29 +49,19 @@ export const BookTitleEditModule = () => {
           </div>
           <form
             method="post"
-            className="w-6/12"
+            className="w-full lg:w-6/12"
             onSubmit={(e) => {
               e.preventDefault();
               const form = new FormData(e.target);
-              const collection = {};
+              const data = {};
               for (let pair of form.entries()) {
-                collection[pair[0]] = pair[1];
+                data[pair[0]] = pair[1];
               }
 
               axios
                 .put(
                   createAPI("booktitle/:id", { id: bookTitle.id }),
-                  qs.stringify({
-                    name: collection.name,
-                    author: collection.author,
-                    publisher: collection.publisher,
-                    isbn: collection.isbn,
-                    genre: collection.genre,
-                    description: collection.description,
-                    rating: collection.rating,
-                    photo: collection.photo,
-                    date_publication: collection.date_publication,
-                  })
+                  qs.stringify({ ...data })
                 )
                 .then((response) => {
                   if (response.data.status === "success") {

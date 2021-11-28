@@ -34,14 +34,14 @@ export const Navbar = () => {
           <Button
             type="button"
             onClick={() =>
-              AuthService.logout().then((loggedIn) =>
-                loggedIn ? history.push("/") : console.log("Can not log out.")
+              AuthService.logout().then((loggedOut) =>
+                loggedOut ? history.push("/") : console.log("Can not log out.")
               )
             }
-            className="Navbar-link"
+            className="Navbar-link shadow-none"
             text="Log out"
             icon={<LogoutIcon className="h-6 mr-2" />}
-            hideTextSm
+            showText={"xl"}
           />
         )}
       </div>

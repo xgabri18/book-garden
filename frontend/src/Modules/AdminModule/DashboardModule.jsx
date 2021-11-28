@@ -10,6 +10,7 @@ import {
   UserIcon,
 } from "@heroicons/react/outline";
 import AuthService from "../../auth";
+import auth from "../../auth";
 
 export const DashboardModule = () => {
   const { path } = useRouteMatch();
@@ -57,19 +58,19 @@ export const modules = [
   },
   {
     name: "Library",
-    url: "/admin/libraries/" + idLibrary,
+    url: "/admin/libraries/" + auth.library_id,
     icon: <LibraryIcon className="h-12 mx-auto text-indigo-600" />,
     roles: ["librarian"],
   },
   {
     name: "Reservations",
-    url: "/admin/libraries/" + idLibrary + "/reservations",
+    url: "/admin/libraries/" + auth.library_id + "/reservations",
     icon: <CollectionIcon className="h-12 mx-auto text-indigo-600" />,
     roles: ["librarian"],
   },
   {
     name: "Borrowings",
-    url: "/admin/libraries/" + idLibrary + "/borrowings",
+    url: "/admin/libraries/" + auth.library_id + "/borrowings",
     icon: <TicketIcon className="h-12 mx-auto text-indigo-600" />,
     roles: ["librarian"],
   },
@@ -81,7 +82,7 @@ export const modules = [
   },
   {
     name: "Stock",
-    url: "/admin/libraries/" + idLibrary + "/stock",
+    url: "/admin/libraries/" + auth.library_id + "/stock",
     icon: <ArchiveIcon className="h-12 mx-auto text-indigo-600" />,
     roles: ["librarian"],
   },

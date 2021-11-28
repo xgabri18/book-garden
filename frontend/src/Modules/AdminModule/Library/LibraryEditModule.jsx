@@ -52,21 +52,15 @@ export const LibraryEditModule = () => {
             onSubmit={(e) => {
               e.preventDefault();
               const form = new FormData(e.target);
-              const collection = {};
+              const data = {};
               for (let pair of form.entries()) {
-                collection[pair[0]] = pair[1];
+                data[pair[0]] = pair[1];
               }
 
               axios
                 .put(
                   createAPI("library/:id", { id: library.id }),
-                  qs.stringify({
-                    name: collection.name,
-                    city: collection.city,
-                    street: collection.street,
-                    open_hours: collection.open_hours,
-                    description: collection.description,
-                  })
+                  qs.stringify({ ...data })
                 )
                 .then((response) => {
                   if (response.data.status === "success") {
@@ -99,9 +93,9 @@ export const LibraryEditModule = () => {
               type="text"
               id="name"
               name="name"
-              label="Book Name"
+              label="Library Name"
               value={library.name}
-              placeholder="Example Book"
+              placeholder="Library"
             />
             <FormControl
               type="text"
