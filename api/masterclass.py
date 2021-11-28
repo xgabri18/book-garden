@@ -16,8 +16,8 @@ from models.models import Stock,Person
 
 class MasterResource(Resource):  # subclass
 
-    def response_error(self, message):
-        return jsonify({'status': 'error', 'message': message})
+    def response_error(self, message, debugm):
+        return jsonify({'status': 'error', 'message': message, 'debug': debugm})
 
     def response_ok(self, data):
         return jsonify({'status': 'success', 'data': data})

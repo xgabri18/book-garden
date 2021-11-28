@@ -43,21 +43,23 @@ class BookTitleResource(MasterResource):
     # Can be done by Admin and Distributor
     def post(self,id = None):
         if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         name        = request.form.get("name")
         author      = request.form.get("author")
         publisher   = request.form.get("publisher")
         isbn        = request.form.get("isbn")
+        if isbn == "":
+            isbn = None
         genre       = request.form.get("genre")
         description = request.form.get("description")
         rating      = request.form.get("rating")
         if rating == "":
             rating = None
-        photo       = request.form.get("rating")
+        photo       = request.form.get("photo")
         date_publication = request.form.get("date_publication")
-        # if date_publication == "":
-        #     date_publication = None
+        if date_publication == "":
+            date_publication = None
 
         try:
             booktitle = BookTitle(name        = name,
@@ -75,7 +77,8 @@ class BookTitleResource(MasterResource):
 
         except DBAPIError as e:
             db.session.rollback()
-            return self.response_error("Database refused push (check if ISBN is unique)!" + '\n' + e.orig.diag.message_detail)  # TODO
+            return self.response_error("Database refused push (check if ISBN is unique)!",
+                                       str(e.__dict__.get('orig')))
 
         # autostock
         libraries = Library.query.all()
@@ -96,10 +99,11 @@ class BookTitleResource(MasterResource):
     def delete(self, id):
 
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
-        booktitle = BookTitle.query.filter_by(id=id).first()#.delete()
-        db.session.delete(booktitle)  # required because of cascade
+        booktitle = BookTitle.query.filter_by(id=id).first()  # .delete() doesnt work -> doesnt cascade
+        if booktitle:
+            db.session.delete(booktitle)  # required because of cascade
         db.session.commit()
 
         return self.response_ok("Committed to db")
@@ -109,22 +113,28 @@ class BookTitleResource(MasterResource):
     def put(self,id):
 
         if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         booktitle = BookTitle.query.filter_by(id=id).first()
 
         if not booktitle:
-            return self.response_error("Booktitle doesnt exist")
+            return self.response_error("Booktitle doesn't exist!", "")
 
         name        = request.form.get("name")
         author      = request.form.get("author")
         publisher   = request.form.get("publisher")
         isbn        = request.form.get("isbn")
+        if isbn == "":
+            isbn = None
         genre       = request.form.get("genre")
         description = request.form.get("description")
         rating      = request.form.get("rating")
-        photo       = request.form.get("rating")
+        if rating == "":
+            rating = None
+        photo       = request.form.get("photo")
         date_publication = request.form.get("date_publication")
+        if date_publication == "":
+            date_publication = None
 
         try:
             booktitle.name        = name
@@ -141,7 +151,8 @@ class BookTitleResource(MasterResource):
 
         except DBAPIError as e:
             db.session.rollback()
-            return self.response_error(e.orig.diag.message_detail)
+            return self.response_error("Unable to update, check if ISBN less than 13 characters and unique!",
+                                       str(e.__dict__.get('orig')))
 
         return self.response_ok("Committed to db")
 
