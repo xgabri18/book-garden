@@ -84,6 +84,7 @@ class AuthService {
     const response = await axios.get(createAPI("session"));
 
     if (response.status === 200) {
+      console.log(response.data);
       this.authenticated =
         this.id === response.data.data.user_id &&
         this.type === this.convertToUserType(response.data.data.user_type);
