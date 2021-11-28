@@ -10,7 +10,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError,SQLAlchemyError
 
 from models.models import Borrowing,Stock,Person,Library,BookTitle
 
@@ -23,22 +23,31 @@ class BorrowingInfoResource(MasterResource):
     # Can be done by Admin
     # todo session
     def get(self, id):
-        # if not (self.is_logged() and self.is_admin()):
-        #     return self.response_error("Unauthorised action!")
+        if not (self.is_logged() and self.is_admin()):
+           return self.response_error("Unauthorised action!", "debug")
 
-        reservation = Borrowing.query.filter_by(id=id).first().__dict__
+        try:
+            borrowing = Borrowing.query.filter_by(id=id).first().__dict__
 
-        stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
+            stock = Stock.query.filter_by(id = borrowing["stock_id"]).first().__dict__
 
-        lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
-        book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
+            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
+            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
 
-        person = Person.query.filter_by(id=reservation["person_id"]).first().__dict__
+            person = Person.query.filter_by(id=borrowing["person_id"]).first().__dict__
 
-        name = person["name"]
-        surname = person["surname"]
+            name = person["name"]
+            surname = person["surname"]
 
-        return self.response_ok({"name" : name, "surname" : surname, "Library_name" : lib_name[0][0], "Book_title" : book_title[0][0] })
+            del borrowing["_sa_instance_state"]
+            borrowing["name"] = name
+            borrowing["surname"] = surname
+            borrowing["Library_name"] = lib_name[0][0]
+            borrowing["Book_title"] =  book_title[0][0]
 
+            return self.response_ok(borrowing)
+
+        except (SQLAlchemyError, AttributeError) as e:
+            return self.response_ok()
 
 

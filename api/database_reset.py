@@ -20,9 +20,11 @@ class DatabaseRestResource(MasterResource):
     def get(self,key):
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
-
-        if key != "12345":
-            return self.response_error("Bad KEY!")
+        # print(key)
+        # print(type(key))
+        # print(key == 12345)
+        if key != 12345:
+            return self.response_error("Bad KEY!", "bad key")
 
         db.drop_all()
         db.create_all()

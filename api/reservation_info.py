@@ -24,8 +24,8 @@ class ReservationInfoResource(MasterResource):
     # Can be done by Admin
     # todo session
     def get(self, id):
-    # if not (self.is_logged() and self.is_admin()):
-    #     return self.response_error("Unauthorised action!")
+        if not (self.is_logged() and self.is_admin()):
+           return self.response_error("Unauthorised action!", "debug")
 
         try:
             reservation = Reservation.query.filter_by(id=id).first().__dict__
@@ -40,7 +40,14 @@ class ReservationInfoResource(MasterResource):
             name = person["name"]
             surname = person["surname"]
 
-            return self.response_ok({"name" : name, "surname" : surname, "Library_name" : lib_name[0][0], "Book_title" : book_title[0][0] })
+            del reservation["_sa_instance_state"]
+            reservation["name"] = name
+            reservation["surname"] = surname
+            reservation["Library_name"] = lib_name[0][0]
+            reservation["Book_title"] =  book_title[0][0]
+
+            return self.response_ok(reservation)
+
         except (sqlalchemy.exc.SQLAlchemyError, AttributeError) as e:
             return self.response_ok()
 

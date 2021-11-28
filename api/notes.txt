@@ -58,6 +58,9 @@ Links: '/reservation/of/lib/<int:library_id>'
 Potvrdenie rezervacie (Librarian a Admin)
 Links: '/reservation/confirm/<int:id>'
 
+Info rezervácie
+Links '/reservation/info/<int:id>'
+
 
 #########################################################
 CRUDE Borrowing
@@ -70,6 +73,9 @@ Links: '/borrowing/person/<int:identificator>','/borrowing/person/<string:identi
 Požičky zadanej knižnice (používa knihovník) - person_id specifikuje o ktoru osobu ide - volitelny param
 Params: person_id
 Links: '/borrowing/of/lib/<int:library_id>'
+
+Info pôžičky
+Links '/borrowing/info/<int:id>'
 
 
 #########################################################
