@@ -20,17 +20,31 @@ import {
 import { useParams } from "react-router-dom";
 
 export const LibraryReservationModule = () => {
-  const [reservations, setReservations] = useState([]);
+  // const [reservations, setReservations] = useState([]);
+  const [test, setTest] = useState({});
   const [alert, setAlert] = useState(null);
   const { id } = useParams();
 
-  /**
-   * Get reservations
-   */
+  let reservations = [];
+
   useEffect(() => {
     axios
       .get(createAPI("reservation/of/lib/:id", { id }))
-      .then((response) => setReservations(response.data.data))
+      .then((response) => {
+        if (response.data.status === "success") {
+          response.data.data.map((reservation) => {
+            axios
+              .get(createAPI("reservation/info/:id", { id }))
+              .then((response, index) => {
+                if (response.data.status === "success") {
+                  reservation.person = response.data.data;
+                  setTest(reservation);
+                }
+              });
+          });
+        } else {
+        }
+      })
       .catch((error) => console.log(error));
   }, [id, alert]);
 
@@ -80,6 +94,8 @@ export const LibraryReservationModule = () => {
       .catch((error) => console.log(error));
   }
 
+  console.log(reservations);
+
   return (
     <>
       <div className="flex justify-between">
@@ -115,8 +131,10 @@ export const LibraryReservationModule = () => {
               {reservations.map((reservation, index) => (
                 <TableRow key={index} index={index} striped>
                   <TableCol>{reservation.id}</TableCol>
-                  <TableCol>{reservation.user}</TableCol>
-                  <TableCol>{reservation.book_title}</TableCol>
+                  <TableCol>
+                    {reservation.person.name + " " + reservation.person.surname}
+                  </TableCol>
+                  <TableCol>{reservation.person.Book_title}</TableCol>
                   <TableCol>{reservation.date_of_reservation}</TableCol>
                   <TableCol>
                     <div className="flex items-center gap-2">

@@ -8,26 +8,26 @@ class AuthService {
   }
 
   init() {
-    this.authenticated = true;
-    this.id = 1;
-    this.username = "admin";
-    this.password = "admin";
-    this.email = "admin@admin.com";
-    this.type = "distributor";
-    this.library_id = 1;
-    this.name = "Joe";
-    this.surname = "Doe";
-    this.profiledesc = "I am gay";
+    // this.authenticated = true;
+    // this.id = 1;
+    // this.username = "admin";
+    // this.password = "admin";
+    // this.email = "admin@admin.com";
+    // this.type = "admin";
+    // this.library_id = 1;
+    // this.name = "Joe";
+    // this.surname = "Doe";
+    // this.profiledesc = "I am gay";
 
-    // this.authenticated = false;
-    // this.id = null;
-    // this.username = "";
-    // this.email = "";
-    // this.type = "";
-    // this.library_id = null;
-    // this.name = "";
-    // this.surname = "";
-    // this.profiledesc = "";
+    this.authenticated = false;
+    this.id = null;
+    this.username = "";
+    this.email = "";
+    this.type = "";
+    this.library_id = null;
+    this.name = "";
+    this.surname = "";
+    this.profiledesc = "";
   }
 
   register(data) {
@@ -89,9 +89,9 @@ class AuthService {
       }
 
       // TODO: Comment this in production
-      this.authenticated = true;
-      console.log("checkAuthSession: " + this.authenticated);
-      return true;
+      // this.authenticated = true;
+      // console.log("checkAuthSession: " + this.authenticated);
+      // return true;
 
       console.log("checkAuthSession: " + this.authenticated);
       return this.authenticated;
