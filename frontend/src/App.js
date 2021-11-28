@@ -12,8 +12,7 @@ import { routes } from "./routes";
 import AuthService from "./auth";
 
 function App() {
-  // AuthService.checkAuthStatus().then((r) => console.log("Auth Status Check"));
-  AuthService.checkAuthStatus().then((r) => console.log("Auth Status: " + r));
+  AuthService.checkAuthSession();
 
   return (
     <>

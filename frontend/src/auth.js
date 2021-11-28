@@ -30,42 +30,20 @@ class AuthService {
 
   login(username, password) {
     // Login
-    console.log("Login");
     return axios
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
         if (response.data.status === "success") {
-          return axios.get(createAPI("session")).then((response) => {
-            if (response.data.status === "success") {
-              this.id = response.data.data.user_id;
-              this.type = this.convertToUserType(response.data.data.user_type);
-
-              // Collect user info
-              return axios.get(createAPI("person")).then((response) => {
-                if (response.data.status === "success") {
-                  this.username = response.data.data.username;
-                  this.library_id = response.data.data.library_id;
-                  this.name = response.data.data.name;
-                  this.surname = response.data.data.surname;
-                  this.profiledesc = response.data.data.profiledesc;
-                  this.authenticated = true;
-
-                  return this.allowedDashboard ? (
-                    <Redirect to="/admin" />
-                  ) : (
-                    <Redirect to="/account/profile" />
-                  );
-                } else {
-                  console.log("Can not get person info.");
-                  console.log(response.data);
-                }
-              });
-            } else {
-              console.log(response.data);
-            }
-          });
+          if (this.isAuthenticated()) {
+            console.log("Login: success");
+            return true;
+          } else {
+            console.log("Login: failed");
+            return false;
+          }
         } else {
           console.log(response.data);
+          return false;
         }
       })
       .catch((error) => console.log(error));
@@ -87,28 +65,20 @@ class AuthService {
       .catch((error) => console.log(error));
   }
 
-  async checkAuthStatus() {
-    const response = await axios.get(createAPI("session"));
+  checkAuthSession() {
+    axios.get(createAPI("session")).then((session) => {
+      if (
+        session.status === 200 &&
+        session.data.data.user_id &&
+        session.data.data.user_type
+      ) {
+        this.id = session.data.data.user_id;
+        this.type = this.convertToUserType(session.data.data.user_type);
+        this.authenticated = true;
+      }
 
-    if (response.status === 200) {
-      console.log("checkAuthStatus()");
-      console.log(response.data);
-      console.log(this);
-      this.authenticated =
-        this.id === response.data.data.user_id &&
-        this.type === this.convertToUserType(response.data.data.user_type);
-    } else {
       this.authenticated = false;
-    }
-
-    // .then((response) => {
-    //     this.authenticated =
-    //       this.id === response.data.data.user_id &&
-    //       this.type === this.convertToUserType(response.data.data.user_type);
-    //   })
-    //     .catch((error) => console.log(error));
-
-    return this.authenticated;
+    });
   }
 
   isAuthenticated() {
@@ -121,10 +91,6 @@ class AuthService {
 
   getUserType() {
     return this.type;
-  }
-
-  getUsername() {
-    return this.username;
   }
 
   isAdmin() {

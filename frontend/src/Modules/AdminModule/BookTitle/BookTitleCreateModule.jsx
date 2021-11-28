@@ -35,11 +35,7 @@ export const BookTitleCreateModule = () => {
             const form = new FormData(e.target);
             const collection = {};
             for (let pair of form.entries()) {
-              if (pair[0] === "date_publication" && !pair[1].length) {
-                collection[pair[0]] = null;
-              } else {
-                collection[pair[0]] = pair[1] ?? null;
-              }
+              collection[pair[0]] = pair[1];
             }
 
             axios

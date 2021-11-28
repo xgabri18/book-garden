@@ -18,19 +18,16 @@ export const Navbar = () => {
       </Link>
       <div className="Navbar-items">
         <NavbarSearch />
-
         <Link to="/account" className="Navbar-link">
-          <UserIcon className="h-6" />
-          <span className="hidden xl:inline">{username}</span>
+          <UserIcon className="h-6 mr-2" />
+          <span className="hidden xl:inline">Account</span>
         </Link>
-
         {AuthService.isAuthenticated() && AuthService.allowedDashboard() && (
           <Link to="/admin" className="Navbar-link">
             <CubeTransparentIcon className="h-6 inline mr-2" />
             <span className="hidden xl:inline">Admin</span>
           </Link>
         )}
-
         {AuthService.isAuthenticated() && (
           <Button onClick={() => AuthService.logout()} className="Navbar-link">
             <LogoutIcon className="h-6 inline mr-2" />

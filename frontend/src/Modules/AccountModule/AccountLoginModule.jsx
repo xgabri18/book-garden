@@ -1,12 +1,13 @@
 import FormControl from "../../Components/Forms/FormControl";
 import { Button } from "../../Components/Ui/Button";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import auth from "../../auth";
 import { useEffect, useState } from "react";
 
 const AccountLoginModule = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
 
   return (
     <div className="w-full sm:w-6/12 xl:w-4/12 mx-auto py-16 px-8 bg-white shadow-sm">
@@ -15,7 +16,11 @@ const AccountLoginModule = () => {
         method="post"
         onSubmit={(e) => {
           e.preventDefault();
-          return auth.login(username, password);
+          auth
+            .login(username, password)
+            .then((loggedIn) =>
+              loggedIn ? history.push("/") : console.log("SHOW ALERT")
+            );
         }}
       >
         <div className="flex flex-col">
