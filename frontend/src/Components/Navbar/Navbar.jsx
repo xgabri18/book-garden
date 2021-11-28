@@ -1,16 +1,17 @@
 import NavbarSearch from "./NavbarSearch";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   CubeTransparentIcon,
   LogoutIcon,
   UserIcon,
 } from "@heroicons/react/outline";
-import { authenticated, role, username } from "../../middlewares";
 import AuthService from "../../auth";
 import { Button } from "../Ui/Button";
 
 export const Navbar = () => {
+  const history = useHistory();
+
   return (
     <nav className="Navbar Container">
       <Link to="/" className="Navbar-logo">
@@ -28,11 +29,20 @@ export const Navbar = () => {
             <span className="hidden xl:inline">Admin</span>
           </Link>
         )}
+
         {AuthService.isAuthenticated() && (
-          <Button onClick={() => AuthService.logout()} className="Navbar-link">
-            <LogoutIcon className="h-6 inline mr-2" />
-            <span className="hidden xl:inline">Log out</span>
-          </Button>
+          <Button
+            type="button"
+            onClick={() =>
+              AuthService.logout().then((loggedIn) =>
+                loggedIn ? history.push("/") : console.log("Can not log out.")
+              )
+            }
+            className="Navbar-link"
+            text="Log out"
+            icon={<LogoutIcon className="h-6 mr-2" />}
+            hideTextSm
+          />
         )}
       </div>
     </nav>

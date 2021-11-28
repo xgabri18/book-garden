@@ -45,17 +45,11 @@ class AuthService {
 
   logout() {
     return axios
-      .delete(
-        createAPI("session").then((response) => {
-          if (response.data.status === "success") {
-            // Logged out
-            this.init();
-            return <Redirect to="/" />;
-          } else {
-            // Session is not set ignore
-          }
-        })
-      )
+      .delete(createAPI("session"))
+      .then((response) => {
+        this.authenticated = false;
+        return response.data.status === "success";
+      })
       .catch((error) => console.log(error));
   }
 
