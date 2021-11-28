@@ -1,0 +1,11 @@
+.Textarea {
+    @apply mb-4
+}
+
+.Textarea .Textarea-label {
+    @apply block mb-1
+}
+
+.Textarea .Textarea-input {
+    @apply block w-full py-1.5 px-4 rounded-md outline-none bg-gray-50 h-64
+}

@@ -5,44 +5,70 @@ import { createAPI } from "./api";
 
 class AuthService {
   constructor() {
-    this.id = null;
-    this.username = "";
-    this.type = "";
-    this.employee = null;
-    this.authenticated = false;
+    this.init();
+  }
+
+  init() {
+    this.authenticated = true;
+    this.id = 1;
+    this.username = "admin";
+    this.type = "admin";
+    this.library_id = null;
+    this.name = "Joe";
+    this.surname = "Doe";
+    this.profiledesc = "I love 50 shades of gray";
   }
 
   login(username, password) {
-    axios
+    // Login
+    return axios
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
-        console.log(response.data);
+        this.authenticated = true;
+        this.id = response.data.data.user_id;
+        this.type = this.convertToUserType(response.data.data.user_type);
+
+        // Get info
+        return axios
+          .get(createAPI("person/:id", { id: this.id }))
+          .then((response) => {
+            this.username = response.data.data.username;
+            this.library_id = response.data.data.library_id;
+            this.name = response.data.data.name;
+            this.surname = response.data.data.surname;
+            this.profiledesc = response.data.data.profiledesc;
+
+            return this.allowedDashboard ? (
+              <Redirect to="/admin" />
+            ) : (
+              <Redirect to="/account/profile" />
+            );
+          });
       });
-    // this.id = id;
-    // this.username = username;
-    // this.type = type;
-    // this.employee = employee;
-    //
-    // return this.employee ? (
-    //   <Redirect to="/admin" />
-    // ) : (
-    //   <Redirect to="/account/profile" />
-    // );
   }
 
   logout() {
-    this.id = null;
-    this.username = "";
-    this.type = "";
-    this.employee = null;
-    this.authenticated = false;
+    this.init();
+    return <Redirect to="/" />;
   }
 
   isAuthenticated() {
-    axios.get(createAPI("session")).then((response) => {
-      console.log(response.data);
-    });
-    return this.authenticated;
+    // return true;
+    return axios
+      .get(createAPI("session"))
+      .then(
+        (response) =>
+          this.id === response.data.data.user_id &&
+          this.type === this.convertToUserType(response.data.data.user_type)
+      );
+  }
+
+  allowedDashboard() {
+    return this.isAdmin() || this.isLibrarian() || this.isDistributor();
+  }
+
+  getUserType() {
+    return this.type;
   }
 
   isAdmin() {
@@ -57,8 +83,15 @@ class AuthService {
     return this.isAuthenticated() && this.type === "distributor";
   }
 
-  isCustomer() {
-    return this.isAuthenticated() && this.type === "customer";
+  isUser() {
+    return this.isAuthenticated() && this.type === "user";
+  }
+
+  convertToUserType(idUserType) {
+    if (idUserType === 5) return "admin";
+    else if (idUserType === 4) return "librarian";
+    else if (idUserType === 3) return "distributor";
+    else return "user";
   }
 }
 

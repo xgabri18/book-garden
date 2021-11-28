@@ -1,8 +1,7 @@
-import "./FormControl.css";
+import "./Textarea.css";
 
-const FormControl = ({
+const Textarea = ({
   id,
-  type,
   label,
   value,
   name,
@@ -11,19 +10,18 @@ const FormControl = ({
   onChange,
 }) => {
   return (
-    <div className="Form-control">
+    <div className="Textarea">
       <label
         htmlFor={id}
-        className={`Form-control-label ${hideLabel ? "sr-only" : ""}`}
+        className={`Textarea-label ${hideLabel ? "sr-only" : ""}`}
       >
         {label}
       </label>
-      <input
-        type={type}
+      <textarea
         id={id}
         name={name}
         placeholder={placeholder}
-        className="Form-control-input"
+        className="Textarea-input"
         onChange={onChange}
         defaultValue={value}
       />
@@ -31,4 +29,4 @@ const FormControl = ({
   );
 };
 
-export default FormControl;
+export default Textarea;

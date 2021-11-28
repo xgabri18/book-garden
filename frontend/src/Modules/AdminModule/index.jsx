@@ -2,6 +2,7 @@ import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import { AdminRoute, authenticated, role } from "../../middlewares";
 import { adminRoutes } from "../../routes";
 import { NotAuthorizedError } from "../../Components/Errors/NotAuthorizedError";
+import AuthService from "../../auth";
 
 const AdminModule = () => {
   const { path } = useRouteMatch();
@@ -23,7 +24,7 @@ const AdminModule = () => {
 };
 
 const AdminSessionHandler = () => {
-  return !authenticated || role === "customer" ? (
+  return !AuthService.isAuthenticated() || !AuthService.allowedDashboard() ? (
     <NotAuthorizedError />
   ) : (
     <Redirect to={`/admin/dashboard`} />

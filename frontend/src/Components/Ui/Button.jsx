@@ -48,6 +48,7 @@ export const ButtonLink = ({
   style = {},
   className = "",
   hideTextSm = false,
+  target,
 }) => {
   if (icon) {
     return (
@@ -55,6 +56,7 @@ export const ButtonLink = ({
         to={to}
         className={`Button ${variant} ${size} ${className}`}
         style={style}
+        target={target}
       >
         {icon}
         <span className={hideTextSm ? "hidden md:block" : ""}>{text}</span>
@@ -67,6 +69,7 @@ export const ButtonLink = ({
       to={to}
       className={`Button ${variant} ${size} ${className}`}
       style={style}
+      target={target}
     >
       {text}
     </Link>

@@ -5,9 +5,20 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { createAdminRoute } from "../../../routes";
+import { createAdminRoute, createRoute } from "../../../routes";
+import axios from "axios";
+import { createAPI } from "../../../api";
+import { useEffect, useState } from "react";
 
 export const BookTitleListModule = () => {
+  const [bookTitles, setBookTitles] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(createAPI("booktitle"))
+      .then((response) => setBookTitles(response.data));
+  });
+
   return (
     <>
       <ButtonLink
@@ -29,43 +40,48 @@ export const BookTitleListModule = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td className="w-2/12">
-                <img
-                  src="https://mrtns.eu/tovar/_m/778/m778903.jpg?v=1637249776"
-                  alt="Meky Žbirka"
-                  className="h-16"
-                />
-              </td>
-              <td>Lorem ipsum</td>
-              <td className="w-1/4">
-                <div className="flex items-center gap-2">
-                  {/*TODO: Set book title dynamically to button links*/}
-                  <ButtonLink
-                    to={`/book-titles/1`}
-                    variant="primary"
-                    icon={<ExternalLinkIcon className="h-6 mr-1" />}
-                    text="Open"
-                    hideTextSm
+            {bookTitles.map((bookTitle, index) => (
+              <tr>
+                <td>{bookTitle.id}</td>
+                <td className="w-2/12">
+                  <img
+                    src={bookTitle.photo}
+                    alt={bookTitle.name}
+                    className="h-16"
                   />
-                  <ButtonLink
-                    to={createAdminRoute("BookTitleEdit", { id: 1 })}
-                    variant="yellow"
-                    icon={<PencilIcon className="h-6 mr-1" />}
-                    text="Edit"
-                    hideTextSm
-                  />
-                  <Button
-                    type="button"
-                    variant="red"
-                    icon={<TrashIcon className="h-6 mr-1" />}
-                    text="Delete"
-                    hideTextSm
-                  />
-                </div>
-              </td>
-            </tr>
+                </td>
+                <td>{bookTitle.name}</td>
+                <td className="w-1/4">
+                  <div className="flex items-center gap-2">
+                    {/*TODO: Set book title dynamically to button links*/}
+                    <ButtonLink
+                      to={`/book-titles/` + bookTitle.id}
+                      variant="primary"
+                      icon={<ExternalLinkIcon className="h-6 mr-1" />}
+                      text="Open"
+                      hideTextSm
+                      target="_blank"
+                    />
+                    <ButtonLink
+                      to={createAdminRoute("BookTitleEdit", {
+                        id: bookTitle.id,
+                      })}
+                      variant="yellow"
+                      icon={<PencilIcon className="h-6 mr-1" />}
+                      text="Edit"
+                      hideTextSm
+                    />
+                    <Button
+                      type="button"
+                      variant="red"
+                      icon={<TrashIcon className="h-6 mr-1" />}
+                      text="Delete"
+                      hideTextSm
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

@@ -3,6 +3,7 @@ import AccountLoginModule from "./AccountLoginModule";
 import AccountRegisterModule from "./AccountRegisterModule";
 import AccountProfileModule from "./AccountProfileModule";
 import { authenticated, AuthRoute } from "../../middlewares";
+import AuthService from "../../auth";
 
 const AccountModule = () => {
   const { path } = useRouteMatch();
@@ -18,7 +19,7 @@ const AccountModule = () => {
 };
 
 const AccountSessionHandler = () => {
-  return authenticated ? (
+  return AuthService.isAuthenticated() ? (
     <Redirect to={`account/profile`} />
   ) : (
     <Redirect to={`account/login`} />

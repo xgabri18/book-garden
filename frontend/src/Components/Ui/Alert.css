@@ -1,0 +1,20 @@
+.Alert {
+    @apply py-2 px-4 bg-gray-200 rounded-md mb-4
+    hover:shadow-md transform hover:scale-105
+}
+
+.Alert.Alert-info {
+    @apply bg-indigo-500 text-indigo-50
+}
+
+.Alert.Alert-danger {
+    @apply bg-red-500 text-red-50
+}
+
+.Alert.Alert-warning {
+    @apply bg-yellow-500 text-yellow-50
+}
+
+.Alert.Alert-success {
+    @apply bg-green-500 text-green-50 transition-all
+}

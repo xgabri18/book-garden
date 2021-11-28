@@ -7,6 +7,7 @@ import {
   UserIcon,
 } from "@heroicons/react/outline";
 import { authenticated, role, username } from "../../middlewares";
+import AuthService from "../../auth";
 
 export const Navbar = () => {
   return (
@@ -22,14 +23,14 @@ export const Navbar = () => {
           <span className="hidden xl:inline">{username}</span>
         </Link>
 
-        {authenticated && role === "admin" && (
+        {AuthService.isAuthenticated() && AuthService.isAdmin() && (
           <Link to="/admin" className="Navbar-link">
             <CubeTransparentIcon className="h-6 inline mr-2" />
             <span className="hidden xl:inline">Admin</span>
           </Link>
         )}
 
-        {authenticated && (
+        {AuthService.isAuthenticated() && (
           <Link to="/admin" className="Navbar-link">
             <LogoutIcon className="h-6 inline mr-2" />
             <span className="hidden xl:inline">Log out</span>

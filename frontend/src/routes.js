@@ -63,6 +63,7 @@ export const adminRoutes = [
     url: "/book-titles",
     roles: ["admin", "librarian", "distributor"],
     component: BookTitleListModule,
+    exact: true,
   },
   {
     name: "BookTitleEdit",
