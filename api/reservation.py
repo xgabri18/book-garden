@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: reservation.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
@@ -6,7 +15,7 @@ from sqlalchemy.exc import IntegrityError
 from models.models import Reservation,Borrowing
 
 # SET response_error a response_ok
-# osetrene
+
 
 class ReservationResource(MasterResource):
 

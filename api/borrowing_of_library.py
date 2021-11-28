@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: borrowing_of_library.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
@@ -6,7 +15,7 @@ from datetime import datetime
 from models.models import Borrowing,Stock
 
 # SET response_error a response_ok
-# osetrene
+
 
 
 class BorrowingOfLibraryRes(MasterResource):
@@ -21,9 +30,6 @@ class BorrowingOfLibraryRes(MasterResource):
             if library_id != self.librarian_in_which_lib(session['user_id']):
                 return self.response_error("Unauthorised action!")
 
-        # ziskanie pola stock id ktore su napojene na library
-        # potom query na borrowings ktore su napojene na tieto stocks
-        # todo otestovat
 
         #get id of stock of library - array of ids
         stock_id = Stock.query.with_entities(Stock.id).filter_by(library_id = library_id).all()
