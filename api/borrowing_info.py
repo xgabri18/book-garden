@@ -22,30 +22,35 @@ class BorrowingInfoResource(MasterResource):
     # Return list of all existing reservations
     # Can be done by Admin
     # todo session
-    def get(self, id):
+    def get(self):
         if not (self.is_logged() and self.is_admin()):
            return self.response_error("Unauthorised action!", "debug")
 
         try:
-            borrowing = Borrowing.query.filter_by(id=id).first().__dict__
 
-            stock = Stock.query.filter_by(id = borrowing["stock_id"]).first().__dict__
+            final = []
+            bor = Borrowing.query.all()
 
-            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
-            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
+            for borrowing in bor:
+                borrowing = borrowing.__dict__
+                stock = Stock.query.filter_by(id = borrowing["stock_id"]).first().__dict__
 
-            person = Person.query.filter_by(id=borrowing["person_id"]).first().__dict__
+                lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
+                book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
 
-            name = person["name"]
-            surname = person["surname"]
+                person = Person.query.filter_by(id=borrowing["person_id"]).first().__dict__
 
-            del borrowing["_sa_instance_state"]
-            borrowing["name"] = name
-            borrowing["surname"] = surname
-            borrowing["Library_name"] = lib_name[0][0]
-            borrowing["Book_title"] =  book_title[0][0]
+                name = person["name"]
+                surname = person["surname"]
 
-            return self.response_ok(borrowing)
+                del borrowing["_sa_instance_state"]
+                borrowing["name"] = name
+                borrowing["surname"] = surname
+                borrowing["Library_name"] = lib_name[0][0]
+                borrowing["Book_title"] =  book_title[0][0]
+
+                final.append(borrowing)
+            return self.response_ok(final)
 
         except (SQLAlchemyError, AttributeError) as e:
             return self.response_ok()

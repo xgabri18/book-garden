@@ -101,14 +101,14 @@ api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
 api.add_resource(ReservationOfPersonRes,  '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>')
 api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>')
 api.add_resource(ReservationConfirmRes, '/reservation/confirm/<int:id>')
-api.add_resource(ReservationInfoResource, '/reservation/info/<int:id>')
+api.add_resource(ReservationInfoResource, '/reservation/info')
 
 
 
 api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
 api.add_resource(BorrowingOfPersonRes,  '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>')
 api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
-api.add_resource(BorrowingInfoResource,  '/borrowing/info/<int:id>')
+api.add_resource(BorrowingInfoResource,  '/borrowing/info')
 
 
 api.add_resource(OrderResource,  '/order', '/order/<int:id>')
