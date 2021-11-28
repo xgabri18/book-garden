@@ -7,9 +7,12 @@ from models.models import Reservation,Borrowing
 # TODO ako sa bude riesit zaznam v tabulke pri vymazani stocku
 # TODO resourcy pre knihovnika zvlast alebo sem?
 
+# SET response_error a response_ok
+# osetrene
+
 class BorrowingResource(MasterResource):
 
-    # Return list of all existing borrowings from all libraries
+    # Return list of all existing borrowings from all libraries or a specific borrowing
     # Can be done by Admin
     def get(self, id=None):
         if not (self.is_logged() and self.is_admin()):
@@ -24,7 +27,7 @@ class BorrowingResource(MasterResource):
                 del row["_sa_instance_state"]
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             borrowing = Borrowing.query.filter_by(id=id).all()
@@ -33,7 +36,7 @@ class BorrowingResource(MasterResource):
                 borrowing = borrowing[0].__dict__
                 del borrowing["_sa_instance_state"]
 
-            return jsonify(borrowing)
+            return self.response_ok(borrowing)
 
     # Create a Borrowing manually in any library
     # Can be done by Admin
@@ -50,14 +53,19 @@ class BorrowingResource(MasterResource):
         db.session.add(borrowing)
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
     # Remove borrowing (user returned a book,...) in any library
     # Can be done by Admin
     def delete(self, id):  # TODO zmena stocku
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
         Borrowing.query.filter_by(id=id).delete()
         db.session.commit()
+
+        return self.response_ok("Committed to db")
 
     # Changing fine or date when the book should be returned in any library
     # Can be done by Admin
@@ -68,7 +76,7 @@ class BorrowingResource(MasterResource):
         borrowing = Borrowing.query.filter_by(id=id).first()
 
         if not borrowing:
-            return
+            return self.response_error("Borrowing doesnt exist")
 
         borrowing.fine = request.form.get("fine")
         borrowing.date_returned = request.form.get("date_returned")
@@ -80,3 +88,5 @@ class BorrowingResource(MasterResource):
         #     borrowing.date_returned = datetime.utcnow()
 
         db.session.commit()
+
+        return self.response_ok("Committed to db")

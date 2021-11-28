@@ -1,8 +1,13 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
+from sqlalchemy.exc import IntegrityError
 
 from models.models import Library,BookTitle,Stock
+
+
+# SET response_error a response_ok
+# osetrene
 
 class LibraryResource(MasterResource):
 
@@ -20,7 +25,7 @@ class LibraryResource(MasterResource):
                 del row["_sa_instance_state"]   #get rid of _sa_instance_state - idk what it is
                 array.append(row)
 
-            return jsonify(array)
+            return self.response_ok(array)
 
         else:
             library = Library.query.filter_by(id = id).all()
@@ -29,7 +34,7 @@ class LibraryResource(MasterResource):
                 library = library[0].__dict__
                 del library["_sa_instance_state"]
 
-            return jsonify(library)
+            return self.response_ok(library)
 
     # Adding a library into DB
     # Can be done by Admin
@@ -43,15 +48,18 @@ class LibraryResource(MasterResource):
         open_hours  = request.form.get("open_hours")
         description = request.form.get("description")
 
+        try:
+            library = Library(name        = name,
+                              city        = city,
+                              street      = street,
+                              open_hours  = open_hours,
+                              description = description)
 
-        library = Library(name        = name,
-                          city        = city,
-                          street      = street,
-                          open_hours  = open_hours,
-                          description = description)
-
-        db.session.add(library)
-        db.session.commit()
+            db.session.add(library)
+            db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
 
         #autostock when added library
         booktitle = BookTitle.query.all()
@@ -65,25 +73,33 @@ class LibraryResource(MasterResource):
 
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
+
     # Removing a library from DB
     # Can be done by Admin
     def delete(self,id):
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
         Library.query.filter_by(id=id).delete()
         db.session.commit()
 
+        return self.response_ok("Committed to db")
+
+
     # Updating a library
     # Can be done by Admin
     def put(self,id):
+
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
         library = Library.query.filter_by(id=id).first()
 
         if not library:
-            return
+            return self.response_error("Library doesn't exist")
 
         name        = request.form.get("name")
         city        = request.form.get("city")
@@ -91,13 +107,20 @@ class LibraryResource(MasterResource):
         open_hours  = request.form.get("open_hours")
         description = request.form.get("description")
 
+        try:
+            library.name        = name
+            library.city        = city
+            library.street      = street
+            library.open_hours  = open_hours
+            library.description = description
 
-        library.name        = name
-        library.city        = city
-        library.street      = street
-        library.open_hours  = open_hours
-        library.description = description
+            db.session.commit()
 
-        db.session.commit()
+        except IntegrityError as e:
+            db.session.rollback()
+            return self.response_error(e.orig.diag.message_detail)
+
+        return self.response_ok("Committed to db")
+
 
 

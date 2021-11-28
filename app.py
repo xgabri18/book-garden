@@ -29,7 +29,7 @@ from api.order_filter import OrderFilterResource
 from api.order_to_stock import OrderConfirmRes
 
 from api.voting import VotingResource
-from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesPersonVotedStockRes
+from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesDidPersonVoteStockRes
 
 from models.models import BookTitle,Person,Library,Stock,Reservation,Borrowing,Order,Voting
 
@@ -138,7 +138,7 @@ api.add_resource(OrderConfirmRes, '/order/confirm/<int:id>')
 api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
 api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
 api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
-api.add_resource(VotesPersonVotedStockRes,  '/voting/person/voted/stock/<int:person_id>/<int:stock_id>')
+api.add_resource(VotesDidPersonVoteStockRes,  '/voting/person/voted/stock/<int:stock_id>')
 
 if __name__ == "__main__":
     app.run(debug=True)

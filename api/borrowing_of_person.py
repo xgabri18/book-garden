@@ -6,6 +6,10 @@ from datetime import datetime
 from models.models import Reservation,Borrowing,Person
 
 # gets list of users borrowings
+
+# SET response_error a response_ok
+# osetrene
+
 # todo session asi needed
 # TODO knihovnik by nemal vidiet veci z inych kniznic (vidi len borrowings z jeho kniznice) - potom upravim session
 class BorrowingOfPersonRes(MasterResource):
@@ -20,7 +24,10 @@ class BorrowingOfPersonRes(MasterResource):
         else:
             email = identificator
             person_id = Person.query.with_entities(Person.id).filter_by(email = email).all()
-            #todo osetrit ze person exituje
+
+            if not person_id:
+                return self.response_error("Person doesnt exist")
+
             borrowings = Borrowing.query.filter_by(person_id = person_id[0][0]).all()
 
         if not (self.is_logged() and (self.is_admin() or self.is_user(person_id))):  # is the right person logged //librarian/admin
@@ -33,4 +40,4 @@ class BorrowingOfPersonRes(MasterResource):
             del row["_sa_instance_state"]
             array.append(row)
 
-        return jsonify(array)
+        return self.response_ok(array)

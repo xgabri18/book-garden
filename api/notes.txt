@@ -96,8 +96,22 @@ Links: '/voting/votesofperson/<int:person_id>'
 
 Zistenie či zadaný užívateľ hlasoval za zadaný stock
 Vracia True/False
-Links: '/voting/person/voted/stock/<int:person_id>/<int:stock_id>'
+Links: '/voting/person/voted/stock/<int:stock_id>'
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+NOTES2:
+-request.form.get nevracia keyerror/ziaden error
+-porusenie nullable alebo unique -> IntegrityError
+-porusenie typu stlpca -> ?

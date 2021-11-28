@@ -12,7 +12,7 @@ class VotesOnStockRes(MasterResource):
     def get(self, stock_id):
         votes = Voting.query.filter(Voting.stock_id == stock_id).all()
 
-        return jsonify(len(votes))
+        return self.response_ok(len(votes))
 
 
 # gets list of stocks where user voted
@@ -31,20 +31,23 @@ class VotesFromPersonRes(MasterResource):
             del row["_sa_instance_state"]
             array.append(row)
 
-        return jsonify(array)
+        return self.response_ok(array)
 
 
-# gets list of stock where user voted
+# Did logged person vote for this stock
 # todo session asi needed
-class VotesPersonVotedStockRes(MasterResource):
+class VotesDidPersonVoteStockRes(MasterResource):
 
-    def get(self, person_id,stock_id):
-        vote = Voting.query.filter(Voting.person_id == person_id, Voting.stock_id == stock_id).all()
+    def get(self, stock_id):
+        if not self.is_logged():
+            return self.response_error("Unauthorised action!")
+
+        vote = Voting.query.filter(Voting.person_id == session['user_id'], Voting.stock_id == stock_id).all()
 
         if not vote:
-            return jsonify(False)
+            return self.response_ok(False)
         else:
-            return jsonify(True)
+            return self.response_ok(True)
 
 
 

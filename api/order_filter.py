@@ -4,11 +4,18 @@ from shared_db import db
 
 from models.models import Order
 
+# SET response_error a response_ok
+# osetrene
+
+
 class OrderFilterResource(MasterResource):
 
 
     # todo session
-    def get(self,library_id = None):
+    def get(self):
+        if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
+            return self.response_error("Unauthorised action!")
+
         library_id      = request.args.get('library_id')
         booktitle_id    = request.args.get('booktitle_id')
 
@@ -28,7 +35,7 @@ class OrderFilterResource(MasterResource):
             del row["_sa_instance_state"]
             array.append(row)
 
-        return jsonify(array)
+        return self.response_ok(array)
 
 
 

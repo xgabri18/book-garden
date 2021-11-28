@@ -8,6 +8,7 @@ class SessionResource(MasterResource):
         return jsonify(session.get("user_id"), session.get("user_type"))
 
     # Login
+    # can be done at any time by anyone -> if logged it re-logs
     def post(self):
         # user_type = request.form.get("user_type")
         # session['user_type'] = user_type
