@@ -16,9 +16,7 @@ export const DashboardModule = () => {
 
   return (
     <>
-      <h1 className="text-2xl text-center font-bold my-8">
-        Welcome back, {AuthService.getUsername()}
-      </h1>
+      <h1 className="text-2xl text-center font-bold my-8">Welcome back</h1>
       <div className="flex items-center flex-wrap">
         {modules.map((module, index) => {
           if (!module.roles.find((r) => r === AuthService.getUserType()))

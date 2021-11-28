@@ -60,7 +60,7 @@ class AuthService {
   }
 
   checkAuthSession() {
-    axios.get(createAPI("session")).then((session) => {
+    return axios.get(createAPI("session")).then((session) => {
       if (
         session.status === 200 &&
         session.data.data.user_id &&

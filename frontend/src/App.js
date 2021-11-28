@@ -12,8 +12,6 @@ import { routes } from "./routes";
 import AuthService from "./auth";
 
 function App() {
-  AuthService.checkAuthSession();
-
   return (
     <>
       <Header />
