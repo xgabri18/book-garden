@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/outline";
 import { authenticated, role, username } from "../../middlewares";
 import AuthService from "../../auth";
+import { Button } from "../Ui/Button";
 
 export const Navbar = () => {
   return (
@@ -31,10 +32,10 @@ export const Navbar = () => {
         )}
 
         {AuthService.isAuthenticated() && (
-          <Link to="/admin" className="Navbar-link">
+          <Button onClick={() => AuthService.logout()} className="Navbar-link">
             <LogoutIcon className="h-6 inline mr-2" />
             <span className="hidden xl:inline">Log out</span>
-          </Link>
+          </Button>
         )}
       </div>
     </nav>

@@ -40,17 +40,22 @@ class AuthService {
 
           // Collect user info
           return axios.get(createAPI("person")).then((response) => {
-            this.username = response.data.data.username;
-            this.library_id = response.data.data.library_id;
-            this.name = response.data.data.name;
-            this.surname = response.data.data.surname;
-            this.profiledesc = response.data.data.profiledesc;
+            if (response.data.status === "success") {
+              this.username = response.data.data.username;
+              this.library_id = response.data.data.library_id;
+              this.name = response.data.data.name;
+              this.surname = response.data.data.surname;
+              this.profiledesc = response.data.data.profiledesc;
 
-            return this.allowedDashboard ? (
-              <Redirect to="/admin" />
-            ) : (
-              <Redirect to="/account/profile" />
-            );
+              return this.allowedDashboard ? (
+                <Redirect to="/admin" />
+              ) : (
+                <Redirect to="/account/profile" />
+              );
+            } else {
+              console.log("Can not get person info.");
+              console.log(response.data);
+            }
           });
         } else {
           console.log(response.data);
@@ -75,16 +80,29 @@ class AuthService {
       .catch((error) => console.log(error));
   }
 
+  async checkAuthStatus() {
+    const response = await axios.get(createAPI("session"));
+
+    if (response.status === 200) {
+      this.authenticated =
+        this.id === response.data.data.user_id &&
+        this.type === this.convertToUserType(response.data.data.user_type);
+    } else {
+      this.authenticated = false;
+    }
+
+    // .then((response) => {
+    //     this.authenticated =
+    //       this.id === response.data.data.user_id &&
+    //       this.type === this.convertToUserType(response.data.data.user_type);
+    //   })
+    //     .catch((error) => console.log(error));
+
+    return this.authenticated;
+  }
+
   isAuthenticated() {
-    // return true;
-    return axios
-      .get(createAPI("session"))
-      .then(
-        (response) =>
-          this.id === response.data.data.user_id &&
-          this.type === this.convertToUserType(response.data.data.user_type)
-      )
-      .catch((error) => console.log(error));
+    return this.authenticated;
   }
 
   allowedDashboard() {
