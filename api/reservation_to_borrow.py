@@ -26,7 +26,7 @@ class ReservationConfirmRes(MasterResource):
         #     return self.response_error("Action not allowed for current session!")
 
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         reservation = Reservation.query.filter_by(id=id).first()
         if reservation:
@@ -34,13 +34,13 @@ class ReservationConfirmRes(MasterResource):
             if self.is_librarian():
                 lib = self.stock_in_which_lib(reservation.stock_id)
                 if lib != self.librarian_in_which_lib(session['user_id']):
-                    return self.response_error("Unauthorised action!")
+                    return self.response_error("Unauthorised action!", "")
 
             person_id = reservation.person_id
             stock_id = reservation.stock_id
             # Change stock count
             if not self.take_from_stock(stock_id):
-                return self.response_error("Stock empty!")
+                return self.response_error("Stock empty!", "")
             # Create borrowing
             db.session.add(Borrowing(stock_id=stock_id, person_id=person_id))
             # Delete reservation
@@ -49,5 +49,5 @@ class ReservationConfirmRes(MasterResource):
             # Done
             return self.response_ok("Committed to db")
         else:
-            return self.response_error("Not in DB!")
+            return self.response_error("Not in DB!", "")
 

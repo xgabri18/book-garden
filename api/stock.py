@@ -10,7 +10,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DBAPIError
 
 from models.models import Stock
 
@@ -23,7 +23,7 @@ class StockResource(MasterResource):
     # Can be used by Admin
     def get(self,id = None):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
 
         if id is None:
@@ -50,11 +50,13 @@ class StockResource(MasterResource):
     # In some cases Admin may use
     def post(self,id = None):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         library_id   = request.form.get("library_id")
         booktitle_id = request.form.get("booktitle_id")
         amount       = request.form.get("amount")
+        if amount == "":
+            amount = 0
         availability = request.form.get("availability")
 
         if availability.lower() == "true":
@@ -71,9 +73,10 @@ class StockResource(MasterResource):
             db.session.add(stock)
             db.session.commit()
 
-        except IntegrityError as e:
+        except DBAPIError as e:
             db.session.rollback()
-            return self.response_error(e.orig.diag.message_detail)
+            return self.response_error("Database refused push!",
+                                       str(e.__dict__.get('orig')))
 
         return self.response_ok("Committed to db")
 
@@ -82,9 +85,11 @@ class StockResource(MasterResource):
     # In some cases Admin may use
     def delete(self, id):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
-        Stock.query.filter_by(id=id).delete()
+        stock = Stock.query.filter_by(id=id).first()  # .delete() doesnt work -> doesnt cascade
+        if stock:
+            db.session.delete(stock)  # required because of cascade
         db.session.commit()
 
         return self.response_ok("Committed to db")
@@ -94,16 +99,18 @@ class StockResource(MasterResource):
     # In some cases Admin may use
     def put(self, id):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         stock = Stock.query.filter_by(id=id).first()
 
         if not stock:
-            return self.response_error("Stock doesnt exist")
+            return self.response_error("Stock doesnt exist", "")
 
         library_id   = request.form.get("library_id")
         booktitle_id = request.form.get("booktitle_id")
         amount       = request.form.get("amount")
+        if amount == "":
+            amount = 0
         availability = request.form.get("availability")
 
         if availability.lower() == "true":
@@ -119,9 +126,11 @@ class StockResource(MasterResource):
 
             db.session.commit()
 
-        except IntegrityError as e:
+        except DBAPIError as e:
             db.session.rollback()
-            return self.response_error(e.orig.diag.message_detail)
+            return self.response_error("Database refused push!",
+                                       str(e.__dict__.get('orig')))
+
 
         return self.response_ok("Committed to db")
 

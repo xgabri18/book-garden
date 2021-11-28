@@ -24,11 +24,11 @@ class BorrowingOfLibraryRes(MasterResource):
     def get(self, library_id):
 
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
             if library_id != self.librarian_in_which_lib(session['user_id']):
-                return self.response_error("Unauthorised action!")
+                return self.response_error("Unauthorised action!", "")
 
 
         #get id of stock of library - array of ids
@@ -37,8 +37,13 @@ class BorrowingOfLibraryRes(MasterResource):
         for id in stock_id:
             stock_id_array.append(id[0])
 
-        #big brain time query
-        borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array)).all()
+
+        person_id      = request.args.get('person_id')
+
+        if person_id is not None:
+            borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array),Borrowing.person_id == person_id).all()
+        else:
+            borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array)).all()
 
         array = []
         for row in borrowings:

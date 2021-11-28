@@ -10,7 +10,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DBAPIError
 
 from models.models import Library,BookTitle,Stock
 
@@ -49,7 +49,7 @@ class LibraryResource(MasterResource):
     # Can be done by Admin
     def post(self,id = None):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         name        = request.form.get("name")
         city        = request.form.get("city")
@@ -66,9 +66,11 @@ class LibraryResource(MasterResource):
 
             db.session.add(library)
             db.session.commit()
-        except IntegrityError as e:
+
+        except DBAPIError as e:
             db.session.rollback()
-            return self.response_error(e.orig.diag.message_detail)
+            return self.response_error("Database refused push!",
+                                       str(e.__dict__.get('orig')))
 
         #autostock when added library
         booktitle = BookTitle.query.all()
@@ -90,9 +92,11 @@ class LibraryResource(MasterResource):
     def delete(self,id):
 
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
-        Library.query.filter_by(id=id).delete()
+        lib = Library.query.filter_by(id=id).first()
+        if lib:
+            db.session.delete(lib)  # required because of cascade
         db.session.commit()
 
         return self.response_ok("Committed to db")
@@ -103,12 +107,12 @@ class LibraryResource(MasterResource):
     def put(self,id):
 
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         library = Library.query.filter_by(id=id).first()
 
         if not library:
-            return self.response_error("Library doesn't exist")
+            return self.response_error("Library doesn't exist", "")
 
         name        = request.form.get("name")
         city        = request.form.get("city")
@@ -125,9 +129,10 @@ class LibraryResource(MasterResource):
 
             db.session.commit()
 
-        except IntegrityError as e:
+        except DBAPIError as e:
             db.session.rollback()
-            return self.response_error(e.orig.diag.message_detail)
+            return self.response_error("Database refused push! (some values, like name have 100 word limit!)",
+                                       str(e.__dict__.get('orig')))
 
         return self.response_ok("Committed to db")
 

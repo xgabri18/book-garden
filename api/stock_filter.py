@@ -74,7 +74,7 @@ class StockFilterResource(MasterResource):
             del row["_sa_instance_state"]
             array.append(row)
 
-        return jsonify(array)
+        return self.response_ok(array)
 
 
 

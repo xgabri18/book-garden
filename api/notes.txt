@@ -51,7 +51,8 @@ Links: '/reservation', '/reservation/<int:id>'
 Získanie rezervácii osoby - buď pomocou ID alebo emailu - napriamo, nie cez params
 Links: '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>'
 
-Rezervácie zadanej knižnice (používa knihovník)
+Rezervácie zadanej knižnice (používa knihovník)- person_id specifikuje o ktoru osobu ide - volitelny param
+Params: person_id
 Links: '/reservation/of/lib/<int:library_id>'
 
 Potvrdenie rezervacie (Librarian a Admin)
@@ -60,12 +61,14 @@ Links: '/reservation/confirm/<int:id>'
 
 #########################################################
 CRUDE Borrowing
+Note: - deleting of borrowing auto increments stock
 Links: '/borrowing', '/borrowing/<int:id>'
 
 Získanie požíčiek osoby - buď pomocou ID alebo emailu - napriamo, nie cez params
 Links: '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>'
 
-Požičky zadanej knižnice (používa knihovník)
+Požičky zadanej knižnice (používa knihovník) - person_id specifikuje o ktoru osobu ide - volitelny param
+Params: person_id
 Links: '/borrowing/of/lib/<int:library_id>'
 
 

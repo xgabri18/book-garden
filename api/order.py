@@ -10,7 +10,7 @@
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DBAPIError
 
 from models.models import Order
 
@@ -24,7 +24,7 @@ class OrderResource(MasterResource):
     # Can be done by Admin and Distributor (librarian sees orders ONLY of his Library)
     def get(self,id = None):
         if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         if id is None:
             order = Order.query.all()
@@ -50,7 +50,7 @@ class OrderResource(MasterResource):
     # Can be done by Admin and Librarian
     def post(self,id = None):
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
         # TODO kontrola librariana
 
         library_id   = request.form.get("library_id")  # TODO aj toto sa da zistit z knihovnika ale admin by sa zas zvlast musel riesit
@@ -58,6 +58,8 @@ class OrderResource(MasterResource):
         #person_id    = request.form.get("person_id")  # TODO cez session?
         person_id    = session['user_id']
         amount       = request.form.get("amount")
+        if amount == "":
+            amount = 0
         note         = request.form.get("note")
 
         try:
@@ -70,9 +72,10 @@ class OrderResource(MasterResource):
             db.session.add(order)
             db.session.commit()
 
-        except IntegrityError as e:
+        except DBAPIError as e:
             db.session.rollback()
-            return self.response_error("Database refused push!" + '\n' + e.orig.diag.message_detail)
+            return self.response_error("Database refused push!",
+                                       str(e.__dict__.get('orig')))
 
         return self.response_ok("Committed to db")
 
@@ -81,14 +84,15 @@ class OrderResource(MasterResource):
     def delete(self, id):
 
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         order = Order.query.filter_by(id=id).first()
-        if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-            if order.library_id != self.librarian_in_which_lib(session['user_id']):
-                return self.response_error("Unauthorised action!")
+        if order:
+            if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+                if order.library_id != self.librarian_in_which_lib(session['user_id']):
+                    return self.response_error("Unauthorised action!", "")
 
-        Order.query.filter_by(id=id).delete()
+        Order.query.filter_by(id=id).delete()  # should work - no cascade
         db.session.commit()
 
         return self.response_ok("Committed to db")
@@ -97,21 +101,23 @@ class OrderResource(MasterResource):
     # Can be done by Admin (Librarian can update orders of his Library)
     def put(self,id):
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         order = Order.query.filter_by(id=id).first()
 
+        if not order:
+            return self.response_error("No such order in DB!", "")
+
         if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
             if order.library_id != self.librarian_in_which_lib(session['user_id']):
-                return self.response_error("Unauthorised action!")
-
-        if not order:
-            return self.response_error("No such order in DB!")
+                return self.response_error("Unauthorised action!", "")
 
         library_id = request.form.get("library_id")
         booktitle_id = request.form.get("booktitle_id")
         person_id = session['user_id']
         amount = request.form.get("amount")
+        if amount == "":
+            amount = 0
         note = request.form.get("note")
 
         try:
@@ -125,6 +131,7 @@ class OrderResource(MasterResource):
 
             db.session.commit()
 
-        except IntegrityError as e:
+        except DBAPIError as e:
             db.session.rollback()
-            return self.response_error("Database refused push!" + '\n' + e.orig.diag.message_detail)
+            return self.response_error("Database refused push!",
+                                       str(e.__dict__.get('orig')))
