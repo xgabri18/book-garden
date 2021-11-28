@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const url = "https://book-garden.herokuapp.com/api/";
 
 export const createAPI = (name, params = {}) => {
@@ -6,4 +8,11 @@ export const createAPI = (name, params = {}) => {
   }
 
   return url + name;
+};
+
+export const getLibrary = (id) => {
+  return axios
+    .get(createAPI("library/:id", { id }))
+    .then((response) => response.data.data)
+    .catch((error) => console.log(error));
 };

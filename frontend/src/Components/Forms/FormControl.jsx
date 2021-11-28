@@ -11,6 +11,7 @@ const FormControl = ({
   onChange,
   min,
   max,
+  disabled,
 }) => {
   return (
     <div className="Form-control">
@@ -30,6 +31,7 @@ const FormControl = ({
         defaultValue={value}
         min={min}
         max={max}
+        disabled={disabled}
       />
     </div>
   );

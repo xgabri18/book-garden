@@ -4,10 +4,8 @@ import { createAPI } from "../../../api";
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
 import {
+  CheckIcon,
   ChevronLeftIcon,
-  CogIcon,
-  PencilIcon,
-  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
 import { Alert } from "../../../Components/Ui/Alert";
@@ -21,21 +19,47 @@ import {
 } from "../../../Components/Ui/Table";
 import { useParams } from "react-router-dom";
 
-export const LibraryReservationsModule = () => {
-  const [alert, setAlert] = useState(null);
+export const LibraryReservationModule = () => {
   const [reservations, setReservations] = useState([]);
+  const [alert, setAlert] = useState(null);
   const { id } = useParams();
 
+  /**
+   * Get reservations
+   */
   useEffect(() => {
     axios
       .get(createAPI("reservation/of/lib/:id", { id }))
       .then((response) => setReservations(response.data.data))
       .catch((error) => console.log(error));
-  }, [alert]);
+  }, [id, alert]);
 
-  function deleteReservation(id) {
+  function confirmReservation(idReservation) {
     axios
-      .delete(createAPI("reservation/:id", { id }))
+      .get(createAPI("reservation/:id", { id: idReservation }))
+      .then((response) => {
+        if (response.data.status === "success") {
+          // Book Deleted
+          window.scrollTo(0, 0);
+          setAlert({
+            message: "Reservation confirmed",
+            type: "success",
+          });
+        } else {
+          // Error
+          window.scrollTo(0, 0);
+          setAlert({
+            message: response.data.message,
+            type: "danger",
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function deleteReservation(idReservation) {
+    axios
+      .delete(createAPI("reservation/:id", { id: idReservation }))
       .then((response) => {
         if (response.data.status === "success") {
           // Book Deleted
@@ -74,40 +98,35 @@ export const LibraryReservationsModule = () => {
             onClick={() => setAlert(null)}
           />
         )}
-        <h1 className="Content-Title">Libraries</h1>
+        <h1 className="Content-Title">'s Reservations</h1>
 
         <div className="overflow-auto">
           <Table>
             <Thead>
               <TableRow>
                 <TableColHead>#</TableColHead>
-                <TableColHead>Address</TableColHead>
+                <TableColHead>User</TableColHead>
+                <TableColHead>Book</TableColHead>
+                <TableColHead>Date Reservation</TableColHead>
                 <TableColHead>Actions</TableColHead>
               </TableRow>
             </Thead>
             <Tbody>
-              {reservations.map((library, index) => (
+              {reservations.map((reservation, index) => (
                 <TableRow key={index} index={index} striped>
-                  <TableCol>{library.name}</TableCol>
-                  <TableCol>
-                    <div className="font-bold">{library.city}</div>
-                    <div className="hidden lg:block">{library.street}</div>
-                  </TableCol>
+                  <TableCol>{reservation.id}</TableCol>
+                  <TableCol>{reservation.user}</TableCol>
+                  <TableCol>{reservation.book_title}</TableCol>
+                  <TableCol>{reservation.date_of_reservation}</TableCol>
                   <TableCol>
                     <div className="flex items-center gap-2">
-                      <ButtonLink
-                        to={createAdminRoute("LibraryShow", { id: library.id })}
-                        variant="primary"
-                        icon={<CogIcon className="h-6 mr-1" />}
-                        text="Manage"
+                      <Button
+                        type="button"
+                        variant="green"
+                        icon={<CheckIcon className="h-6 mr-1" />}
+                        text="Confirm"
                         showText="md"
-                      />
-                      <ButtonLink
-                        to={createAdminRoute("LibraryEdit", { id: library.id })}
-                        variant="yellow"
-                        icon={<PencilIcon className="h-6 mr-1" />}
-                        text="Edit"
-                        showText="md"
+                        onClick={() => confirmReservation(reservation.id)}
                       />
                       <Button
                         type="button"
@@ -115,7 +134,7 @@ export const LibraryReservationsModule = () => {
                         icon={<TrashIcon className="h-6 mr-1" />}
                         text="Delete"
                         showText="md"
-                        onClick={() => deleteReservation(library.id)}
+                        onClick={() => deleteReservation(reservation.id)}
                       />
                     </div>
                   </TableCol>

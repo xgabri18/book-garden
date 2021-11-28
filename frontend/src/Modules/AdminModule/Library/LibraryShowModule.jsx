@@ -1,11 +1,10 @@
-import { Button, ButtonLink } from "../../../Components/Ui/Button";
+import { ButtonLink } from "../../../Components/Ui/Button";
 import {
   ArchiveIcon,
   ChevronLeftIcon,
   CollectionIcon,
   LibraryIcon,
   PencilIcon,
-  SaveIcon,
   TicketIcon,
 } from "@heroicons/react/outline";
 import axios from "axios";
@@ -18,14 +17,13 @@ import { createAdminRoute } from "../../../routes";
 export const LibraryShowModule = () => {
   const { id } = useParams();
   const [library, setLibrary] = useState({});
-  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
     axios
       .get(createAPI("library/:id", { id }))
       .then((response) => setLibrary(response.data.data))
       .catch((error) => console.log(error));
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -62,14 +60,14 @@ export const LibraryShowModule = () => {
 
           <div className="flex flex-col md:flex-row mt-8 gap-4">
             <ButtonLink
-              to={createAdminRoute("LibraryReservations", { id: library.id })}
+              to={createAdminRoute("LibraryReservation", { id: library.id })}
               text="Reservations"
               icon={<CollectionIcon className="h-12 mr-2 text-indigo-600" />}
               variant="secondary"
               className="w-full md:w-1/3"
             />
             <ButtonLink
-              to={createAdminRoute("LibraryBorrowings", { id: library.id })}
+              to={createAdminRoute("LibraryBorrowing", { id: library.id })}
               text="Borrowings"
               icon={<TicketIcon className="h-12 mr-2 text-indigo-600" />}
               variant="secondary"

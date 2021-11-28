@@ -32,16 +32,7 @@ const BookTitleListModule = () => {
     <div className="flex flex-row flex-wrap">
       <div className="w-full lg:w-3/12">
         <FilterDropdown>
-          <FilterDropdownItem title="Sorting" collapsed>
-            <select id="sorting" className="w-full p-2">
-              <option value="newest">Popular</option>
-              <option value="newest">Newest</option>
-              <option value="newest">Oldest</option>
-              <option value="newest">Price Ascending</option>
-              <option value="newest">Price Descending</option>
-            </select>
-          </FilterDropdownItem>
-          <FilterDropdownItem title="Genres">
+          <FilterDropdownItem title="Genres" collapsed>
             {genres.map((genre, index) => (
               <div className="block mr-2" key={index}>
                 <input type="checkbox" id={`genre-${index}`} className="mr-1" />
@@ -49,16 +40,13 @@ const BookTitleListModule = () => {
               </div>
             ))}
           </FilterDropdownItem>
-          <FilterDropdownItem title="Authors">
+          <FilterDropdownItem title="Authors" collapsed>
             <select id="sorting" className="w-full p-2">
               <option defaultChecked>Select Author</option>
             </select>
           </FilterDropdownItem>
-          <FilterDropdownItem title="Libraries">
+          <FilterDropdownItem title="Libraries" collapsed>
             <b>Select box</b> with libraries
-          </FilterDropdownItem>
-          <FilterDropdownItem title="Rating">
-            <b>Select rating</b>
           </FilterDropdownItem>
         </FilterDropdown>
       </div>

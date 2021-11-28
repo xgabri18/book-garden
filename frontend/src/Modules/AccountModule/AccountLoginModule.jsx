@@ -2,7 +2,7 @@ import FormControl from "../../Components/Forms/FormControl";
 import { Button } from "../../Components/Ui/Button";
 import { Link, useHistory } from "react-router-dom";
 import auth from "../../auth";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const AccountLoginModule = () => {
   const [username, setUsername] = useState("");

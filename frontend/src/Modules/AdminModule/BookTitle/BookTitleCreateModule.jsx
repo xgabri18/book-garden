@@ -1,19 +1,12 @@
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
-import {
-  BookOpenIcon,
-  ChevronLeftIcon,
-  PlusIcon,
-  SaveIcon,
-} from "@heroicons/react/outline";
+import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/outline";
 import FormControl from "../../../Components/Forms/FormControl";
 import axios from "axios";
 import { createAPI } from "../../../api";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 import Textarea from "../../../Components/Forms/Textarea";
 import qs from "querystring";
 import { Alert } from "../../../Components/Ui/Alert";
-import ReactDOM from "react-dom";
 import { createAdminRoute } from "../../../routes";
 
 export const BookTitleCreateModule = () => {

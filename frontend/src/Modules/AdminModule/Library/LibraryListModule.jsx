@@ -1,10 +1,7 @@
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import {
-  ArchiveIcon,
   ChevronLeftIcon,
   CogIcon,
-  ExternalLinkIcon,
-  EyeIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,

@@ -1,13 +1,12 @@
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import {
   ChevronLeftIcon,
-  CogIcon,
   ExternalLinkIcon,
   PencilIcon,
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { createAdminRoute, createRoute } from "../../../routes";
+import { createAdminRoute } from "../../../routes";
 import axios from "axios";
 import { createAPI } from "../../../api";
 import { useEffect, useState } from "react";

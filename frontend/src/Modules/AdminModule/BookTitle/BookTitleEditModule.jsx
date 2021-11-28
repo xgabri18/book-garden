@@ -1,9 +1,5 @@
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
-import {
-  BookOpenIcon,
-  ChevronLeftIcon,
-  SaveIcon,
-} from "@heroicons/react/outline";
+import { ChevronLeftIcon, SaveIcon } from "@heroicons/react/outline";
 import FormControl from "../../../Components/Forms/FormControl";
 import axios from "axios";
 import { createAPI } from "../../../api";
@@ -12,7 +8,6 @@ import { useParams } from "react-router-dom";
 import Textarea from "../../../Components/Forms/Textarea";
 import qs from "querystring";
 import { Alert } from "../../../Components/Ui/Alert";
-import ReactDOM from "react-dom";
 
 export const BookTitleEditModule = () => {
   const { id } = useParams();
@@ -24,7 +19,7 @@ export const BookTitleEditModule = () => {
       .get(createAPI("booktitle/:id", { id }))
       .then((response) => setBookTitle(response.data.data))
       .catch((error) => console.log(error));
-  }, [alert]);
+  }, [id, alert]);
 
   return (
     <>

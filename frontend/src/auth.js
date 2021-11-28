@@ -1,4 +1,3 @@
-import { Redirect } from "react-router-dom";
 import axios from "axios";
 import qs from "querystring";
 import { createAPI } from "./api";
@@ -14,7 +13,7 @@ class AuthService {
     this.username = "admin";
     this.password = "admin";
     this.email = "admin@admin.com";
-    this.type = "librarian";
+    this.type = "distributor";
     this.library_id = 1;
     this.name = "Joe";
     this.surname = "Doe";

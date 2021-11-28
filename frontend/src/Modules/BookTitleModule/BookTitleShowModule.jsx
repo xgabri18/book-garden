@@ -16,9 +16,7 @@ const BookTitleShowModule = () => {
       .get(createAPI("booktitle/:id", { id }))
       .then((response) => setBookTitle(response.data.data))
       .catch((error) => console.log(error));
-  }, []);
-
-  console.log(libraries);
+  }, [id]);
 
   const items = [
     {

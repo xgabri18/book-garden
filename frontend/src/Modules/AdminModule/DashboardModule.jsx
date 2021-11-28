@@ -1,5 +1,4 @@
-import { Link, useRouteMatch } from "react-router-dom";
-import { idLibrary, role } from "../../middlewares";
+import { Link } from "react-router-dom";
 import {
   ArchiveIcon,
   BookOpenIcon,
@@ -13,8 +12,6 @@ import AuthService from "../../auth";
 import auth from "../../auth";
 
 export const DashboardModule = () => {
-  const { path } = useRouteMatch();
-
   return (
     <>
       <h1 className="text-2xl text-center font-bold my-8">Welcome back</h1>

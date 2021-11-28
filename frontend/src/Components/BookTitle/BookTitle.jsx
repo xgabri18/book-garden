@@ -1,7 +1,6 @@
 import "./BookTitle.css";
 import { Link } from "react-router-dom";
 import { Rating } from "../Ui/Rating";
-import { ButtonLink } from "../Ui/Button";
 
 export const BookTitle = ({ bookTitle }) => {
   return (
@@ -21,7 +20,7 @@ export const BookTitle = ({ bookTitle }) => {
           </Link>
         </div>
         <div className="BookTitle-rating">
-          <Rating rating={bookTitle.rating % 5} className="h-6" />
+          <Rating rating={bookTitle.rating / 2} className="h-6" />
         </div>
       </div>
       <div className="BookTitle-description">{bookTitle.description}</div>

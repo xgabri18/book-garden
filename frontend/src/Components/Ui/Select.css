@@ -1,0 +1,7 @@
+.Select {
+    @apply bg-transparent
+}
+
+.Select [class*="-control"] {
+    @apply bg-gray-50 border-none rounded-md
+}

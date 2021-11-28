@@ -6,7 +6,7 @@
 }
 
 .BookTitleItem .BookTitleItem-image {
-    @apply block bg-gray-200 border-0 mb-4 w-full
+    @apply block bg-gray-200 border-0 mb-4 w-auto max-h-64 mx-auto
 }
 
 .BookTitleItem .BookTitleItem-name {

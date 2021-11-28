@@ -2,7 +2,7 @@ import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
 import AccountLoginModule from "./AccountLoginModule";
 import AccountRegisterModule from "./AccountRegisterModule";
 import AccountProfileModule from "./AccountProfileModule";
-import { authenticated, AuthRoute } from "../../middlewares";
+import { AuthRoute } from "../../middlewares";
 import AuthService from "../../auth";
 
 const AccountModule = () => {

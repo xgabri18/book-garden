@@ -7,7 +7,6 @@ import qs from "querystring";
 import { Alert } from "../../../Components/Ui/Alert";
 import FormControl from "../../../Components/Forms/FormControl";
 import Textarea from "../../../Components/Forms/Textarea";
-import auth from "../../../auth";
 import { useState } from "react";
 
 export const LibraryCreateModule = () => {

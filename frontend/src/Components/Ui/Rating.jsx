@@ -5,6 +5,8 @@ export const Rating = ({ rating, className }) => {
   const stars = [];
   const emptyStars = [];
 
+  rating = Math.ceil(rating);
+
   const [hoveredItem, setHoveredItem] = useState(null);
 
   /** @todo: PUT Request: Add rating */
@@ -26,19 +28,21 @@ export const Rating = ({ rating, className }) => {
     );
   }
 
-  for (let i = rating; i < 5; i++) {
-    emptyStars.push(
-      <StarIcon
-        key={i}
-        onMouseEnter={() => setHoveredItem(i)}
-        onMouseLeave={() => setHoveredItem(null)}
-        className={`${className} transition duration-200 ease-linear cursor-pointer transform ${
-          hoveredItem != null && hoveredItem >= i
-            ? "scale-125 text-yellow-400"
-            : ""
-        }`}
-      />
-    );
+  if (rating < 5) {
+    for (let i = rating; i < 5; i++) {
+      emptyStars.push(
+        <StarIcon
+          key={i}
+          onMouseEnter={() => setHoveredItem(i)}
+          onMouseLeave={() => setHoveredItem(null)}
+          className={`${className} transition duration-200 ease-linear cursor-pointer transform ${
+            hoveredItem != null && hoveredItem >= i
+              ? "scale-125 text-yellow-400"
+              : ""
+          }`}
+        />
+      );
+    }
   }
 
   return (
