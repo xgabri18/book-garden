@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: person.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
@@ -6,12 +15,13 @@ from sqlalchemy.exc import IntegrityError
 from models.models import Person
 
 # SET response_error a response_ok
-# osetrene
+
 
 
 class PersonResource(MasterResource):
 
-    # TODO k tomuto treba debatu (profil alebo jak?/ admin?)
+    # Get info about person
+    # Admin (all) or User (only info about himself)
     def get(self,id = None):
 
         if not (self.is_logged() and (self.is_admin() or self.is_user(id))):

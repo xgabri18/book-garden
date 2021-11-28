@@ -1,12 +1,21 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: book_title.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DBAPIError
 
 from models.models import BookTitle,Library,Stock
 
 # SET response_error a response_ok
-# osetrene
+
 
 class BookTitleResource(MasterResource):
     def get(self,id = None):
@@ -43,8 +52,12 @@ class BookTitleResource(MasterResource):
         genre       = request.form.get("genre")
         description = request.form.get("description")
         rating      = request.form.get("rating")
+        if rating == "":
+            rating = None
         photo       = request.form.get("rating")
         date_publication = request.form.get("date_publication")
+        # if date_publication == "":
+        #     date_publication = None
 
         try:
             booktitle = BookTitle(name        = name,
@@ -60,7 +73,7 @@ class BookTitleResource(MasterResource):
             db.session.add(booktitle)
             db.session.commit()
 
-        except IntegrityError as e:
+        except DBAPIError as e:
             db.session.rollback()
             return self.response_error("Database refused push (check if ISBN is unique)!" + '\n' + e.orig.diag.message_detail)  # TODO
 
@@ -85,7 +98,8 @@ class BookTitleResource(MasterResource):
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
-        BookTitle.query.filter_by(id=id).delete()
+        booktitle = BookTitle.query.filter_by(id=id).first()#.delete()
+        db.session.delete(booktitle)  # required because of cascade
         db.session.commit()
 
         return self.response_ok("Committed to db")
@@ -125,7 +139,7 @@ class BookTitleResource(MasterResource):
 
             db.session.commit()
 
-        except IntegrityError as e:
+        except DBAPIError as e:
             db.session.rollback()
             return self.response_error(e.orig.diag.message_detail)
 

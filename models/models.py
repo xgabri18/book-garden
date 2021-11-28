@@ -1,10 +1,18 @@
+# ########################################
+# Brief: Database structure
+# Project: System for libraries
+# File: models.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from shared_db import db
 from datetime import datetime, timedelta
 #TODO doplnit nullable + unique TRUE + cascade delete
 
 
 class Person(db.Model):
-    #query: db.Query  # adds autocomplete to queries
     id = db.Column(db.Integer, primary_key=True)
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'))
     user_type = db.Column(db.Integer, nullable=False, default=1)  # ADMIN-5/LIBRARIAN-4/DISTRIBUTOR-3/LOGUSER-other - permissions
@@ -25,7 +33,6 @@ class Person(db.Model):
 
 
 class Library(db.Model):
-    #query: db.Query  # adds autocomplete to queries
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Unicode(100), nullable=False)
     city = db.Column(db.Unicode(100))
@@ -47,7 +54,7 @@ class BookTitle(db.Model):
     photo = db.Column(db.Text)
     isbn = db.Column(db.String(13), nullable=False, unique=True)  # ISBN is composed of 10 or 13 numbers
     date_publication = db.Column(db.Integer)
-    genre = db.Column(db.Unicode(100))  # mozno tabulka????
+    genre = db.Column(db.Unicode(100))
     description = db.Column(db.UnicodeText)
     rating = db.Column(db.Integer)  # or float??? (value 0-5 / 0-100 or smtn, hardcoded -> critics rating)
 
@@ -59,14 +66,12 @@ class BookTitle(db.Model):
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    #library_id = db.Column(db.Integer, db.ForeignKey('library.id'), primary_key=True)
-    #booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'), primary_key=True)
     library_id = db.Column(db.Integer, db.ForeignKey('library.id'), nullable=False)  # TODO stock must belong somewhere
     booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'), nullable=False)
     amount = db.Column(db.Integer, default=0)
     availability = db.Column(db.Boolean, default=False)
 
-    reservations = db.relationship("Reservation", cascade="all,delete,delete-orphan", backref="stock") #foreign_keys="[Reservation.library_id]"
+    reservations = db.relationship("Reservation", cascade="all,delete,delete-orphan", backref="stock")
     borrowings = db.relationship("Borrowing", cascade="all,delete,delete-orphan", backref="stock")
     votes = db.relationship("Voting", cascade="all,delete,delete-orphan", backref="stock")
 
@@ -75,31 +80,14 @@ class Stock(db.Model):
 
 
 class Reservation(db.Model):
-    #__table_args__ = (db.UniqueConstraint('library_id', 'booktitle_id', name='unique_library_booktitle'),)
-    # __table_args__ = (
-    #     db.ForeignKeyConstraint(
-    #         ['library_id', 'booktitle_id'],
-    #         ['stock.library_id', 'stock.booktitle_id'],
-    #     ),
-    # )
     id = db.Column(db.Integer, primary_key=True)
-    #library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
-    #booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     date_of_reservation = db.Column(db.DateTime, default=datetime.now)  # not so sure how to do this
 
 
 class Borrowing(db.Model):
-    # __table_args__ = (
-    #     db.ForeignKeyConstraint(
-    #         ['library_id', 'booktitle_id'],
-    #         ['stock.library_id', 'stock.booktitle_id'],
-    #     ),
-    # )
     id = db.Column(db.Integer, primary_key=True)
-    #library_id = db.Column(db.Integer)#, db.ForeignKey('stock.library_id'))
-    #booktitle_id = db.Column(db.Integer)#, db.ForeignKey('stock.booktitle_id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     date_borrowed = db.Column(db.DateTime, default=datetime.now)
@@ -118,12 +106,6 @@ class Order(db.Model):
 
 
 class Voting(db.Model):
-    # __table_args__ = (
-    #     db.ForeignKeyConstraint(
-    #         ['library_id', 'booktitle_id'],
-    #         ['stock.library_id', 'stock.booktitle_id'],
-    #     ),
-    # )
     id = db.Column(db.Integer, primary_key=True)
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))

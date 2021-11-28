@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Subclass of the Resource class
+# Project: System for libraries
+# File: masterclass.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from flask import jsonify,session
 from flask_restful import Resource
 from shared_db import db

@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: borrowing_of_person.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
@@ -8,9 +17,9 @@ from models.models import Reservation,Borrowing,Person
 # gets list of users borrowings
 
 # SET response_error a response_ok
-# osetrene
 
-# todo session asi needed
+
+
 # TODO knihovnik by nemal vidiet veci z inych kniznic (vidi len borrowings z jeho kniznice) - potom upravim session
 class BorrowingOfPersonRes(MasterResource):
 
@@ -30,7 +39,7 @@ class BorrowingOfPersonRes(MasterResource):
 
             borrowings = Borrowing.query.filter_by(person_id = person_id[0][0]).all()
 
-        if not (self.is_logged() and (self.is_admin() or self.is_user(person_id))):  # is the right person logged //librarian/admin
+        if not (self.is_logged() and (self.is_admin() or self.is_user(person_id))):  # is the right person logged //admin
             return self.response_error("Unauthorised action!")
 
 
