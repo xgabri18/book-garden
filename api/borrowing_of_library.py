@@ -12,7 +12,7 @@ from flask import jsonify,request,session
 from shared_db import db
 from datetime import datetime
 
-from models.models import Borrowing,Stock
+from models.models import Borrowing,Stock,Library,BookTitle,Person
 
 # SET response_error a response_ok
 
@@ -41,14 +41,39 @@ class BorrowingOfLibraryRes(MasterResource):
         person_id      = request.args.get('person_id')
 
         if person_id is not None:
-            borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array),Borrowing.person_id == person_id).all()
+            bor = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array),Borrowing.person_id == person_id).all()
         else:
-            borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array)).all()
+            bor = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array)).all()
 
-        array = []
-        for row in borrowings:
-            row = row.__dict__
-            del row["_sa_instance_state"]
-            array.append(row)
+        final = []
+        for borrowing in bor:
+            borrowing = borrowing.__dict__
+            stock = Stock.query.filter_by(id = borrowing["stock_id"]).first().__dict__
 
-        return self.response_ok(array)
+            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
+            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
+
+            person = Person.query.filter_by(id=borrowing["person_id"]).first().__dict__
+
+            name = person["name"]
+            surname = person["surname"]
+
+            del borrowing["_sa_instance_state"]
+            borrowing["name"] = name
+            borrowing["surname"] = surname
+            borrowing["Library_name"] = lib_name[0][0]
+            borrowing["Book_title"] =  book_title[0][0]
+
+            final.append(borrowing)
+        return self.response_ok(final)
+
+
+
+
+        # array = []
+        # for row in borrowings:
+        #     row = row.__dict__
+        #     del row["_sa_instance_state"]
+        #     array.append(row)
+        #
+        # return self.response_ok(array)

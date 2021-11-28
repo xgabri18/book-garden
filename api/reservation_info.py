@@ -23,16 +23,16 @@ class ReservationInfoResource(MasterResource):
     # Return list of all existing reservations
     # Can be done by Admin
     # todo session
-    def get(self):
+    def get(self,id):
         if not (self.is_logged() and self.is_admin()):
            return self.response_error("Unauthorised action!", "debug")
 
         try:
             final = []
-            res = Reservation.query.all()
+            res = Reservation.query.filter_by(library_id = id).all()
 
             for reservation in res:
-                print(reservation)
+                #print(reservation)
                 reservation = reservation.__dict__
                 stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
 

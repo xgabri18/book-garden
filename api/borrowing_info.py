@@ -22,14 +22,14 @@ class BorrowingInfoResource(MasterResource):
     # Return list of all existing reservations
     # Can be done by Admin
     # todo session
-    def get(self):
+    def get(self,id):
         if not (self.is_logged() and self.is_admin()):
-           return self.response_error("Unauthorised action!", "debug")
+          return self.response_error("Unauthorised action!", "debug")
 
         try:
 
             final = []
-            bor = Borrowing.query.all()
+            bor = Borrowing.query.filter_by(library_id = id).all()
 
             for borrowing in bor:
                 borrowing = borrowing.__dict__

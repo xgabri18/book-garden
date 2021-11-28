@@ -11,7 +11,7 @@ from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 
-from models.models import Reservation,Stock
+from models.models import Reservation,Stock,Library,BookTitle,Person
 
 # SET response_error a response_ok
 
@@ -44,17 +44,43 @@ class ReservationOfLibraryRes(MasterResource):
 
 
         if person_id is not None:
-            reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array), Reservation.person_id == person_id).all()
+            res = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array), Reservation.person_id == person_id).all()
         else:
-            reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array)).all()
+            res = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array)).all()
 
-        array = []
-        for row in reservations:
-            row = row.__dict__
-            del row["_sa_instance_state"]
-            array.append(row)
 
-        return self.response_ok(array)
+        final = []
+        for reservation in res:
+            #print(reservation)
+            reservation = reservation.__dict__
+            stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
+
+            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).first()
+            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).first()
+
+            person = Person.query.filter_by(id=reservation["person_id"]).first().__dict__
+
+            name = person["name"]
+            surname = person["surname"]
+
+            del reservation["_sa_instance_state"]
+            reservation["name"] = name
+            reservation["surname"] = surname
+            reservation["Library_name"] = lib_name[0][0]
+            reservation["Book_title"] =  book_title[0][0]
+
+            final.append(reservation)
+
+        return self.response_ok(final)
+
+        #
+        # array = []
+        # for row in reservations:
+        #     row = row.__dict__
+        #     del row["_sa_instance_state"]
+        #     array.append(row)
+        #
+        # return self.response_ok(array)
 
 
 
