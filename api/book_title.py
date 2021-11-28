@@ -54,7 +54,8 @@ class BookTitleResource(MasterResource):
         rating      = request.form.get("rating")
         if rating == "":
             rating = None
-        photo       = request.form.get("rating")
+
+        photo       = request.form.get("photo")
         date_publication = request.form.get("date_publication")
         # if date_publication == "":
         #     date_publication = None

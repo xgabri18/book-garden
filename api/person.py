@@ -57,22 +57,22 @@ class PersonResource(MasterResource):
             return self.response_error("Can not be done while logged in!")  # TODO co tu
 
         email       = request.form.get("email")
-        #user_type   = request.form.get("user_type")
+        # user_type   = request.form.get("user_type")
         username    = request.form.get("username")
         password    = request.form.get("password")
         name        = request.form.get("name")
         surname     = request.form.get("surname")
-        #library_id  = request.form.get("library_id")
+        # library_id  = request.form.get("library_id")
         profiledesc = request.form.get("profiledesc")
 
         try:
             person = Person(email       = email,
-                            #user_type   = user_type,
+                            # user_type   = user_type,
                             username    = username,
                             password    = password,
                             name        = name,
                             surname     = surname,
-                            #library_id  = library_id,
+                            # library_id  = library_id,
                             profiledesc = profiledesc)
 
             db.session.add(person)
