@@ -23,30 +23,36 @@ class ReservationInfoResource(MasterResource):
     # Return list of all existing reservations
     # Can be done by Admin
     # todo session
-    def get(self, id):
+    def get(self):
         if not (self.is_logged() and self.is_admin()):
            return self.response_error("Unauthorised action!", "debug")
 
         try:
-            reservation = Reservation.query.filter_by(id=id).first().__dict__
+            final = []
+            res = Reservation.query.all()
 
-            stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
+            for reservation in res:
+                print(reservation)
+                reservation = reservation.__dict__
+                stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
 
-            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
-            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
+                lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).first()
+                book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).first()
 
-            person = Person.query.filter_by(id=reservation["person_id"]).first().__dict__
+                person = Person.query.filter_by(id=reservation["person_id"]).first().__dict__
 
-            name = person["name"]
-            surname = person["surname"]
+                name = person["name"]
+                surname = person["surname"]
 
-            del reservation["_sa_instance_state"]
-            reservation["name"] = name
-            reservation["surname"] = surname
-            reservation["Library_name"] = lib_name[0][0]
-            reservation["Book_title"] =  book_title[0][0]
+                del reservation["_sa_instance_state"]
+                reservation["name"] = name
+                reservation["surname"] = surname
+                reservation["Library_name"] = lib_name[0][0]
+                reservation["Book_title"] =  book_title[0][0]
 
-            return self.response_ok(reservation)
+                final.append(reservation)
+
+            return self.response_ok(final)
 
         except (sqlalchemy.exc.SQLAlchemyError, AttributeError) as e:
             return self.response_ok()
