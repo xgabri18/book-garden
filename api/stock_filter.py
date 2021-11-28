@@ -11,6 +11,7 @@ from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 from urllib import parse
+import json
 
 from models.models import Stock,BookTitle
 
@@ -28,14 +29,16 @@ class StockFilterResource(MasterResource):
         name            = request.args.get('name')
 
         stock = Stock.query
-
+        #print(stock.all()[0][0])
+        #print(availability)
+        #print(type(availability))
         if availability is not None:
             if availability.lower() == "true":
-                availability = True
-                stock = stock.filter_by(availability = availability)
+                stock = stock.filter(Stock.availability.is_(True))
+                #print(stock.all())
             else:
-                availability = False
-                stock = stock.filter_by(availability = availability)
+                stock = stock.filter(Stock.availability.is_(False))
+                #print(stock.all())
 
 
 

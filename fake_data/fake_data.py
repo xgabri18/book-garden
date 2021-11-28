@@ -210,9 +210,10 @@ def random_orders(url,s,low,high):
     for person in json.loads(people.text)["data"]:
         # zoberie iba knihovnikov
         if person["user_type"] == 4:
+            print(person["library_id"])
             stock = s.get(url + "/stock/filter?availability=False&library_id=" + str(person["library_id"]))
             stock = json.loads(stock.text)["data"]
-
+            print(stock)
             # vyberie nahodnu sadu stocku z nahodneho range
             # vrati pole stock ID
             chosen_stock = random.sample([d['id'] for d in stock],k = random.randrange(low,high))
@@ -299,8 +300,8 @@ url = "http://127.0.0.1:5000/api"
 s = requests.Session()
 r = s.post(url = url+"/session", data = {"username" : "admin", "password" : "admin", })
 
-x = s.get(url + "/database/reset")
-print(x.text)
+# x = s.get(url + "/database/reset/12345")
+# print(x.text)
 
 
 generate_books(     url,s      )
