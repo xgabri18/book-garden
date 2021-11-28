@@ -69,7 +69,7 @@ class MasterResource(Resource):  # subclass
 
     def is_librarian(self):
         # TODO: DEBUG
-        return True
+        return False
         if session['user_type'] == 4:
             return True
         else:
@@ -77,7 +77,7 @@ class MasterResource(Resource):  # subclass
 
     def is_distributor(self):
         # TODO: DEBUG
-        return True
+        return False
         if session['user_type'] == 3:
             return True
         else:
@@ -85,7 +85,7 @@ class MasterResource(Resource):  # subclass
 
     def is_user(self, user_id):  # Regular user can ask for his info only
         # TODO: DEBUG
-        return True
+        return False
         if session['user_id'] == user_id:
             return True
         else:

@@ -19,27 +19,29 @@ import {
   Tbody,
   Thead,
 } from "../../../Components/Ui/Table";
+import { useParams } from "react-router-dom";
 
 export const LibraryReservationsModule = () => {
   const [alert, setAlert] = useState(null);
   const [reservations, setReservations] = useState([]);
+  const { id } = useParams();
 
   useEffect(() => {
     axios
-      .get(createAPI("reservation"))
-      .then((response) => setReservations(response.data?.data))
+      .get(createAPI("reservation/of/lib/:id", { id }))
+      .then((response) => setReservations(response.data.data))
       .catch((error) => console.log(error));
   }, [alert]);
 
   function deleteReservation(id) {
     axios
-      .delete(createAPI("library/:id", { id }))
+      .delete(createAPI("reservation/:id", { id }))
       .then((response) => {
         if (response.data.status === "success") {
           // Book Deleted
           window.scrollTo(0, 0);
           setAlert({
-            message: "Library Deleted",
+            message: "Reservation deleted",
             type: "success",
           });
         } else {
@@ -58,16 +60,10 @@ export const LibraryReservationsModule = () => {
     <>
       <div className="flex justify-between">
         <ButtonLink
-          to={createAdminRoute("Dashboard")}
+          to={createAdminRoute("LibraryShow", { id })}
           variant="secondary"
           icon={<ChevronLeftIcon className="h-6 mr-1" />}
           text="Back"
-        />
-        <ButtonLink
-          to={createAdminRoute("LibraryCreate")}
-          variant="green"
-          icon={<PlusIcon className="h-6 mr-1" />}
-          text="New Library"
         />
       </div>
       <div className="Content mt-4">
@@ -84,7 +80,7 @@ export const LibraryReservationsModule = () => {
           <Table>
             <Thead>
               <TableRow>
-                <TableColHead>Name</TableColHead>
+                <TableColHead>#</TableColHead>
                 <TableColHead>Address</TableColHead>
                 <TableColHead>Actions</TableColHead>
               </TableRow>
