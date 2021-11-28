@@ -33,27 +33,32 @@ class AuthService {
     return axios
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
-        this.authenticated = true;
-        this.id = response.data.data.user_id;
-        this.type = this.convertToUserType(response.data.data.user_type);
+        if (response.data.status === "success") {
+          this.authenticated = true;
+          this.id = response.data.data.user_id;
+          this.type = this.convertToUserType(response.data.data.user_type);
 
-        // Get info
-        return axios
-          .get(createAPI("person/:id", { id: this.id }))
-          .then((response) => {
-            this.username = response.data.data.username;
-            this.library_id = response.data.data.library_id;
-            this.name = response.data.data.name;
-            this.surname = response.data.data.surname;
-            this.profiledesc = response.data.data.profiledesc;
+          // Collect user info
+          return axios
+            .get(createAPI("person/:id", { id: this.id }))
+            .then((response) => {
+              this.username = response.data.data.username;
+              this.library_id = response.data.data.library_id;
+              this.name = response.data.data.name;
+              this.surname = response.data.data.surname;
+              this.profiledesc = response.data.data.profiledesc;
 
-            return this.allowedDashboard ? (
-              <Redirect to="/admin" />
-            ) : (
-              <Redirect to="/account/profile" />
-            );
-          });
-      });
+              return this.allowedDashboard ? (
+                <Redirect to="/admin" />
+              ) : (
+                <Redirect to="/account/profile" />
+              );
+            });
+        } else {
+          console.log(response.data);
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   logout() {

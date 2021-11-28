@@ -1,4 +1,4 @@
-const url = "http://book-garden.herokuapp.com/api/";
+const url = "https://book-garden.herokuapp.com/api/";
 
 export const createAPI = (name, params = {}) => {
   for (let key in params) {
