@@ -23,7 +23,7 @@ class OrderFilterResource(MasterResource):
     # Get orders filtered by book or library
     def get(self):
         if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         library_id      = request.args.get('library_id')
         booktitle_id    = request.args.get('booktitle_id')

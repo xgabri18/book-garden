@@ -27,10 +27,12 @@ from api.reservation import ReservationResource
 from api.reservation_of_person import ReservationOfPersonRes
 from api.reservation_of_library import ReservationOfLibraryRes
 from api.reservation_to_borrow import ReservationConfirmRes
+from api.reservation_info import ReservationInfoResource
 
 from api.borrowing import BorrowingResource
 from api.borrowing_of_person import BorrowingOfPersonRes
 from api.borrowing_of_library import BorrowingOfLibraryRes
+from api.borrowing_info import BorrowingInfoResource
 
 from api.order import OrderResource
 from api.order_of_library import OrderOfLibResource
@@ -39,6 +41,8 @@ from api.order_to_stock import OrderConfirmRes
 
 from api.voting import VotingResource
 from api.voting_unique import VotesOnStockRes,VotesFromPersonRes,VotesDidPersonVoteStockRes
+
+from api.database_reset import DatabaseRestResource
 
 from models.models import BookTitle,Person,Library,Stock,Reservation,Borrowing,Order,Voting
 
@@ -54,7 +58,7 @@ CORS(app)
 
 # username:password@server/db
 #toto mozno do env variable
-app.config['SECRET_KEY'] = 'kok420'
+app.config['SECRET_KEY'] = 'not_secure'
 app.config['SESSION_TYPE'] = 'sqlalchemy'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yenewkmhgqretf:34c9ca2c665494adcad3ca82982bd708cf2c19cdf32c9e8597f9b7a0c7f3912e@ec2-34-247-118-233.eu-west-1.compute.amazonaws.com:5432/d4h6icjgreq9p4'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -134,10 +138,13 @@ api.add_resource(ReservationResource,  '/reservation', '/reservation/<int:id>')
 api.add_resource(ReservationOfPersonRes,  '/reservation/person/<int:identificator>', '/reservation/person/<string:identificator>')
 api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>')
 api.add_resource(ReservationConfirmRes, '/reservation/confirm/<int:id>')
+api.add_resource(ReservationInfoResource, '/reservation/info/<int:id>')
+
 
 api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
 api.add_resource(BorrowingOfPersonRes,  '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>')
 api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
+api.add_resource(BorrowingInfoResource,  '/borrowing/info/<int:id>')
 
 api.add_resource(OrderResource,  '/order', '/order/<int:id>')
 api.add_resource(OrderOfLibResource,  '/order/library/<int:id>')
@@ -148,6 +155,31 @@ api.add_resource(VotingResource,  '/voting', '/voting/<int:id>')
 api.add_resource(VotesOnStockRes,  '/voting/stockvotes/<int:stock_id>')
 api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
 api.add_resource(VotesDidPersonVoteStockRes,  '/voting/person/voted/stock/<int:stock_id>')
+
+api.add_resource(DatabaseRestResource, '/database/reset/<int:key>')
+
+
+
+# @app.route('/')
+# def index():
+#     return send_from_directory('frontend/build', 'index.html')
+# #
+
+# @app.route("/reset")
+# def reset():
+#     db.drop_all()
+#     db.create_all()
+#     person = Person(email       = "admin@admin.com",
+#                     user_type   = 5,
+#                     username    = "admin",
+#                     password    = "admin")
+#
+#     db.session.add(person)
+#     db.session.commit()
+#
+#     return "resetoval som db"
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

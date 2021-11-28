@@ -33,7 +33,7 @@ class ReservationOfPersonRes(MasterResource):
             email = identificator
             person_id = Person.query.with_entities(Person.id).filter_by(email = email).all()
             if not person_id:
-                return self.response_error("Person doesnt exist")
+                return self.response_error("Person doesnt exist", "")
 
             reservations = Reservation.query.filter_by(person_id = person_id[0][0]).all()
 
@@ -41,7 +41,7 @@ class ReservationOfPersonRes(MasterResource):
 
         #reservations = Reservation.query.filter(Reservation.person_id == person_id).all()
         if not (self.is_logged() and (self.is_admin() or self.is_user(person_id))):  # is the right person logged //librarian/admin
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         array = []
         for row in reservations:

@@ -24,11 +24,11 @@ class ReservationOfLibraryRes(MasterResource):
     def get(self, library_id):
 
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
             if library_id != self.librarian_in_which_lib(session['user_id']):
-                return self.response_error("Unauthorised action!")
+                return self.response_error("Unauthorised action!", "")
 
 
 
@@ -40,9 +40,13 @@ class ReservationOfLibraryRes(MasterResource):
         for id in stock_id:
             stock_id_array.append(id[0])
 
+        person_id      = request.args.get('person_id')
 
-        #big brain time query
-        reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array)).all()
+
+        if person_id is not None:
+            reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array), Reservation.person_id == person_id).all()
+        else:
+            reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array)).all()
 
         array = []
         for row in reservations:

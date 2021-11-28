@@ -6,13 +6,14 @@
 #          Roman Országh <xorsza01(at)fit.vutbr.cz>
 #          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
 # ########################################
+import sqlalchemy.exc
 
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from models.models import Reservation,Borrowing
+from models.models import Reservation,Borrowing,Stock
 # TODO ako sa bude riesit zaznam v tabulke pri vymazani stocku
 # TODO resourcy pre knihovnika zvlast alebo sem?
 
@@ -25,7 +26,7 @@ class BorrowingResource(MasterResource):
     # Can be done by Admin
     def get(self, id=None):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         if id is None:
             borrowing = Borrowing.query.all()
@@ -51,27 +52,46 @@ class BorrowingResource(MasterResource):
     # Can be done by Admin
     def post(self, id=None):
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         stock_id = request.form.get("stock_id")
+        if stock_id == "":
+            stock_id = None
         person_id = request.form.get("person_id")
+        if person_id == "":
+            person_id = None
+        try:
+            borrowing = Borrowing(stock_id        = stock_id,
+                                  person_id       = person_id)
 
-        borrowing = Borrowing(stock_id        = stock_id,
-                              person_id       = person_id)
+            db.session.add(borrowing)
+            db.session.commit()
+        except sqlalchemy.exc.DBAPIError as e:
+            db.session.rollback()
+            return self.response_error("Database refused push, Person and Stock must exist!",
+                                       str(e.__dict__.get('orig')))
 
-        db.session.add(borrowing)
-        db.session.commit()
 
         return self.response_ok("Committed to db")
 
     # Remove borrowing (user returned a book,...) in any library
     # Can be done by Admin
-    def delete(self, id):  # TODO zmena stocku
+    def delete(self, id):
 
         if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
-        Borrowing.query.filter_by(id=id).delete()
+        borrowing = Borrowing.query.filter_by(id=id).first()
+        try:
+            stock = Stock.query.filter_by(id = borrowing.stock_id).first()
+            stock.amount +=1
+        except (sqlalchemy.exc.SQLAlchemyError, AttributeError):
+            pass
+
+        #print(borrowing.stock_id)
+        borrowing = Borrowing.query.filter_by(id=id).first()
+        if borrowing:
+            db.session.delete(borrowing)
         db.session.commit()
 
         return self.response_ok("Committed to db")
@@ -79,22 +99,27 @@ class BorrowingResource(MasterResource):
     # Changing fine or date when the book should be returned in any library
     # Can be done by Admin
     def put(self, id):
-        if not (self.is_logged() and self.is_admin()):
-            return self.response_error("Unauthorised action!")
+        if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
+            return self.response_error("Unauthorised action!", "")
 
         borrowing = Borrowing.query.filter_by(id=id).first()
 
         if not borrowing:
-            return self.response_error("Borrowing doesnt exist")
+            return self.response_error("Borrowing doesn't exist", "")
 
-        borrowing.fine = request.form.get("fine")
-        borrowing.date_returned = request.form.get("date_returned")
+        if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+            if borrowing.library_id != self.librarian_in_which_lib(session['user_id']):
+                return self.response_error("Unauthorised action!", "")
 
-        # not relevant
-        # if request.form.get("fine"):
-        #     borrowing.fine = request.form.get("fine")
-        # else:
-        #     borrowing.date_returned = datetime.utcnow()
+        fine = request.form.get("fine")
+        if fine == "":
+            fine = 0
+        if request.form.get("extend"):
+            borrowing.date_returned += timedelta(days=30)
+
+        borrowing.fine = fine
+
+
 
         db.session.commit()
 

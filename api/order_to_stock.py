@@ -21,7 +21,7 @@ class OrderConfirmRes(MasterResource):
     # Can be done by Admin and Distributor
     def get(self, id):
         if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
-            return self.response_error("Unauthorised action!")
+            return self.response_error("Unauthorised action!", "")
 
         order = Order.query.filter_by(id=id).first()
         library_id = order.library_id
@@ -40,7 +40,7 @@ class OrderConfirmRes(MasterResource):
                 return self.response_ok({})  # TODO Idk
 
             else:
-                return self.response_error("Not in DB!")
+                return self.response_error("Not in DB!", "")
 
         else:
-            return self.response_error("Not in DB!")
+            return self.response_error("Not in DB!", "")
