@@ -32,15 +32,18 @@ class StockFilterResource(MasterResource):
         if availability is not None:
             if availability.lower() == "true":
                 availability = True
+                stock = stock.filter_by(availability = availability)
             else:
                 availability = False
+                stock = stock.filter_by(availability = availability)
 
-        stock = stock.filter_by(availability = availability)
+
 
         if library_id is not None:
-            stock = stock.filter_by(library_id = library_id)
+            stock = stock.filter_by(booktitle_id = library_id)
 
         if booktitle_id is not None:
+            print(booktitle_id)
             stock = stock.filter_by(booktitle_id = booktitle_id)
 
         if author is not None:
@@ -68,6 +71,7 @@ class StockFilterResource(MasterResource):
             stock = stock.filter(Stock.booktitle_id.in_(booktitles_array))
 
         stock = stock.all()
+        print(stock)
         array = []
         for row in stock:
             row = row.__dict__
