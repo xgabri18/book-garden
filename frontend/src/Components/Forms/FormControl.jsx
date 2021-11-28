@@ -9,6 +9,8 @@ const FormControl = ({
   placeholder,
   hideLabel,
   onChange,
+  min,
+  max,
 }) => {
   return (
     <div className="Form-control">
@@ -26,6 +28,8 @@ const FormControl = ({
         className="Form-control-input"
         onChange={onChange}
         defaultValue={value}
+        min={min}
+        max={max}
       />
     </div>
   );

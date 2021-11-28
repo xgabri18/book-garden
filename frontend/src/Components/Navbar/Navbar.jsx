@@ -23,7 +23,7 @@ export const Navbar = () => {
           <span className="hidden xl:inline">{username}</span>
         </Link>
 
-        {AuthService.isAuthenticated() && AuthService.isAdmin() && (
+        {AuthService.isAuthenticated() && AuthService.allowedDashboard() && (
           <Link to="/admin" className="Navbar-link">
             <CubeTransparentIcon className="h-6 inline mr-2" />
             <span className="hidden xl:inline">Admin</span>

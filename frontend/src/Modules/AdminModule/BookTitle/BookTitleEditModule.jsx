@@ -17,12 +17,14 @@ import ReactDOM from "react-dom";
 export const BookTitleEditModule = () => {
   const { id } = useParams();
   const [bookTitle, setBookTitle] = useState([]);
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
     axios
       .get(createAPI("booktitle/:id", { id }))
-      .then((response) => setBookTitle(response.data.data));
-  });
+      .then((response) => setBookTitle(response.data.data))
+      .catch((error) => console.log(error));
+  }, [alert]);
 
   return (
     <>
@@ -35,7 +37,6 @@ export const BookTitleEditModule = () => {
       <div className="Content mt-4">
         <div className="flex items-center">
           <div className="w-6/12 text-center">
-            {/*<BookOpenIcon className="mx-auto h-32 bg-indigo-600 text-white rounded-full p-4" />*/}
             <img
               src={bookTitle.photo}
               alt={bookTitle.name}
@@ -75,23 +76,31 @@ export const BookTitleEditModule = () => {
                 .then((response) => {
                   if (response.data.status === "success") {
                     // Edited
-                    console.log(response.data);
+                    window.scrollTo(0, 0);
+                    setAlert({
+                      message: "Book Title Edited Successfully",
+                      type: "success",
+                    });
                   } else {
                     // Error
-                    ReactDOM.render(
-                      <Alert
-                        className="block"
-                        message={response.data.message}
-                        type="danger"
-                        closeable
-                      />,
-                      document.getElementById("validation")
-                    );
+                    window.scrollTo(0, 0);
+                    setAlert({
+                      message: response.data.message,
+                      type: "danger",
+                    });
                   }
-                });
+                })
+                .catch((error) => console.log(error));
             }}
           >
-            <div id="validation" />
+            {alert && (
+              <Alert
+                message={alert.message}
+                type={alert.type}
+                onClick={() => setAlert(null)}
+              />
+            )}
+
             <FormControl
               type="text"
               id="name"

@@ -19,11 +19,13 @@ const BookTitleListModule = () => {
   useEffect(() => {
     axios
       .get(createAPI("booktitle"))
-      .then((response) => setBookTitles(response.data.data));
+      .then((response) => setBookTitles(response.data.data))
+      .catch((error) => console.log(error));
 
     axios
       .get(createAPI("booktitle/unique/genres"))
-      .then((response) => setGenres(response.data.data));
+      .then((response) => setGenres(response.data.data))
+      .catch((error) => console.log(error));
   }, []);
 
   return (

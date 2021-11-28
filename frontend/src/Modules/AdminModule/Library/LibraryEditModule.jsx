@@ -1,73 +1,142 @@
+import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import {
-  BookOpenIcon,
   ChevronLeftIcon,
+  LibraryIcon,
   SaveIcon,
 } from "@heroicons/react/outline";
+import axios from "axios";
+import { createAPI } from "../../../api";
+import qs from "querystring";
+import ReactDOM from "react-dom";
+import { Alert } from "../../../Components/Ui/Alert";
 import FormControl from "../../../Components/Forms/FormControl";
-import { Button, ButtonLink } from "../../../Components/Ui/Button";
-import { idLibrary, role } from "../../../middlewares";
+import Textarea from "../../../Components/Forms/Textarea";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { createAdminRoute } from "../../../routes";
 
 export const LibraryEditModule = () => {
+  const { id } = useParams();
+  const [library, setLibrary] = useState({});
+  const [alert, setAlert] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(createAPI("library/:id", { id }))
+      .then((response) => setLibrary(response.data.data))
+      .catch((error) => console.log(error));
+  }, [alert]);
+
   return (
     <>
-      {role === "admin" ? (
-        <ButtonLink
-          to="/admin/libraries"
-          variant="secondary"
-          icon={<ChevronLeftIcon className="h-6" />}
-          text="Back"
-        />
-      ) : (
-        <ButtonLink
-          to={`/admin/libraries/${idLibrary}`}
-          variant="secondary"
-          icon={<ChevronLeftIcon className="h-6" />}
-          text="Back"
-        />
-      )}
+      <ButtonLink
+        to={createAdminRoute("LibraryShow", { id: library.id })}
+        variant="secondary"
+        icon={<ChevronLeftIcon className="h-6 mr-1" />}
+        text="Back"
+      />
       <div className="Content mt-4">
-        <div className="flex items-center">
-          <div className="w-6/12">
-            <BookOpenIcon className="mx-auto h-32 bg-indigo-600 text-white rounded-full p-4" />
+        <div className="flex flex-col lg:flex-row items-center">
+          <div className="w-full lg:w-6/12 mb-8 lg:mb-0 text-center">
+            <LibraryIcon className="mx-auto h-32 bg-indigo-600 text-white rounded-full p-4" />
             <div className="my-4 text-2xl text-center font-bold">
-              Lorem Ipsum
+              {library.name}
             </div>
-            <div className="italic text-center">I love 50 shades of gray.</div>
+            <div className="italic text-center px-20">
+              {library.description}
+            </div>
           </div>
-          <div className="w-6/12">
+          <form
+            method="post"
+            className="w-full lg:w-6/12"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const form = new FormData(e.target);
+              const collection = {};
+              for (let pair of form.entries()) {
+                collection[pair[0]] = pair[1];
+              }
+
+              axios
+                .put(
+                  createAPI("library/:id", { id: library.id }),
+                  qs.stringify({
+                    name: collection.name,
+                    city: collection.city,
+                    street: collection.street,
+                    open_hours: collection.open_hours,
+                    description: collection.description,
+                  })
+                )
+                .then((response) => {
+                  if (response.data.status === "success") {
+                    // Edited
+                    window.scrollTo(0, 0);
+                    setAlert({
+                      message: "Library Edited Successfully",
+                      type: "success",
+                    });
+                  } else {
+                    // Error
+                    window.scrollTo(0, 0);
+                    setAlert({
+                      message: response.data.message,
+                      type: "danger",
+                    });
+                  }
+                })
+                .catch((error) => console.log(error));
+            }}
+          >
+            {alert && (
+              <Alert
+                message={alert.message}
+                type={alert.type}
+                onClick={() => setAlert(null)}
+              />
+            )}
             <FormControl
               type="text"
               id="name"
+              name="name"
               label="Book Name"
+              value={library.name}
               placeholder="Example Book"
             />
             <FormControl
               type="text"
-              id="author"
-              label="Author"
-              placeholder="Joe Doe"
+              id="city"
+              name="city"
+              label="City"
+              value={library.city}
+              placeholder="London"
             />
             <FormControl
               type="text"
-              id="isbn"
-              label="ISBN"
-              placeholder="3232183828"
-            />
-            <FormControl type="time" id="release_date" label="Release Date" />
-            <FormControl
-              type="text"
-              id="publisher"
-              label="Publisher"
-              placeholder="Example Publisher"
+              id="street"
+              name="street"
+              label="Street"
+              value={library.street}
+              placeholder="2987 Oxford Street, LN 13224"
             />
             <FormControl
               type="text"
-              id="genre"
-              label="Genre"
-              placeholder="e.g. Action"
+              id="open_hours"
+              name="open_hours"
+              value={library.open_hours}
+              placeholder="8:00 - 14:00"
+              label="Opening hours"
+            />
+            <Textarea
+              type="text"
+              id="description"
+              name="description"
+              label="Description"
+              value={library.description}
+              placeholder="Lorem ipsum..."
             />
 
-            <div className="flex flex-end">
+            <div className="flex items-end">
               <Button
                 type="submit"
                 text="Save"
@@ -76,7 +145,7 @@ export const LibraryEditModule = () => {
                 icon={<SaveIcon className="h-6 mr-1" />}
               />
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>

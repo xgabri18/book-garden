@@ -1,6 +1,7 @@
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import {
   ChevronLeftIcon,
+  CogIcon,
   ExternalLinkIcon,
   PencilIcon,
   PlusIcon,
@@ -11,6 +12,14 @@ import axios from "axios";
 import { createAPI } from "../../../api";
 import { useEffect, useState } from "react";
 import { Alert } from "../../../Components/Ui/Alert";
+import {
+  Table,
+  TableCol,
+  TableColHead,
+  TableRow,
+  Tbody,
+  Thead,
+} from "../../../Components/Ui/Table";
 
 export const BookTitleListModule = () => {
   const [alert, setAlert] = useState(null);
@@ -19,34 +28,38 @@ export const BookTitleListModule = () => {
   useEffect(() => {
     axios
       .get(createAPI("booktitle"))
-      .then((response) => setBookTitles(response.data.data));
+      .then((response) => setBookTitles(response.data.data))
+      .catch((error) => console.log(error));
   }, [alert]);
 
   function deleteBook(id) {
-    axios.delete(createAPI("booktitle/:id", { id })).then((response) => {
-      if (response.data.status === "success") {
-        // Book Deleted
-        window.scrollTo(0, 0);
-        setAlert({
-          message: "Book Title Deleted",
-          type: "success",
-        });
-      } else {
-        // Error
-        window.scrollTo(0, 0);
-        setAlert({
-          message: response.data.message,
-          type: "danger",
-        });
-      }
-    });
+    axios
+      .delete(createAPI("booktitle/:id", { id }))
+      .then((response) => {
+        if (response.data.status === "success") {
+          // Book Deleted
+          window.scrollTo(0, 0);
+          setAlert({
+            message: "Book Title Deleted",
+            type: "success",
+          });
+        } else {
+          // Error
+          window.scrollTo(0, 0);
+          setAlert({
+            message: response.data.message,
+            type: "danger",
+          });
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   return (
     <>
       <div className="flex justify-between">
         <ButtonLink
-          to="/admin"
+          to={createAdminRoute("Dashboard")}
           variant="secondary"
           icon={<ChevronLeftIcon className="h-6 mr-1" />}
           text="Back"
@@ -68,61 +81,61 @@ export const BookTitleListModule = () => {
         )}
         <h1 className="Content-Title">Book titles</h1>
 
-        <table className="table-auto w-full">
-          <thead>
-            <tr className="text-left">
-              <th>#</th>
-              <th />
-              <th>Name</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookTitles.map((bookTitle, index) => (
-              <tr key={index}>
-                <td>{bookTitle.id}</td>
-                <td className="w-2/12">
-                  <img
-                    src={bookTitle.photo}
-                    alt={bookTitle.name}
-                    className="h-16"
-                  />
-                </td>
-                <td>{bookTitle.name}</td>
-                <td className="w-1/4">
-                  <div className="flex items-center gap-2">
-                    {/*TODO: Set book title dynamically to button links*/}
-                    <ButtonLink
-                      to={`/book-titles/` + bookTitle.id}
-                      variant="primary"
-                      icon={<ExternalLinkIcon className="h-6 mr-1" />}
-                      text="Open"
-                      hideTextSm
-                      target="_blank"
+        <div className="overflow-auto">
+          <Table>
+            <Thead>
+              <TableRow>
+                <TableColHead className="w-1/6" />
+                <TableColHead>Name</TableColHead>
+                <TableColHead className="w-1/4">Actions</TableColHead>
+              </TableRow>
+            </Thead>
+            <Tbody>
+              {bookTitles.map((bookTitle, index) => (
+                <TableRow key={index} index={index} striped>
+                  <TableCol>
+                    <img
+                      src={bookTitle.photo}
+                      alt={bookTitle.name}
+                      className="h-16"
                     />
-                    <ButtonLink
-                      to={createAdminRoute("BookTitleEdit", {
-                        id: bookTitle.id,
-                      })}
-                      variant="yellow"
-                      icon={<PencilIcon className="h-6 mr-1" />}
-                      text="Edit"
-                      hideTextSm
-                    />
-                    <Button
-                      type="button"
-                      variant="red"
-                      icon={<TrashIcon className="h-6 mr-1" />}
-                      text="Delete"
-                      hideTextSm
-                      onClick={() => deleteBook(bookTitle.id)}
-                    />
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </TableCol>
+                  <TableCol>{bookTitle.name}</TableCol>
+                  <TableCol>
+                    <div className="flex items-center gap-2">
+                      {/*TODO: Set book title dynamically to button links*/}
+                      <ButtonLink
+                        to={`/book-titles/` + bookTitle.id}
+                        variant="primary"
+                        icon={<ExternalLinkIcon className="h-6 mr-1" />}
+                        text="Open"
+                        hideTextSm
+                        target="_blank"
+                      />
+                      <ButtonLink
+                        to={createAdminRoute("BookTitleEdit", {
+                          id: bookTitle.id,
+                        })}
+                        variant="yellow"
+                        icon={<PencilIcon className="h-6 mr-1" />}
+                        text="Edit"
+                        hideTextSm
+                      />
+                      <Button
+                        type="button"
+                        variant="red"
+                        icon={<TrashIcon className="h-6 mr-1" />}
+                        text="Delete"
+                        hideTextSm
+                        onClick={() => deleteBook(bookTitle.id)}
+                      />
+                    </div>
+                  </TableCol>
+                </TableRow>
+              ))}
+            </Tbody>
+          </Table>
+        </div>
       </div>
     </>
   );

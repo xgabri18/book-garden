@@ -9,14 +9,23 @@ class AuthService {
   }
 
   init() {
-    this.authenticated = true;
-    this.id = 1;
-    this.username = "admin";
-    this.type = "admin";
+    // this.authenticated = true;
+    // this.id = 1;
+    // this.username = "admin";
+    // this.type = "admin";
+    // this.library_id = null;
+    // this.name = "Joe";
+    // this.surname = "Doe";
+    // this.profiledesc = "I love 50 shades of gray";
+
+    this.authenticated = false;
+    this.id = null;
+    this.username = "";
+    this.type = "";
     this.library_id = null;
-    this.name = "Joe";
-    this.surname = "Doe";
-    this.profiledesc = "I love 50 shades of gray";
+    this.name = "";
+    this.surname = "";
+    this.profiledesc = "";
   }
 
   login(username, password) {
@@ -48,8 +57,19 @@ class AuthService {
   }
 
   logout() {
-    this.init();
-    return <Redirect to="/" />;
+    return axios
+      .delete(
+        createAPI("session").then((response) => {
+          if (response.data.status === "success") {
+            // Logged out
+            this.init();
+            return <Redirect to="/" />;
+          } else {
+            // Session is not set ignore
+          }
+        })
+      )
+      .catch((error) => console.log(error));
   }
 
   isAuthenticated() {
@@ -60,7 +80,8 @@ class AuthService {
         (response) =>
           this.id === response.data.data.user_id &&
           this.type === this.convertToUserType(response.data.data.user_type)
-      );
+      )
+      .catch((error) => console.log(error));
   }
 
   allowedDashboard() {
@@ -69,6 +90,10 @@ class AuthService {
 
   getUserType() {
     return this.type;
+  }
+
+  getUsername() {
+    return this.username;
   }
 
   isAdmin() {

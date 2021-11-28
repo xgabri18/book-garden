@@ -14,6 +14,7 @@ import Textarea from "../../../Components/Forms/Textarea";
 import qs from "querystring";
 import { Alert } from "../../../Components/Ui/Alert";
 import ReactDOM from "react-dom";
+import { createAdminRoute } from "../../../routes";
 
 export const BookTitleCreateModule = () => {
   const [alert, setAlert] = useState(null);
@@ -21,7 +22,7 @@ export const BookTitleCreateModule = () => {
   return (
     <>
       <ButtonLink
-        to="/admin"
+        to={createAdminRoute("BookTitleList")}
         variant="secondary"
         icon={<ChevronLeftIcon className="h-6 mr-1" />}
         text="Back"
@@ -34,7 +35,11 @@ export const BookTitleCreateModule = () => {
             const form = new FormData(e.target);
             const collection = {};
             for (let pair of form.entries()) {
-              collection[pair[0]] = pair[1];
+              if (pair[0] === "date_publication" && !pair[1].length) {
+                collection[pair[0]] = null;
+              } else {
+                collection[pair[0]] = pair[1] ?? null;
+              }
             }
 
             axios
@@ -68,7 +73,8 @@ export const BookTitleCreateModule = () => {
                     type: "danger",
                   });
                 }
-              });
+              })
+              .catch((error) => console.log(error));
           }}
         >
           {alert && (
@@ -101,7 +107,7 @@ export const BookTitleCreateModule = () => {
             placeholder="3232183828"
           />
           <FormControl
-            type="text"
+            type="number"
             id="date_publication"
             name="date_publication"
             label="Publish Date"
@@ -127,6 +133,8 @@ export const BookTitleCreateModule = () => {
             name="rating"
             label="Rating"
             placeholder="10"
+            min={0}
+            max={10}
           />
           <FormControl
             type="text"

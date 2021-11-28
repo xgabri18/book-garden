@@ -4,8 +4,11 @@ import Header from "./Layout/Header";
 import Main from "./Layout/Main";
 import Footer from "./Layout/Footer";
 import { routes } from "./routes";
+import AuthService from "./auth";
 
 function App() {
+  console.log(AuthService.isAuthenticated());
+
   return (
     <Router>
       <Header />

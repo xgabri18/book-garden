@@ -9,23 +9,27 @@ import {
   TicketIcon,
   UserIcon,
 } from "@heroicons/react/outline";
+import AuthService from "../../auth";
 
 export const DashboardModule = () => {
   const { path } = useRouteMatch();
 
   return (
     <>
-      <h1 className="text-2xl text-center font-bold">Welcome back, {role}</h1>
+      <h1 className="text-2xl text-center font-bold my-8">
+        Welcome back, {AuthService.getUsername()}
+      </h1>
       <div className="flex items-center flex-wrap">
         {modules.map((module, index) => {
-          if (!module.roles.find((r) => r === role)) return false;
+          if (!module.roles.find((r) => r === AuthService.getUserType()))
+            return false;
 
           return (
-            <div className="w-3/12 p-2" key={index}>
+            <div className="w-full lg:w-3/12 p-2" key={index}>
               <Link
                 to={module.url}
                 key={index}
-                className="block border border-gray-200 rounded-md text-center px-4 py-8 hover:shadow-md transition"
+                className="block border-2 bg-white border-transparent rounded-md text-center px-4 py-8 hover:shadow-md hover:border-indigo-600 transition"
               >
                 {module.icon}
                 <div className="text-xl font-semibold text-indigo-600 mt-4">
