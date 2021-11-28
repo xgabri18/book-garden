@@ -34,13 +34,7 @@ class AuthService {
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
         if (response.data.status === "success") {
-          if (this.isAuthenticated()) {
-            console.log("Login: success");
-            return true;
-          } else {
-            console.log("Login: failed");
-            return false;
-          }
+          this.checkAuthSession();
         } else {
           console.log(response.data);
           return false;
@@ -72,12 +66,15 @@ class AuthService {
         session.data.data.user_id &&
         session.data.data.user_type
       ) {
+        console.log(session.data);
         this.id = session.data.data.user_id;
         this.type = this.convertToUserType(session.data.data.user_type);
         this.authenticated = true;
+      } else {
+        this.authenticated = false;
       }
 
-      this.authenticated = false;
+      console.log("checkAuthSession: " + this.authenticated);
     });
   }
 
