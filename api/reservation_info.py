@@ -24,8 +24,8 @@ class ReservationInfoResource(MasterResource):
     # Can be done by Admin
     # todo session
     def get(self, id):
-    # if not (self.is_logged() and self.is_admin()):
-    #     return self.response_error("Unauthorised action!")
+        if not (self.is_logged() and self.is_admin()):
+            return self.response_error("Unauthorised action!")
 
         try:
             reservation = Reservation.query.filter_by(id=id).first().__dict__
