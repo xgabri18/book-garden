@@ -28,7 +28,7 @@ class StockFilterResource(MasterResource):
         genre           = request.args.get('genre')
         name            = request.args.get('name')
 
-        stock = Stock.query
+        stock = Stock.query.join(BookTitle,  BookTitle.id ==  Stock.booktitle_id).add_columns(BookTitle.name,BookTitle.genre,BookTitle.photo)
         #print(stock.all()[0][0])
         #print(availability)
         #print(type(availability))
@@ -74,12 +74,17 @@ class StockFilterResource(MasterResource):
             stock = stock.filter(Stock.booktitle_id.in_(booktitles_array))
 
         stock = stock.all()
-        print(stock)
+        #print(stock)
         array = []
+        #print(stock)
         for row in stock:
-            row = row.__dict__
-            del row["_sa_instance_state"]
-            array.append(row)
+            first = row[0].__dict__
+            del first["_sa_instance_state"]
+            first["name"] = row[1]
+            first["genre"] = row[2]
+            first["photo"] = row[3]
+            array.append(first)
+
 
         return self.response_ok(array)
 
