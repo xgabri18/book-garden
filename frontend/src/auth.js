@@ -30,30 +30,37 @@ class AuthService {
 
   login(username, password) {
     // Login
+    console.log("Login");
     return axios
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
         if (response.data.status === "success") {
-          this.authenticated = true;
-          this.id = response.data.data.user_id;
-          this.type = this.convertToUserType(response.data.data.user_type);
-
-          // Collect user info
-          return axios.get(createAPI("person")).then((response) => {
+          return axios.get(createAPI("session")).then((response) => {
             if (response.data.status === "success") {
-              this.username = response.data.data.username;
-              this.library_id = response.data.data.library_id;
-              this.name = response.data.data.name;
-              this.surname = response.data.data.surname;
-              this.profiledesc = response.data.data.profiledesc;
+              this.id = response.data.data.user_id;
+              this.type = this.convertToUserType(response.data.data.user_type);
 
-              return this.allowedDashboard ? (
-                <Redirect to="/admin" />
-              ) : (
-                <Redirect to="/account/profile" />
-              );
+              // Collect user info
+              return axios.get(createAPI("person")).then((response) => {
+                if (response.data.status === "success") {
+                  this.username = response.data.data.username;
+                  this.library_id = response.data.data.library_id;
+                  this.name = response.data.data.name;
+                  this.surname = response.data.data.surname;
+                  this.profiledesc = response.data.data.profiledesc;
+                  this.authenticated = true;
+
+                  return this.allowedDashboard ? (
+                    <Redirect to="/admin" />
+                  ) : (
+                    <Redirect to="/account/profile" />
+                  );
+                } else {
+                  console.log("Can not get person info.");
+                  console.log(response.data);
+                }
+              });
             } else {
-              console.log("Can not get person info.");
               console.log(response.data);
             }
           });
@@ -84,7 +91,9 @@ class AuthService {
     const response = await axios.get(createAPI("session"));
 
     if (response.status === 200) {
+      console.log("checkAuthStatus()");
       console.log(response.data);
+      console.log(this);
       this.authenticated =
         this.id === response.data.data.user_id &&
         this.type === this.convertToUserType(response.data.data.user_type);
