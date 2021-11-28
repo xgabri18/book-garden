@@ -72,9 +72,11 @@ def generate_librarians(url,s):
 
     # ku kazdej lib librarian
     x =   s.get(url + "/library")
+    x = json.loads(x.text)
+    #print(type(x))
+    #print(x["data"])
     i = 0
-
-    for lib in json.loads(x.text):
+    for lib in x["data"]:
         i+=1
         data = {}
         data["library_id"] = lib["id"]
@@ -160,9 +162,10 @@ def randomize_stock(url,s):
 
     # ku kazdej lib librarian
     x = s.get(url + spec)
-    print(x.text)
+    x = json.loads(x.text)
+    #print(x.text)
 
-    for stock in json.loads(x.text):
+    for stock in x["data"]:
         print(stock)
         if random.choice([0,1]) == 1:
             stock["availability"] = True
@@ -175,14 +178,15 @@ def random_votes(url,s,low,high):
     spec = "/voting"
 
     stock = s.get(url + "/stock/filter?availability=False")
-    stock = json.loads(stock.text)
+    stock = json.loads(stock.text)["data"]
 
     people = s.get(url + "/person")
     #print(json.loads(stock.text))
+    people = json.loads(people.text)
 
 
 
-    for person in json.loads(people.text):
+    for person in people["data"]:
         # zoberie iba low lovel usera
         if person["user_type"] == 1:
 
@@ -203,11 +207,11 @@ def random_orders(url,s,low,high):
 
     people = s.get(url + "/person")
 
-    for person in json.loads(people.text):
+    for person in json.loads(people.text)["data"]:
         # zoberie iba knihovnikov
         if person["user_type"] == 4:
             stock = s.get(url + "/stock/filter?availability=False&library_id=" + str(person["library_id"]))
-            stock = json.loads(stock.text)
+            stock = json.loads(stock.text)["data"]
 
             # vyberie nahodnu sadu stocku z nahodneho range
             # vrati pole stock ID
@@ -239,11 +243,11 @@ def random_reservations(url,s,low,high):
 
     people = s.get(url + "/person")
 
-    for person in json.loads(people.text):
+    for person in json.loads(people.text)["data"]:
         # zoberie userov
         if person["user_type"] == 1:
             stock = s.get(url + "/stock/filter?availability=True" )
-            stock = json.loads(stock.text)
+            stock = json.loads(stock.text)["data"]
 
             # vyberie nahodnu sadu stocku z nahodneho range
             # vrati pole stock ID
@@ -262,11 +266,11 @@ def random_borrowings(url,s,low,high):
 
     people = s.get(url + "/person")
 
-    for person in json.loads(people.text):
+    for person in json.loads(people.text)["data"]:
         # zoberie userov
         if person["user_type"] == 1:
             stock = s.get(url + "/stock/filter?availability=True" )
-            stock = json.loads(stock.text)
+            stock = json.loads(stock.text)["data"]
 
             # vyberie nahodnu sadu stocku z nahodneho range
             # vrati pole stock ID
@@ -294,6 +298,9 @@ def random_borrowings(url,s,low,high):
 url = "http://127.0.0.1:5000/api"
 s = requests.Session()
 r = s.post(url = url+"/session", data = {"username" : "admin", "password" : "admin", })
+
+x = s.get(url + "/database/reset")
+print(x.text)
 
 
 generate_books(     url,s      )
