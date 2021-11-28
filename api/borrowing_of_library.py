@@ -37,8 +37,13 @@ class BorrowingOfLibraryRes(MasterResource):
         for id in stock_id:
             stock_id_array.append(id[0])
 
-        #big brain time query
-        borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array)).all()
+
+        person_id      = request.args.get('person_id')
+
+        if person_id is not None:
+            borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array),Borrowing.person_id == person_id).all()
+        else:
+            borrowings = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array)).all()
 
         array = []
         for row in borrowings:

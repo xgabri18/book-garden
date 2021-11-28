@@ -48,7 +48,7 @@ app = Flask(__name__, static_url_path='', static_folder='frontend/build')
 
 # username:password@server/db
 #toto mozno do env variable
-app.config['SECRET_KEY'] = 'kok420'
+app.config['SECRET_KEY'] = 'not_secure'
 app.config['SESSION_TYPE'] = 'sqlalchemy'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yenewkmhgqretf:34c9ca2c665494adcad3ca82982bd708cf2c19cdf32c9e8597f9b7a0c7f3912e@ec2-34-247-118-233.eu-west-1.compute.amazonaws.com:5432/d4h6icjgreq9p4'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

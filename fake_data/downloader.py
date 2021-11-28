@@ -82,6 +82,7 @@ class MartinusDownloader():
 
 
         driver.close()
+        driver.quit()
 
         return book_data
 

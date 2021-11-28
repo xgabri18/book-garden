@@ -40,9 +40,13 @@ class ReservationOfLibraryRes(MasterResource):
         for id in stock_id:
             stock_id_array.append(id[0])
 
+        person_id      = request.args.get('person_id')
 
-        #big brain time query
-        reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array)).all()
+
+        if person_id is not None:
+            reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array), Reservation.person_id == person_id).all()
+        else:
+            reservations = Reservation.query.filter(Reservation.stock_id.in_(stock_id_array)).all()
 
         array = []
         for row in reservations:

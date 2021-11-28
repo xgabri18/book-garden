@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="cz">
+<head>
+    <meta charset="UTF-8">
+    <title>Projekt IIS</title>
+    <style type="text/css">
+        table { border-collapse: collapse; }
+        td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
+        dt { font-weight: bold; margin-top: 0.5em; }
+    </style>
+</head>
+<body>
+
+<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu
+     podle pouľitého editoru -->
+
+<h1>Knihovna</h1> <!-- Nahradte názvem svého zadání -->
+
+<dl>
+    <dt>Autori</dt>
+    <dd>Stanislav Gabriš <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+        <a href="mailto:xgabri18@stud.fit.vutbr.cz">xgabri18@stud.fit.vutbr.cz</a> -
+        Leader, Implementácia DB, Resources, Session
+    </dd>
+    <dd>Adam Fabo <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+        <a href="mailto:xfaboa00@stud.fit.vutbr.cz">xfaboa00@stud.fit.vutbr.cz</a> -
+        Návrh DB, Resources
+    </dd>
+    <dd>Roman Országh <!-- Nahraďte skutečným jménem a e-mailem autora a popisem činnosti -->
+        <a href="mailto:idk@stud.fit.vutbr.cz">idk@stud.fit.vutbr.cz</a> -
+        Frontend
+    </dd>
+    <dt>URL aplikace</dt>
+    <dd><a href="https://book-garden.herokuapp.com">https://book-garden.herokuapp.com</a></dd>
+</dl>
+
+<h2>Uživatelé systému pro testování</h2>
+<table>
+    <tr><th>Login</th><th>Heslo</th><th>Role</th></tr>
+    <tr><td>admin</td><td>admin</td><td>Administrátor</td></tr>
+    <tr><td>librarian1</td><td>librarian1</td><td>Knihovník</td></tr>
+    <tr><td>distributor1</td><td>distributor1</td><td>Distributor knih</td></tr>
+    <tr><td>user1</td><td>user1</td><td>Čtenář</td></tr>
+</table>
+
+
+<h2>Implementace</h2>
+<p>Backend je implementovany v Pythone pomocou Flask-u. Databáza je typu postgresql a je na zvlášť serveri. V zložke /api sú Flask-resources pomocou ktorých užívatelia pristupujú k dátam. Pre prístup
+k databazy využívame ORM pomocou SQLAlchemy. V súbore models.py v zložke /models sú uložené tabulky databázy</p>
+<p>V zložke /fake_data sa nachádza script fake_data.py ktorý nahrá do databázy počiatočné dáta. Script potrebuje k spusteniu mať v zložke chromedriver.exe</p>
+<p>Stručná dokumentace k implementaci, která popisuje, které části projektu (např. PHP skripty) implementují jednotlivé případy pouľití.</p>
+
+<h3>Databáze</h3>
+<p>Databáza je typu Postgresql</p>
+<img src="db.png" alt="Database">
+
+<h2>Instalace</h2>
+
+
+<p>Požiadavky (prevzaté z pipfile): </p>
+
+<p>
+    python_version = "3.9"<br>
+    [packages] gunicorn,
+    flask,
+    pymysql,
+    flask-admin,
+    flask-psycopg2,
+    flask-sqlalchemy,
+    flask-restful,
+    flask-session,
+    requests,
+    faker,
+    selenium,
+    sqlalchemy
+    </p>
+
+<p>Inicializácia DB: </p>
+<p>Databáza sa resetuje a inicializuje príchodom stránku  [url]/reset, pričom je potrebné byť prihlásený ako admin. Následne je možné spustiť script fake_data.py ktorý naplní databázu dátami</p>
+
+Stručně popiąte:
+<ul>
+    <li>postup instalace na server,</li>
+    <li>softwarové poľadavky (verze PHP apod.),</li>
+    <li>jak rozbalit, konfigurovat, inicializovat databázi, ...</li>
+</ul>
+
+<h2>Známé problémy</h2>
+<p>Zde popiąte, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových důvodů nebyla implementována správa uľivatelů.&rdquo; Pomůľete tím zrychlit hodnocení, kdyľ neimplementované funkce nebudeme muset dlouze hledat.</p>
+
+</body>
+</html>

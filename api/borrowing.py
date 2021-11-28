@@ -6,13 +6,14 @@
 #          Roman Országh <xorsza01(at)fit.vutbr.cz>
 #          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
 # ########################################
+import sqlalchemy.exc
 
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
 from datetime import datetime
 
-from models.models import Reservation,Borrowing
+from models.models import Reservation,Borrowing,Stock
 # TODO ako sa bude riesit zaznam v tabulke pri vymazani stocku
 # TODO resourcy pre knihovnika zvlast alebo sem?
 
@@ -71,6 +72,14 @@ class BorrowingResource(MasterResource):
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!")
 
+        borrowing = Borrowing.query.filter_by(id=id).first()
+        try:
+            stock = Stock.query.filter_by(id = borrowing.stock_id).first()
+            stock.amount +=1
+        except sqlalchemy.exc.SQLAlchemyError:
+            pass
+
+        #print(borrowing.stock_id)
         Borrowing.query.filter_by(id=id).delete()
         db.session.commit()
 
