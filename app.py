@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Main script
+# Project: System for libraries
+# File: app.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from flask import Flask,send_from_directory,session
 from flask_restful import Api
 from flask_admin import Admin

@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Script for generating example data
+# Project: System for libraries
+# File: downloader.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 import random
 
 from selenium import webdriver

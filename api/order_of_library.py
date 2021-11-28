@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: order_of_library.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
@@ -5,11 +14,12 @@ from shared_db import db
 from models.models import Order
 
 # SET response_error a response_ok
-# osetrene
+
 
 class OrderOfLibResource(MasterResource):
 
-
+    # Get orders in specific library
+    # Admin/Distributor (Librarian only in his/her library)
     def get(self,library_id = None):
         if not (self.is_logged() and (self.is_admin() or self.is_librarian()) or self.is_distributor()):
             return self.response_error("Action not allowed for current session!")

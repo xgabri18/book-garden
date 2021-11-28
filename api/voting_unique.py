@@ -1,3 +1,13 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: voting_unique.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
@@ -35,7 +45,6 @@ class VotesFromPersonRes(MasterResource):
 
 
 # Did logged person vote for this stock
-# todo session asi needed
 class VotesDidPersonVoteStockRes(MasterResource):
 
     def get(self, stock_id):

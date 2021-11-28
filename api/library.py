@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: library.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 from api.masterclass import MasterResource
 from flask import jsonify,request,session
 from shared_db import db
@@ -7,7 +16,7 @@ from models.models import Library,BookTitle,Stock
 
 
 # SET response_error a response_ok
-# osetrene
+
 
 class LibraryResource(MasterResource):
 
@@ -22,7 +31,7 @@ class LibraryResource(MasterResource):
             array = []
             for row in library:
                 row = row.__dict__
-                del row["_sa_instance_state"]   #get rid of _sa_instance_state - idk what it is
+                del row["_sa_instance_state"]   #get rid of _sa_instance_state - __dict__ creates it
                 array.append(row)
 
             return self.response_ok(array)

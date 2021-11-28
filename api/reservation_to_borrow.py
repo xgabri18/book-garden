@@ -1,3 +1,12 @@
+# ########################################
+# Brief: Implementation of resources
+# Project: System for libraries
+# File: reservation_to_borrow.py
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
+# ########################################
+
 # Confirm reservation - Librarian/Admin
 # from flask_restful import Resource
 from api.masterclass import MasterResource
@@ -38,7 +47,7 @@ class ReservationConfirmRes(MasterResource):
             Reservation.query.filter_by(id=id).delete()
             db.session.commit()
             # Done
-            return self.response_ok("Committed to db")  # TODO idk ako a ci vobec
+            return self.response_ok("Committed to db")
         else:
             return self.response_error("Not in DB!")
 
