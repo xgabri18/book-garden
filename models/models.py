@@ -9,7 +9,7 @@
 
 from shared_db import db
 from datetime import datetime, timedelta
-#TODO doplnit nullable + unique TRUE + cascade delete
+
 
 
 class Person(db.Model):
@@ -24,8 +24,8 @@ class Person(db.Model):
     profiledesc = db.Column(db.UnicodeText)
 
     reservations = db.relationship("Reservation", cascade="all,delete,delete-orphan", backref="person")
-    borrowings = db.relationship("Borrowing", backref="person")
-    orders = db.relationship("Order", backref="person")
+    borrowings = db.relationship("Borrowing", cascade="all,delete,delete-orphan", backref="person")
+    orders = db.relationship("Order", cascade="all,delete,delete-orphan", backref="person")
     votes = db.relationship("Voting", cascade="all,delete,delete-orphan", backref="person")
 
     def __repr__(self):
@@ -56,7 +56,7 @@ class BookTitle(db.Model):
     date_publication = db.Column(db.Integer)
     genre = db.Column(db.Unicode(100))
     description = db.Column(db.UnicodeText)
-    rating = db.Column(db.Integer)  # or float??? (value 0-5 / 0-100 or smtn, hardcoded -> critics rating)
+    rating = db.Column(db.Integer)  # (value 0-5 / 0-100 or smtn, hardcoded -> critics rating)
 
     stocks = db.relationship("Stock", cascade="all,delete,delete-orphan", backref="booktitle")
     orders = db.relationship("Order", cascade="all,delete,delete-orphan", backref="booktitle")
@@ -66,7 +66,7 @@ class BookTitle(db.Model):
 
 class Stock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    library_id = db.Column(db.Integer, db.ForeignKey('library.id'), nullable=False)  # TODO stock must belong somewhere
+    library_id = db.Column(db.Integer, db.ForeignKey('library.id'), nullable=False)
     booktitle_id = db.Column(db.Integer, db.ForeignKey('booktitle.id'), nullable=False)
     amount = db.Column(db.Integer, default=0)
     availability = db.Column(db.Boolean, default=False)
@@ -83,7 +83,7 @@ class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
-    date_of_reservation = db.Column(db.DateTime, default=datetime.now)  # not so sure how to do this
+    date_of_reservation = db.Column(db.DateTime, default=datetime.now)
 
 
 class Borrowing(db.Model):
@@ -110,6 +110,6 @@ class Voting(db.Model):
     person_id = db.Column(db.Integer, db.ForeignKey('person.id'))
     stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
 
-    #TODO __table_args__ = (
+    # __table_args__ = (
     #db.UniqueConstraint('person_id', 'stock_id'),
     #)

@@ -18,7 +18,6 @@ from models.models import Stock,BookTitle
 class StockFilterResource(MasterResource):
 
     # Filter stocks
-    # todo session
     def get(self):
 
         availability    = request.args.get('availability')

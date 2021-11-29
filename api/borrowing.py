@@ -14,8 +14,7 @@ from shared_db import db
 from datetime import datetime, timedelta
 
 from models.models import Reservation,Borrowing,Stock
-# TODO ako sa bude riesit zaznam v tabulke pri vymazani stocku
-# TODO resourcy pre knihovnika zvlast alebo sem?
+
 
 # SET response_error a response_ok
 # osetrene
@@ -46,7 +45,7 @@ class BorrowingResource(MasterResource):
 
             if borrowing:
                 if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-                    stock = Stock.query.filter_by(id=borrowing.stock_id).first()
+                    stock = Stock.query.filter_by(id=borrowing[0].stock_id).first()
                     if stock:
                         if stock.library_id != self.librarian_in_which_lib(session['user_id']):
                             return self.response_error("Unauthorised action!", "")
@@ -96,8 +95,12 @@ class BorrowingResource(MasterResource):
             return self.response_ok({})
 
         if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-            if borrowing.library_id != self.librarian_in_which_lib(session['user_id']):
-                return self.response_error("Unauthorised action!", "")
+            stock = Stock.query.filter_by(id=borrowing.stock_id).first()
+            if stock:
+                if stock.library_id != self.librarian_in_which_lib(session['user_id']):
+                    return self.response_error("Unauthorised action!", "")
+            else:
+                return self.response_ok({})
 
         try:
             stock = Stock.query.filter_by(id = borrowing.stock_id).first()
@@ -125,11 +128,14 @@ class BorrowingResource(MasterResource):
             return self.response_error("Borrowing doesn't exist", "")
 
         if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-            if borrowing.library_id != self.librarian_in_which_lib(session['user_id']):
-                return self.response_error("Unauthorised action!", "")
+            stock = Stock.query.filter_by(id=borrowing.stock_id).first()
+            if stock:
+                if stock.library_id != self.librarian_in_which_lib(session['user_id']):
+                    return self.response_error("Unauthorised action!", "")
+
 
         fine = request.form.get("fine")
-        if fine == "":
+        if fine == "" or (fine is None):
             fine = 0
         if request.form.get("extend"):
             borrowing.date_returned += timedelta(days=30)

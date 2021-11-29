@@ -47,7 +47,6 @@ class VotingResource(MasterResource):
 
             return self.response_ok(voting)
 
-    # TODO ako vobec bude vote fungovat, ked je to len ze ci palec hore alebo ne tak potom bud post alebo put alebo delete nedava zmysel
     def post(self, id=None):
         if not self.is_logged():
             return self.response_error("Unauthorised action!", "")
