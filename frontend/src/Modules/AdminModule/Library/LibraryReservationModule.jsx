@@ -19,6 +19,7 @@ import {
 } from "../../../Components/Ui/Table";
 import { useParams } from "react-router-dom";
 import { PingLoading } from "../../../Components/Ui/PingLoading";
+import { convertDate, convertPrice } from "../../../middlewares";
 
 export const LibraryReservationModule = () => {
   const [reservations, setReservations] = useState([]);
@@ -67,7 +68,7 @@ export const LibraryReservationModule = () => {
 
   function confirmReservation(idReservation) {
     axios
-      .get(createAPI("reservation/:id", { id: idReservation }))
+      .get(createAPI("reservation/confirm/:id", { id: idReservation }))
       .then((response) => {
         if (response.data.status === "success") {
           // Book Deleted
@@ -151,7 +152,9 @@ export const LibraryReservationModule = () => {
                   <TableCol>{reservation.id}</TableCol>
                   <TableCol>{reservation.user}</TableCol>
                   <TableCol>{reservation.bookTitle}</TableCol>
-                  <TableCol>{reservation.date_of_reservation}</TableCol>
+                  <TableCol>
+                    {convertDate(reservation.date_of_reservation)}
+                  </TableCol>
                   <TableCol>
                     <div className="flex items-center gap-2">
                       <Button

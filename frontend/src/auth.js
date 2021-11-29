@@ -41,7 +41,10 @@ class AuthService {
     // Login
     return axios
       .post(createAPI("session"), qs.stringify({ username, password }))
-      .then((response) => response.data.status === "success")
+      .then((response) => {
+        this.authenticated = true;
+        return response.data.status === "success";
+      })
       .catch((error) => console.log(error));
   }
 

@@ -19,9 +19,7 @@ const AccountLoginModule = () => {
           auth
             .login(username, password)
             .then((loggedIn) =>
-              loggedIn
-                ? history.push("/account")
-                : console.log("Can not log in")
+              loggedIn ? history.push("/") : history.push("/account/login")
             );
         }}
       >

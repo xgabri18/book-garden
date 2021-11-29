@@ -26,13 +26,13 @@ const HomeModule = () => {
             size="lg"
             icon={<BookOpenIcon className="h-6 w-6 inline pr-1" />}
           />
-          <ButtonLink
-            to="/libraries"
-            text="Find a Library"
-            variant="secondary"
-            size="lg"
-            icon={<LibraryIcon className="h-6 w-6 inline pr-1" />}
-          />
+          {/*<ButtonLink*/}
+          {/*  to="/libraries"*/}
+          {/*  text="Find a Library"*/}
+          {/*  variant="secondary"*/}
+          {/*  size="lg"*/}
+          {/*  icon={<LibraryIcon className="h-6 w-6 inline pr-1" />}*/}
+          {/*/>*/}
         </div>
       </div>
 

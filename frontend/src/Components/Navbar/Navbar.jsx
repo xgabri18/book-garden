@@ -18,7 +18,6 @@ export const Navbar = () => {
         <b>BOOK</b>Garden
       </Link>
       <div className="Navbar-items">
-        <NavbarSearch />
         <Link to="/account" className="Navbar-link">
           <UserIcon className="h-6 mr-2" />
           <span className="hidden xl:inline">Account</span>

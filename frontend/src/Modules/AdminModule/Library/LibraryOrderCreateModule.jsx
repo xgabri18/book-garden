@@ -87,6 +87,8 @@ export const LibraryOrderCreateModule = () => {
             />
           )}
 
+          <input type="hidden" name="library_id" value={id} />
+
           <div className="mb-2">
             <div className="mb-1">Book Title</div>
             <Select

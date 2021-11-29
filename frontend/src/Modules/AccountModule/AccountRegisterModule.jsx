@@ -17,14 +17,17 @@ const AccountRegisterModule = () => {
       data[pair[0]] = pair[1];
     }
 
-    auth.register(data).then((response) => {
-      if (response.status === "success") {
-        history.push("/account/login");
-      } else {
-        window.scrollTo(0, 0);
-        setAlert({ message: response.message, type: "danger" });
-      }
-    });
+    auth
+      .register(data)
+      .then((response) => {
+        if (response.status === "success") {
+          history.push("/account/login");
+        } else {
+          window.scrollTo(0, 0);
+          setAlert({ message: response.message, type: "danger" });
+        }
+      })
+      .catch((error) => console.log(error));
   }
 
   return (

@@ -38,11 +38,11 @@ export const routes = [
     url: "/book-titles",
     component: BookTitleModule,
   },
-  {
-    name: "Library",
-    url: "/libraries",
-    component: LibraryModule,
-  },
+  // {
+  //   name: "Library",
+  //   url: "/libraries",
+  //   component: LibraryModule,
+  // },
   {
     name: "Account",
     url: "/account",
