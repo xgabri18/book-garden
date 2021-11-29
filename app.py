@@ -82,14 +82,14 @@ def index():
 
 api = Api(app, prefix="/api")
 
-admin.add_view(ModelView(BookTitle, db.session))
-admin.add_view(ModelView(Person, db.session))
-admin.add_view(ModelView(Library, db.session))
-admin.add_view(ModelView(Stock, db.session))
-admin.add_view(ModelView(Reservation, db.session))
-admin.add_view(ModelView(Borrowing, db.session))
-admin.add_view(ModelView(Order, db.session))
-admin.add_view(ModelView(Voting, db.session))
+#admin.add_view(ModelView(BookTitle, db.session))
+#admin.add_view(ModelView(Person, db.session))
+#admin.add_view(ModelView(Library, db.session))
+#admin.add_view(ModelView(Stock, db.session))
+#admin.add_view(ModelView(Reservation, db.session))
+#admin.add_view(ModelView(Borrowing, db.session))
+#admin.add_view(ModelView(Order, db.session))
+#admin.add_view(ModelView(Voting, db.session))
 
 api.add_resource(BookTitleResource, '/booktitle', '/booktitle/<int:id>')
 api.add_resource(BookTitleGenreRes, '/booktitle/unique/genres')
