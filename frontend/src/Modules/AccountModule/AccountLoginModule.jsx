@@ -20,8 +20,8 @@ const AccountLoginModule = () => {
             .login(username, password)
             .then((loggedIn) =>
               loggedIn
-                ? window.location.reload(true)
-                : window.location.reload(true)
+                ? (window.location.href = "/account/profile")
+                : (window.location.href = "/account/login")
             );
         }}
       >

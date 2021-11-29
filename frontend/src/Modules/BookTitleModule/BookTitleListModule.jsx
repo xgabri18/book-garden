@@ -15,6 +15,22 @@ const BookTitleListModule = () => {
   const [authors, setAuthors] = useState([]);
   const [libraries, setLibraries] = useState([]);
   const [filters, setFilters] = useState({});
+  const [defaultGenre, setDefaultGenre] = useState({
+    value: null,
+    label: "Choose Genre",
+  });
+  const [defaultAuthor, setdefaultAuthor] = useState({
+    value: null,
+    label: "Choose Author",
+  });
+  const [defaultLibrary, setdefaultLibrary] = useState({
+    value: null,
+    label: "Choose Library",
+  });
+  const [defaultAvailability, setdefaultAvailability] = useState({
+    value: null,
+    label: "Choose Availability",
+  });
 
   useEffect(() => {
     setBookTitles([]);
@@ -89,6 +105,13 @@ const BookTitleListModule = () => {
     setFilters(data);
   }
 
+  function setDefaults() {
+    setDefaultGenre({ value: null, label: "Choose Genre" });
+    setdefaultAuthor({ value: null, label: "Choose Author" });
+    setdefaultLibrary({ value: null, label: "Choose Library" });
+    setdefaultAvailability({ value: null, label: "Choose Availability" });
+  }
+
   return (
     <div className="flex flex-row flex-wrap">
       <form
@@ -101,27 +124,30 @@ const BookTitleListModule = () => {
       >
         <FilterDropdown>
           <FilterDropdownItem title="Genres" collapsed>
-            <Select
-              className="Select"
-              defaultValue={{ value: null, label: "Choose Genre" }}
-              name="genre"
-              options={genres}
-            />
+            <Select defaultValue={defaultGenre} name="genre" options={genres} />
           </FilterDropdownItem>
           <FilterDropdownItem title="Authors" collapsed>
             <Select
-              className="Select"
-              defaultValue={{ value: null, label: "Choose Author" }}
+              defaultValue={defaultAuthor}
               name="author"
               options={authors}
             />
           </FilterDropdownItem>
           <FilterDropdownItem title="Libraries" collapsed>
             <Select
-              className="Select"
-              defaultValue={{ value: null, label: "Choose Library" }}
+              defaultValue={defaultLibrary}
               name="library_id"
               options={libraries}
+            />
+          </FilterDropdownItem>
+          <FilterDropdownItem title="Availability" collapsed>
+            <Select
+              defaultValue={defaultAvailability}
+              name="availability"
+              options={[
+                { value: true, label: "Available" },
+                { value: false, label: "Not Available" },
+              ]}
             />
           </FilterDropdownItem>
         </FilterDropdown>
@@ -132,7 +158,10 @@ const BookTitleListModule = () => {
             type="button"
             text="Reset Filters"
             variant="red-light"
-            onClick={() => setFilters({})}
+            onClick={() => {
+              setFilters({});
+              setDefaults();
+            }}
           />
         </div>
       </form>

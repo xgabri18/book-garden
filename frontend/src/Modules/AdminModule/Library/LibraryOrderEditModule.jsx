@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
 import { ChevronLeftIcon, SaveIcon } from "@heroicons/react/outline";
@@ -11,42 +11,25 @@ import { useParams } from "react-router-dom";
 
 export const LibraryOrderEditModule = () => {
   const [alert, setAlert] = useState(null);
-  // const [bookTitles, setBookTitles] = useState([]);
   const [order, setOrder] = useState({});
 
   const { idLibrary, idOrder } = useParams();
 
-  //useEffect(() => {
-  //   setBookTitles([]);
-  //
-  //   axios
-  //     .get(createAPI("booktitle"))
-  //     .then((response) => {
-  //       response.data.data.map((bookTitle) => {
-  //         let option = {
-  //           value: bookTitle.id,
-  //           label: bookTitle.name,
-  //         };
-  //
-  //         setBookTitles((state) => [...state, option]);
-  //       });
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, [alert]);
-
-  axios
-    .get(createAPI("order/:id", { id: idOrder }))
-    .then((response) => {
-      axios
-        .get(
-          createAPI("booktitle/:id", { id: response.data.data.booktitle_id })
-        )
-        .then((bookTitle) => {
-          response.data.data.bookTitle = bookTitle.data.data.name;
-          setOrder(response.data.data);
-        });
-    })
-    .catch((error) => console.log(error));
+  useEffect(() => {
+    axios
+      .get(createAPI("order/:id", { id: idOrder }))
+      .then((response) => {
+        axios
+          .get(
+            createAPI("booktitle/:id", { id: response.data.data.booktitle_id })
+          )
+          .then((bookTitle) => {
+            response.data.data.bookTitle = bookTitle.data.data.name;
+            setOrder(response.data.data);
+          });
+      })
+      .catch((error) => console.log(error));
+  }, [alert]);
 
   function editOrder(form) {
     const formData = new FormData(form);
