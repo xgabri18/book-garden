@@ -53,6 +53,6 @@ class BorrowingInfoResource(MasterResource):
             return self.response_ok(final)
 
         except (SQLAlchemyError, AttributeError) as e:
-            return self.response_ok()
+            return self.response_error("Error", "")
 
 
