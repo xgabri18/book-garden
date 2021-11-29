@@ -54,10 +54,17 @@ class BorrowingOfLibraryRes(MasterResource):
                 lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
                 book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
 
-                person = Person.query.filter_by(id=borrowing["person_id"]).first().__dict__
+                person = Person.query.filter_by(id=borrowing["person_id"]).first()
 
-                name = person["name"]
-                surname = person["surname"]
+                if person is None:
+                    name = ""
+                    surname = ""
+                else:
+                    person = person.__dict__
+
+                    name = person["name"]
+                    surname = person["surname"]
+
 
                 del borrowing["_sa_instance_state"]
                 borrowing["name"] = name

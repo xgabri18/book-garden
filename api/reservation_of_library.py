@@ -59,10 +59,18 @@ class ReservationOfLibraryRes(MasterResource):
                 lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).first()
                 book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).first()
 
-                person = Person.query.filter_by(id=reservation["person_id"]).first().__dict__
+                person = Person.query.filter_by(id=reservation["person_id"]).first()
 
-                name = person["name"]
-                surname = person["surname"]
+
+
+                if person is None:
+                    name = ""
+                    surname = ""
+                else:
+                    person = person.__dict__
+
+                    name = person["name"]
+                    surname = person["surname"]
 
                 del reservation["_sa_instance_state"]
                 reservation["name"] = name
@@ -72,7 +80,7 @@ class ReservationOfLibraryRes(MasterResource):
 
                 final.append(reservation)
         except (AttributeError, IndexError):
-            self.response_ok({})
+            return self.response_ok({})
 
         return self.response_ok(final)
 
