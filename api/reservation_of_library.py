@@ -50,26 +50,29 @@ class ReservationOfLibraryRes(MasterResource):
 
 
         final = []
-        for reservation in res:
-            #print(reservation)
-            reservation = reservation.__dict__
-            stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
+        try:
+            for reservation in res:
+                #print(reservation)
+                reservation = reservation.__dict__
+                stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
 
-            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).first()
-            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).first()
+                lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).first()
+                book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).first()
 
-            person = Person.query.filter_by(id=reservation["person_id"]).first().__dict__
+                person = Person.query.filter_by(id=reservation["person_id"]).first().__dict__
 
-            name = person["name"]
-            surname = person["surname"]
+                name = person["name"]
+                surname = person["surname"]
 
-            del reservation["_sa_instance_state"]
-            reservation["name"] = name
-            reservation["surname"] = surname
-            reservation["Library_name"] = lib_name[0][0]
-            reservation["Book_title"] =  book_title[0][0]
+                del reservation["_sa_instance_state"]
+                reservation["name"] = name
+                reservation["surname"] = surname
+                reservation["Library_name"] = lib_name[0][0]
+                reservation["Book_title"] =  book_title[0][0]
 
-            final.append(reservation)
+                final.append(reservation)
+        except (AttributeError, IndexError):
+            self.response_ok({})
 
         return self.response_ok(final)
 
