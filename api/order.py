@@ -53,10 +53,17 @@ class OrderResource(MasterResource):
             return self.response_error("Unauthorised action!", "")
         # TODO kontrola librariana
 
-        library_id   = request.form.get("library_id")  # TODO aj toto sa da zistit z knihovnika ale admin by sa zas zvlast musel riesit
+        if self.is_admin():  # admin can create a order anywhere
+            library_id = request.form.get("library_id")
+            if library_id == "" or (library_id is None):
+                library_id = self.librarian_in_which_lib(session['user_id'])
+        else:
+            library_id = self.librarian_in_which_lib(session['user_id'])
+
         booktitle_id = request.form.get("booktitle_id")
-        #person_id    = request.form.get("person_id")  # TODO cez session?
-        person_id    = session['user_id']
+
+        person_id = session['user_id']
+
         amount       = request.form.get("amount")
         if amount == "":
             amount = 0

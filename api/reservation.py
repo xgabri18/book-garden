@@ -57,7 +57,7 @@ class ReservationResource(MasterResource):
         stock_id = request.form.get("stock_id")
         if self.is_admin():  # admin can create a reservation for anyone
             person_id = request.form.get("person_id")
-            if person_id == "":
+            if person_id == "" or (person_id is None):
                 person_id = session['user_id']
         else:
             person_id = session['user_id']
