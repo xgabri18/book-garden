@@ -61,7 +61,7 @@ class PersonResource(MasterResource):
             email = None
         if self.is_admin():
             user_type   = request.form.get("user_type")
-            if user_type == "":
+            if user_type == "" or (user_type is None):
                 user_type = 1
         else:
             user_type = 1
@@ -75,7 +75,7 @@ class PersonResource(MasterResource):
         surname     = request.form.get("surname")
         if self.is_admin():
             library_id  = request.form.get("library_id")
-            if library_id == "":
+            if library_id == "" or (user_type is None):
                 library_id = None
         else:
             library_id = None
