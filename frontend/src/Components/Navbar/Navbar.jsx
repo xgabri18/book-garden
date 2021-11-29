@@ -6,8 +6,8 @@ import {
   LogoutIcon,
   UserIcon,
 } from "@heroicons/react/outline";
-import AuthService from "../../auth";
 import { Button } from "../Ui/Button";
+import auth from "../../auth";
 
 export const Navbar = () => {
   const history = useHistory();
@@ -23,20 +23,24 @@ export const Navbar = () => {
           <UserIcon className="h-6 mr-2" />
           <span className="hidden xl:inline">Account</span>
         </Link>
-        {AuthService.isAuthenticated() && AuthService.allowedDashboard() && (
+        {auth.isAuthenticated() && auth.allowedDashboard() && (
           <Link to="/admin" className="Navbar-link">
             <CubeTransparentIcon className="h-6 inline mr-2" />
-            <span className="hidden xl:inline">Admin</span>
+            <span className="hidden xl:inline">Dashboard</span>
           </Link>
         )}
 
-        {AuthService.isAuthenticated() && (
+        {auth.isAuthenticated() && (
           <Button
             type="button"
             onClick={() =>
-              AuthService.logout().then((loggedOut) =>
-                loggedOut ? history.push("/") : console.log("Can not log out.")
-              )
+              auth
+                .logout()
+                .then((loggedOut) =>
+                  loggedOut
+                    ? history.push("/")
+                    : console.log("Can not log out.")
+                )
             }
             className="Navbar-link shadow-none"
             text="Log out"

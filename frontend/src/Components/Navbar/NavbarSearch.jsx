@@ -9,6 +9,8 @@ const NavbarSearch = () => {
   const searchRef = useRef();
   useOnClickOutside(searchRef, () => setSearchExpanded(false));
 
+  function handleInputChange() {}
+
   return (
     <>
       <div
@@ -24,6 +26,7 @@ const NavbarSearch = () => {
           placeholder="Search for books, authors..."
           className="bg-white md:bg-gray-100 py-1.5 px-4 rounded-md outline-none"
           style={{ minWidth: "300px" }}
+          onChange={handleInputChange}
         />
 
         <button

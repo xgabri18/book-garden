@@ -1,5 +1,5 @@
 import { Redirect, Route, Switch, useRouteMatch } from "react-router-dom";
-import { AdminRoute } from "../../middlewares";
+import { ProtectedRoute } from "../../middlewares";
 import { adminRoutes } from "../../routes";
 import { NotAuthorizedError } from "../../Components/Errors/NotAuthorizedError";
 import AuthService from "../../auth";
@@ -11,12 +11,13 @@ const AdminModule = () => {
     <Switch>
       <Route exact path={path} component={AdminSessionHandler} />
       {adminRoutes.map((route, index) => (
-        <AdminRoute
+        <ProtectedRoute
           key={index}
           path={path + route.url}
           component={route.component}
           roles={route.roles}
           exact={route.exact}
+          librarian={route.librarian}
         />
       ))}
     </Switch>

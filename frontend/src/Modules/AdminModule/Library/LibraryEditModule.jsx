@@ -31,7 +31,7 @@ export const LibraryEditModule = () => {
       <ButtonLink
         to={createAdminRoute("LibraryShow", { id: library.id })}
         variant="secondary"
-        icon={<ChevronLeftIcon className="h-6 mr-1" />}
+        icon={<ChevronLeftIcon className="h-6 mr-0 md:mr-1" />}
         text="Back"
       />
       <div className="Content mt-4">
@@ -135,7 +135,7 @@ export const LibraryEditModule = () => {
                 text="Save"
                 variant="primary"
                 className="ml-auto"
-                icon={<SaveIcon className="h-6 mr-1" />}
+                icon={<SaveIcon className="h-6 mr-0 md:mr-1" />}
               />
             </div>
           </form>

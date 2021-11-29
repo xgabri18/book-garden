@@ -13,7 +13,7 @@ class AuthService {
     // this.username = "admin";
     // this.password = "admin";
     // this.email = "admin@admin.com";
-    // this.type = "admin";
+    // this.type = "librarian";
     // this.library_id = 1;
     // this.name = "Joe";
     // this.surname = "Doe";
@@ -80,21 +80,23 @@ class AuthService {
             this.name = response.data.data.name;
             this.surname = response.data.data.surname;
             this.profiledesc = response.data.data.profiledesc;
+
+            console.log("checkAuthSession: " + this.authenticated);
+            return true;
           } else {
             console.log("Can not get user info");
           }
         });
       } else {
         this.authenticated = false;
+        console.log("checkAuthSession: " + this.authenticated);
+        return false;
       }
 
       // TODO: Comment this in production
       // this.authenticated = true;
       // console.log("checkAuthSession: " + this.authenticated);
       // return true;
-
-      console.log("checkAuthSession: " + this.authenticated);
-      return this.authenticated;
     });
   }
 
@@ -108,6 +110,10 @@ class AuthService {
 
   getUserType() {
     return this.type;
+  }
+
+  getEmployeeLibrary() {
+    return this.library_id;
   }
 
   isAdmin() {

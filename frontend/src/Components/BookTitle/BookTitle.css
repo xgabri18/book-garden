@@ -31,7 +31,3 @@
 .BookTitle .BookTitle-details {
     @apply flex flex-col gap-2 mt-4 text-sm
 }
-
-.BookTitle .BookTitle-libraries {
-    @apply flex flex-col gap-4
-}

@@ -8,17 +8,15 @@ export const Button = ({
   type,
   variant = "",
   size = "",
-  style = {},
   className = "",
   showText,
-  onClick,
+  ...rest
 }) => {
   return (
     <button
       type={type}
       className={`Button ${variant} ${size} ${className}`}
-      style={style}
-      onClick={onClick}
+      {...rest}
     >
       {icon}
       <span className={showText ? "hidden " + showText + ":block" : ""}>
@@ -34,17 +32,15 @@ export const ButtonLink = ({
   to,
   variant = "",
   size = "",
-  style = {},
   className = "",
   showText,
-  target,
+  ...rest
 }) => {
   return (
     <Link
       to={to}
       className={`Button ${variant} ${size} ${className}`}
-      style={style}
-      target={target}
+      {...rest}
     >
       {icon}
       <span className={showText ? "hidden " + showText + ":block" : ""}>

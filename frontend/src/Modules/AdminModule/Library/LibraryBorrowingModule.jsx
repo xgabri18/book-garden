@@ -6,6 +6,7 @@ import { createAdminRoute } from "../../../routes";
 import {
   ChevronLeftIcon,
   PencilIcon,
+  StatusOnlineIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
 import { Alert } from "../../../Components/Ui/Alert";
@@ -18,6 +19,8 @@ import {
   Thead,
 } from "../../../Components/Ui/Table";
 import { useParams } from "react-router-dom";
+import { PingLoading } from "../../../Components/Ui/PingLoading";
+import { convertDate, convertPrice } from "../../../middlewares";
 
 export const LibraryBorrowingModule = () => {
   const [borrowings, setBorrowings] = useState([]);
@@ -29,9 +32,34 @@ export const LibraryBorrowingModule = () => {
    * Get reservations
    */
   useEffect(() => {
+    setBorrowings([]);
+
     axios
       .get(createAPI("borrowing/of/lib/:id", { id }))
-      .then((response) => setBorrowings(response.data.data))
+      .then((response) => {
+        response.data.data.map((borrowing) => {
+          axios
+            .all([
+              axios.get(createAPI("person/:id", { id: borrowing.person_id })),
+              axios.get(createAPI("stockinfo/:id", { id: borrowing.stock_id })),
+            ])
+            .then(
+              axios.spread((person, stockinfo) => {
+                if (
+                  person.data.status === "success" &&
+                  stockinfo.data.status === "success"
+                ) {
+                  borrowing.user =
+                    person.data.data.name + " " + person.data.data.surname;
+                  borrowing.bookTitle = stockinfo.data.data.Book_title;
+                  setBorrowings((state) => [...state, borrowing]);
+                } else {
+                  console.log(person.data, stockinfo.data);
+                }
+              })
+            );
+        });
+      })
       .catch((error) => console.log(error));
 
     axios
@@ -69,7 +97,7 @@ export const LibraryBorrowingModule = () => {
         <ButtonLink
           to={createAdminRoute("LibraryShow", { id })}
           variant="secondary"
-          icon={<ChevronLeftIcon className="h-6 mr-1" />}
+          icon={<ChevronLeftIcon className="h-6 mr-0 md:mr-1" />}
           text="Back"
         />
       </div>
@@ -81,30 +109,31 @@ export const LibraryBorrowingModule = () => {
             onClick={() => setAlert(null)}
           />
         )}
-        <h1 className="Content-Title">{library.name}'s Borrowings</h1>
+        <h1 className="Content-Title relative">
+          {library.name}'s Borrowings{" "}
+          {!borrowings.length ? <PingLoading /> : ""}
+        </h1>
 
         <div className="overflow-auto">
           <Table>
             <Thead>
               <TableRow>
-                <TableColHead>#</TableColHead>
-                <TableColHead>User</TableColHead>
-                <TableColHead>Book</TableColHead>
+                <TableColHead className="w-3/12">User</TableColHead>
+                <TableColHead className="w-3/12">Book</TableColHead>
                 <TableColHead>Date Borrowed</TableColHead>
                 <TableColHead>Date To Return</TableColHead>
-                <TableColHead>Fine</TableColHead>
+                <TableColHead className="w-3/12">Fine</TableColHead>
                 <TableColHead>Actions</TableColHead>
               </TableRow>
             </Thead>
             <Tbody>
               {borrowings.map((borrowing, index) => (
                 <TableRow key={index} index={index} striped>
-                  <TableCol>{borrowing.id}</TableCol>
                   <TableCol>{borrowing.user}</TableCol>
-                  <TableCol>{borrowing.book_title}</TableCol>
-                  <TableCol>{borrowing.date_borrowed}</TableCol>
-                  <TableCol>{borrowing.date_returned}</TableCol>
-                  <TableCol>{borrowing.fine}</TableCol>
+                  <TableCol>{borrowing.bookTitle}</TableCol>
+                  <TableCol>{convertDate(borrowing.date_borrowed)}</TableCol>
+                  <TableCol>{convertDate(borrowing.date_returned)}</TableCol>
+                  <TableCol>{convertPrice(borrowing.fine)}</TableCol>
                   <TableCol>
                     <div className="flex items-center gap-2">
                       <ButtonLink
@@ -113,14 +142,14 @@ export const LibraryBorrowingModule = () => {
                           idBorrowing: borrowing.id,
                         })}
                         variant="yellow"
-                        icon={<PencilIcon className="h-6 mr-1" />}
+                        icon={<PencilIcon className="h-6 mr-0 md:mr-1" />}
                         text="Edit"
                         showText="md"
                       />
                       <Button
                         type="button"
                         variant="red"
-                        icon={<TrashIcon className="h-6 mr-1" />}
+                        icon={<TrashIcon className="h-6 mr-0 md:mr-1" />}
                         text="Delete"
                         showText="md"
                         onClick={() => deleteBorrowing(borrowing.id)}

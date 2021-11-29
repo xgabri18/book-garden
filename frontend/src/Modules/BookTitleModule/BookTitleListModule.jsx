@@ -17,9 +17,28 @@ const BookTitleListModule = () => {
   const [genres, setGenres] = useState([]);
 
   useEffect(() => {
+    setBookTitles([]);
+
     axios
       .get(createAPI("booktitle"))
-      .then((response) => setBookTitles(response.data.data))
+      .then((response) => {
+        if (response.data.status === "success") {
+          response.data.data.map((bookTitle) => {
+            axios
+              .get(createAPI("stock/filter"), {
+                params: { booktitle_id: bookTitle.id },
+              })
+              .then((response) => {
+                // Check availibility
+                bookTitle.availability = !!response.data.data.find(
+                  (s) => s.availability === true
+                );
+                bookTitle.stock = response.data.data;
+                setBookTitles((state) => [...state, bookTitle]);
+              });
+          });
+        }
+      })
       .catch((error) => console.log(error));
 
     axios
@@ -27,6 +46,8 @@ const BookTitleListModule = () => {
       .then((response) => setGenres(response.data.data))
       .catch((error) => console.log(error));
   }, []);
+
+  console.log(bookTitles);
 
   return (
     <div className="flex flex-row flex-wrap">

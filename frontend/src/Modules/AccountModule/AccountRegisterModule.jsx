@@ -9,6 +9,24 @@ const AccountRegisterModule = () => {
   const history = useHistory();
   const [alert, setAlert] = useState(null);
 
+  function registerUser(form) {
+    const formData = new FormData(form);
+    const data = {};
+
+    for (let pair of formData.entries()) {
+      data[pair[0]] = pair[1];
+    }
+
+    auth.register(data).then((response) => {
+      if (response.status === "success") {
+        history.push("/account/login");
+      } else {
+        window.scrollTo(0, 0);
+        setAlert({ message: response.message, type: "danger" });
+      }
+    });
+  }
+
   return (
     <div className="w-full sm:w-6/12 xl:w-4/12 mx-auto py-16 px-8 bg-white shadow-sm">
       <div className="uppercase text-center font-bold text-lg mb-8">
@@ -19,21 +37,7 @@ const AccountRegisterModule = () => {
         method="post"
         onSubmit={(e) => {
           e.preventDefault();
-          const form = new FormData(e.target);
-          const data = {};
-
-          for (let pair of form.entries()) {
-            data[pair[0]] = pair[1];
-          }
-
-          auth.register(data).then((response) => {
-            if (response.status === "success") {
-              history.push("/account/login");
-            } else {
-              window.scrollTo(0, 0);
-              setAlert({ message: response.message, type: "danger" });
-            }
-          });
+          registerUser(e.target);
         }}
       >
         {alert && (
