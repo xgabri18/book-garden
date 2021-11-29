@@ -33,8 +33,8 @@ class BookTitleAuthorRes(MasterResource):
     def get(self):
         authors = []
 
-        for author in BookTitle.query.distinct(BookTitle.authors):
-            authors.append(author.authors)
+        for author in BookTitle.query.distinct(BookTitle.author):
+            authors.append(author.author)
 
         return self.response_ok(authors)
 

@@ -19,9 +19,14 @@ from models.models import Stock, Library, BookTitle
 # takes stock ID and returns Library name and Book Name
 # session not needed
 class StockInfoResource(MasterResource):
-    def get(self,id ):
+    def get(self,id):
 
-        stock = Stock.query.filter_by(id = id).all()[0].__dict__
+        stock = Stock.query.filter_by(id = id).all()
+
+        if stock is None:
+            return self.response_ok([])
+
+        stock = stock[0].__dict__
         #print(stock)
         lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
         book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
