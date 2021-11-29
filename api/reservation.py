@@ -57,8 +57,7 @@ class ReservationResource(MasterResource):
 
     # Create a reservation
     # Logged user can do
-    def post(self, id=None):  # TODO tu sa bude asi person_id zistovat zo session?
-        # TODO rezervacia rovnakej knihy
+    def post(self, id=None):
 
         if not self.is_logged():
             return self.response_error("Unauthorised action!", "")

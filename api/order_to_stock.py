@@ -37,7 +37,7 @@ class OrderConfirmRes(MasterResource):
                 # Delete order
                 Order.query.filter_by(id=id).delete()
                 db.session.commit()
-                return self.response_ok({})  # TODO Idk
+                return self.response_ok({})
 
             else:
                 return self.response_error("Not in DB!", "")
