@@ -43,7 +43,7 @@ class AuthService {
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
         this.authenticated = true;
-        return response.data.status === "success";
+        return response.data;
       })
       .catch((error) => console.log(error));
   }

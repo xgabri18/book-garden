@@ -41,7 +41,7 @@ export const LibraryOrderEditModule = () => {
     }
 
     axios
-      .post(createAPI("order"), qs.stringify({ ...data }))
+      .put(createAPI("order/:id", { id: idOrder }), qs.stringify({ ...data }))
       .then((response) => {
         if (response.data.status === "success") {
           // Edited
@@ -87,6 +87,7 @@ export const LibraryOrderEditModule = () => {
           )}
 
           <input type="hidden" name="booktitle_id" value={order.booktitle_id} />
+          <input type="hidden" name="library_id" value={idLibrary} />
 
           <FormControl
             type="text"

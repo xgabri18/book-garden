@@ -105,13 +105,6 @@ const BookTitleListModule = () => {
     setFilters(data);
   }
 
-  function setDefaults() {
-    setDefaultGenre({ value: null, label: "Choose Genre" });
-    setdefaultAuthor({ value: null, label: "Choose Author" });
-    setdefaultLibrary({ value: null, label: "Choose Library" });
-    setdefaultAvailability({ value: null, label: "Choose Availability" });
-  }
-
   return (
     <div className="flex flex-row flex-wrap">
       <form
@@ -159,8 +152,7 @@ const BookTitleListModule = () => {
             text="Reset Filters"
             variant="red-light"
             onClick={() => {
-              setFilters({});
-              setDefaults();
+              window.location.href = "/book-titles";
             }}
           />
         </div>

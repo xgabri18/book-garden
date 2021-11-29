@@ -70,20 +70,19 @@ const BookTitleShowModule = () => {
       .post(createAPI("reservation"), qs.stringify({ stock_id }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Borrowing Deleted
-          window.scrollTo(0, 0);
           setAlert({
             message: "Book reserved",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,
             type: "danger",
           });
         }
+
+        executeScroll();
       });
   }
 
@@ -92,18 +91,18 @@ const BookTitleShowModule = () => {
       .post(createAPI("voting"), qs.stringify({ stock_id }))
       .then((response) => {
         if (response.data.status === "success") {
-          window.scrollTo(0, 0);
           setAlert({
             message: "Book voted",
             type: "success",
           });
         } else {
-          window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,
             type: "danger",
           });
         }
+
+        executeScroll();
       })
       .catch((error) => console.log(error));
   }

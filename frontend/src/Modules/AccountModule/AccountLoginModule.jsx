@@ -3,10 +3,12 @@ import { Button } from "../../Components/Ui/Button";
 import { Link, useHistory } from "react-router-dom";
 import auth from "../../auth";
 import { useState } from "react";
+import { Alert } from "../../Components/Ui/Alert";
 
 const AccountLoginModule = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [alert, setAlert] = useState(null);
   const history = useHistory();
 
   return (
@@ -16,21 +18,30 @@ const AccountLoginModule = () => {
         method="post"
         onSubmit={(e) => {
           e.preventDefault();
-          auth
-            .login(username, password)
-            .then((loggedIn) =>
-              loggedIn
-                ? (window.location.href = "/account/profile")
-                : (window.location.href = "/account/login")
-            );
+          auth.login(username, password).then((response) => {
+            if (response.status === "success") {
+              history.push("/account/profile");
+            } else {
+              window.scrollTo(0, 0);
+              setAlert({ message: response.message, type: "danger" });
+            }
+          });
         }}
       >
+        {alert && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClick={() => setAlert(null)}
+          />
+        )}
+
         <div className="flex flex-col">
           <FormControl
             type="username"
             id="username"
-            label="Email"
-            placeholder="user@example.com"
+            label="Username"
+            placeholder="joe.doe"
             onChange={(e) => setUsername(e.target.value)}
           />
           <FormControl
