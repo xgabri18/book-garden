@@ -10,15 +10,23 @@ import FormControl from "../../../Components/Forms/FormControl";
 import Select from "react-select";
 import Textarea from "../../../Components/Forms/Textarea";
 import auth from "../../../auth";
+import { useParams } from "react-router-dom";
 
 export const UserEditModule = () => {
   const [alert, setAlert] = useState(null);
   const [libraries, setLibraries] = useState([]);
+  const [user, setUser] = useState({});
+  const { id } = useParams();
 
   useEffect(() => {
     axios
       .get(createAPI("library"))
       .then((response) => setLibraries(response.data.data))
+      .catch((error) => console.log(error));
+
+    axios
+      .get(createAPI("person/:id", { id: id }))
+      .then((response) => setUser(response.data.data))
       .catch((error) => console.log(error));
   }, [alert]);
 
@@ -90,7 +98,7 @@ export const UserEditModule = () => {
             name="username"
             label="Username"
             placeholder="Username"
-            value={auth.username}
+            value={user.username}
           />
           <div className="flex flex-row">
             <div className="w-1/2 pr-2">
@@ -100,7 +108,7 @@ export const UserEditModule = () => {
                 name="name"
                 label="First Name"
                 placeholder="Joe"
-                value={auth.name}
+                value={user.name}
               />
             </div>
             <div className="w-1/2 pl-2">
@@ -110,7 +118,7 @@ export const UserEditModule = () => {
                 name="surname"
                 label="Last Name"
                 placeholder="Doe"
-                value={auth.surname}
+                value={user.surname}
               />
             </div>
           </div>
@@ -120,7 +128,7 @@ export const UserEditModule = () => {
             name="email"
             placeholder="user@example.com"
             label="Email"
-            value={auth.email}
+            value={user.email}
           />
           <FormControl
             type="password"
@@ -128,13 +136,13 @@ export const UserEditModule = () => {
             name="password"
             placeholder="Password"
             label="Password"
-            value={auth.password}
+            value={user.password}
           />
           <div className="mb-2">
             <div className="mb-1 cursor-default">User type</div>
             <Select
               className="Select"
-              defaultValue={userTypeOptions.find((o) => o.value === auth.id)}
+              defaultValue={userTypeOptions.find((o) => o.value === user.id)}
               name="user_type"
               options={userTypeOptions}
             />
@@ -144,7 +152,7 @@ export const UserEditModule = () => {
             <Select
               className="Select"
               defaultValue={libraryOptions.find(
-                (o) => o.id === auth.library_id
+                (o) => o.id === user.library_id
               )}
               name="library_id"
               options={libraryOptions}
@@ -156,7 +164,7 @@ export const UserEditModule = () => {
             name="profiledesc"
             label="Profile Description"
             placeholder="Lorem ipsum..."
-            value={auth.profiledesc}
+            value={user.profiledesc}
           />
 
           <div className="flex items-end">

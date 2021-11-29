@@ -55,7 +55,7 @@ const BookTitleListModule = () => {
       .catch((error) => console.log(error));
 
     axios
-      .get(createAPI("booktitle/unique/author"))
+      .get(createAPI("booktitle/unique/authors"))
       .then((response) =>
         response.data.data.map((author) =>
           setAuthors((state) => [...state, { value: author, label: author }])
@@ -126,8 +126,14 @@ const BookTitleListModule = () => {
           </FilterDropdownItem>
         </FilterDropdown>
 
-        <div className="flex mt-4">
-          <Button type="submit" text="Apply Filters" variant="primary" />
+        <div className="flex justify-between mt-4">
+          <Button type="submit" text="Apply Filters" variant="secondary" />
+          <Button
+            type="button"
+            text="Reset Filters"
+            variant="red-light"
+            onClick={() => setFilters({})}
+          />
         </div>
       </form>
       <div className="w-full lg:w-9/12 flex flex-row flex-wrap content-start">

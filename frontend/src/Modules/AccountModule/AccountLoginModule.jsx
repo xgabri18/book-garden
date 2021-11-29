@@ -19,7 +19,9 @@ const AccountLoginModule = () => {
           auth
             .login(username, password)
             .then((loggedIn) =>
-              loggedIn ? history.push("/") : history.push("/account/login")
+              loggedIn
+                ? window.location.reload(true)
+                : window.location.reload(true)
             );
         }}
       >
