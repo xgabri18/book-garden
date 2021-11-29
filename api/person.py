@@ -24,7 +24,7 @@ class PersonResource(MasterResource):
     # Admin (all) or User (only info about himself)
     def get(self,id = None):
 
-        if not (self.is_logged() and (self.is_admin() or self.is_user(id))):
+        if not (self.is_logged() and (self.is_admin() or self.is_user(id)) or self.is_librarian()):
             return self.response_error("Unauthorised action!", "")
 
         if id is None:  # user can see his own information
@@ -47,6 +47,9 @@ class PersonResource(MasterResource):
             if person:
                 person = person[0].__dict__
                 del person["_sa_instance_state"]
+                if self.is_librarian():
+                    if person.get("password"):
+                        del person["password"]
 
             return self.response_ok(person)
 
