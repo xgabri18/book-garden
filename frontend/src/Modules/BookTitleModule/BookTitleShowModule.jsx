@@ -1,6 +1,6 @@
 import { BookTitle } from "../../Components/BookTitle/BookTitle";
 import { Breadcrumb } from "../../Components/Ui/Breadcrumb";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { createAPI } from "../../api";
 import { Link, useParams } from "react-router-dom";
@@ -21,6 +21,10 @@ const BookTitleShowModule = () => {
   const [userVotes, setUserVotes] = useState([]);
   const [alert, setAlert] = useState(null);
 
+  // Scroll to alert
+  const alertRef = useRef(null);
+  const executeScroll = () => alertRef.current.scrollIntoView();
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -28,33 +32,36 @@ const BookTitleShowModule = () => {
 
     axios
       .get(createAPI("booktitle/:id", { id }))
-      .then((response) => setBookTitle(response.data.data))
+      .then((response) => {
+        setBookTitle(response.data.data);
+
+        axios
+          .get(createAPI("library"))
+          .then((response) => {
+            response.data.data.map((library) =>
+              axios
+                .get(createAPI("stock/filter"), {
+                  params: {
+                    library_id: library.id,
+                    booktitle_id: bookTitle.id,
+                  },
+                })
+                .then((response) => {
+                  library.stock = response.data.data;
+                  setLibraries((state) => [...state, library]);
+                })
+                .catch((error) => console.log(error))
+            );
+          })
+          .catch((error) => console.log(error));
+      })
       .catch((error) => console.log(error));
 
     axios
       .get(createAPI("voting/votesofperson/:id", { id: auth.id }))
       .then((response) => setUserVotes(response.data.data))
       .catch((error) => console.log(error));
-
-    axios
-      .get(createAPI("library"))
-      .then((response) => {
-        response.data.data.map((library) =>
-          axios
-            .get(createAPI("stock/filter"), {
-              params: {
-                library_id: library.id,
-              },
-            })
-            .then((response) => {
-              library.stock = response.data.data[0];
-              return setLibraries((state) => [...state, library]);
-            })
-            .catch((error) => console.log(error))
-        );
-      })
-      .catch((error) => console.log(error));
-  }, [id]);
+  }, [id, alert]);
 
   function reserveBook(stock_id) {
     axios
@@ -81,6 +88,21 @@ const BookTitleShowModule = () => {
   function voteBook(stock_id) {
     axios
       .post(createAPI("voting"), qs.stringify({ stock_id }))
+      .then((response) => {
+        if (response.data.status === "success") {
+          window.scrollTo(0, 0);
+          setAlert({
+            message: "Book reserved",
+            type: "success",
+          });
+        } else {
+          window.scrollTo(0, 0);
+          setAlert({
+            message: response.data.message,
+            type: "danger",
+          });
+        }
+      })
       .catch((error) => console.log(error));
   }
 
@@ -89,6 +111,21 @@ const BookTitleShowModule = () => {
       vote.stock_id === stock_id
         ? axios
             .delete(createAPI("voting/:id", { id: vote.id }))
+            .then((response) => {
+              if (response.data.status === "success") {
+                setAlert({
+                  message: "Book reserved",
+                  type: "success",
+                });
+              } else {
+                setAlert({
+                  message: response.data.message,
+                  type: "danger",
+                });
+              }
+
+              executeScroll();
+            })
             .catch((error) => console.log(error))
         : ""
     );
@@ -118,6 +155,14 @@ const BookTitleShowModule = () => {
       )}
       <BookTitle bookTitle={bookTitle} />
       <div className="w-full lg:w-1/2 mx-auto">
+        {alert && (
+          <Alert
+            message={alert.message}
+            type={alert.type}
+            onClick={() => setAlert(null)}
+            ref={alertRef}
+          />
+        )}
         {auth.isAuthenticated() ? (
           libraries.map((library, index) => (
             <div key={index} className="bg-white p-4 shadow mb-2">
