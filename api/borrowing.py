@@ -42,7 +42,7 @@ class BorrowingResource(MasterResource):
             return self.response_ok(array)
 
         else:
-            borrowing = Borrowing.query.filter_by(id=id).all()
+            borrowing = Borrowing.query.filter_by(id=id).first()
 
             if borrowing:
                 if self.is_librarian():  # check if librarian works in the library where he wants to change stuff

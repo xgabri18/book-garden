@@ -39,7 +39,7 @@ class ReservationResource(MasterResource):
             return self.response_ok(array)
 
         else:
-            reservation = Reservation.query.filter_by(id=id).all()
+            reservation = Reservation.query.filter_by(id=id).first()
 
             if reservation:
                 if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
