@@ -49,7 +49,7 @@ const BookTitleShowModule = () => {
                   },
                 })
                 .then((response) => {
-                  library.stock = response.data.data;
+                  library.stock = response.data.data[0];
                   setLibraries((state) => [...state, library]);
                 })
                 .catch((error) => console.log(error))
