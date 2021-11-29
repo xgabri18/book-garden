@@ -51,7 +51,7 @@ class MasterResource(Resource):  # subclass
             return None
 
     def librarian_in_which_lib(self,librarian_id):
-        librarian = Person.query.filter_by(person_id=librarian_id).first()
+        librarian = Person.query.filter_by(id=librarian_id).first()
         if librarian:
             return librarian.library_id
         else:
