@@ -23,10 +23,13 @@ class OrderResource(MasterResource):
     # Return list of all existing orders from all libraries
     # Can be done by Admin and Distributor (librarian sees orders ONLY of his Library)
     def get(self,id = None):
-        if not (self.is_logged() and (self.is_admin() or self.is_distributor())):
+        if not (self.is_logged() and (self.is_admin() or self.is_distributor() or self.is_librarian())):
             return self.response_error("Unauthorised action!", "")
 
         if id is None:
+            if not (self.is_admin() or self.is_distributor()):
+                return self.response_error("Unauthorised action!", "")
+
             order = Order.query.all()
 
             array = []
@@ -39,6 +42,10 @@ class OrderResource(MasterResource):
 
         else:
             order = Order.query.filter_by(id = id).all()
+            if order:
+                if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+                    if order.library_id != self.librarian_in_which_lib(session['user_id']):
+                        return self.response_error("Unauthorised action!", "")
 
             if order:
                 order = order[0].__dict__
@@ -51,7 +58,6 @@ class OrderResource(MasterResource):
     def post(self,id = None):
         if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
             return self.response_error("Unauthorised action!", "")
-        # TODO kontrola librariana
 
         if self.is_admin():  # admin can create a order anywhere
             library_id = request.form.get("library_id")
