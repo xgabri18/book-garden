@@ -7,7 +7,6 @@ import {
   ChevronLeftIcon,
   CogIcon,
   PencilIcon,
-  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
 import { Alert } from "../../../Components/Ui/Alert";
@@ -40,7 +39,7 @@ export const LibraryStockModule = () => {
             params: { library_id: response.data.data.id },
           })
           .then((response) => {
-            response.data.data.map((stockInfo) => {
+            response.data.data.map((stockInfo) =>
               axios
                 .get(createAPI("booktitle/:id", { id: stockInfo.booktitle_id }))
                 .then((response) => {
@@ -49,12 +48,12 @@ export const LibraryStockModule = () => {
                     photo: response.data.data.photo,
                   };
                   setStock((state) => [...state, stockInfo]);
-                });
-            });
+                })
+            );
           });
       })
       .catch((error) => console.log(error));
-  }, [alert]);
+  }, [id, alert]);
 
   function deleteStock(id) {
     axios
@@ -78,8 +77,6 @@ export const LibraryStockModule = () => {
       })
       .catch((error) => console.log(error));
   }
-
-  console.log(stock);
 
   return (
     <>
@@ -110,7 +107,6 @@ export const LibraryStockModule = () => {
                 <TableColHead>Book Title</TableColHead>
                 <TableColHead>Availability</TableColHead>
                 <TableColHead>Amount</TableColHead>
-                <TableColHead>Actions</TableColHead>
               </TableRow>
             </Thead>
             <Tbody>
@@ -132,32 +128,6 @@ export const LibraryStockModule = () => {
                     )}
                   </TableCol>
                   <TableCol>{item.amount}</TableCol>
-                  <TableCol>
-                    <div className="flex items-center gap-2">
-                      <ButtonLink
-                        to={createAdminRoute("LibraryShow", { id: library.id })}
-                        variant="primary"
-                        icon={<CogIcon className="h-6 mr-0 md:mr-1" />}
-                        text="Manage"
-                        showText="md"
-                      />
-                      <ButtonLink
-                        to={createAdminRoute("LibraryEdit", { id: library.id })}
-                        variant="yellow"
-                        icon={<PencilIcon className="h-6 mr-0 md:mr-1" />}
-                        text="Edit"
-                        showText="md"
-                      />
-                      <Button
-                        type="button"
-                        variant="red"
-                        icon={<TrashIcon className="h-6 mr-0 md:mr-1" />}
-                        text="Delete"
-                        showText="md"
-                        onClick={() => deleteStock(item.id)}
-                      />
-                    </div>
-                  </TableCol>
                 </TableRow>
               ))}
             </Tbody>

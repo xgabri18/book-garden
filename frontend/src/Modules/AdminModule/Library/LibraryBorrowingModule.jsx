@@ -6,7 +6,6 @@ import { createAdminRoute } from "../../../routes";
 import {
   ChevronLeftIcon,
   PencilIcon,
-  StatusOnlineIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
 import { Alert } from "../../../Components/Ui/Alert";
@@ -37,7 +36,7 @@ export const LibraryBorrowingModule = () => {
     axios
       .get(createAPI("borrowing/of/lib/:id", { id }))
       .then((response) => {
-        response.data.data.map((borrowing) => {
+        response.data.data.map((borrowing) =>
           axios
             .all([
               axios.get(createAPI("person/:id", { id: borrowing.person_id })),
@@ -57,8 +56,8 @@ export const LibraryBorrowingModule = () => {
                   console.log(person.data, stockinfo.data);
                 }
               })
-            );
-        });
+            )
+        );
       })
       .catch((error) => console.log(error));
 

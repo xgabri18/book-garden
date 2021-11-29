@@ -14,14 +14,12 @@ import auth from "../../auth";
 import { createRoute } from "../../routes";
 import qs from "querystring";
 import { Alert } from "../../Components/Ui/Alert";
-import { useForceUpdate } from "../../Hooks/useForceUpdate";
 
 const BookTitleShowModule = () => {
   const [bookTitle, setBookTitle] = useState({});
   const [libraries, setLibraries] = useState([]);
   const [userVotes, setUserVotes] = useState([]);
   const [alert, setAlert] = useState(null);
-  const forceUpdate = useForceUpdate();
 
   const { id } = useParams();
 
@@ -33,17 +31,15 @@ const BookTitleShowModule = () => {
       .then((response) => setBookTitle(response.data.data))
       .catch((error) => console.log(error));
 
-    if (auth.isAuthenticated()) {
-      axios
-        .get(createAPI("voting/votesofperson/:id", { id: auth.id }))
-        .then((response) => setUserVotes(response.data.data))
-        .catch((error) => console.log(error));
-    }
+    axios
+      .get(createAPI("voting/votesofperson/:id", { id: auth.id }))
+      .then((response) => setUserVotes(response.data.data))
+      .catch((error) => console.log(error));
 
     axios
       .get(createAPI("library"))
       .then((response) => {
-        response.data.data.map((library) => {
+        response.data.data.map((library) =>
           axios
             .get(createAPI("stock/filter"), {
               params: {
@@ -52,13 +48,13 @@ const BookTitleShowModule = () => {
             })
             .then((response) => {
               library.stock = response.data.data[0];
-              setLibraries((state) => [...state, library]);
+              return setLibraries((state) => [...state, library]);
             })
-            .catch((error) => console.log(error));
-        });
+            .catch((error) => console.log(error))
+        );
       })
       .catch((error) => console.log(error));
-  }, [id, forceUpdate]);
+  }, [id]);
 
   function reserveBook(stock_id) {
     axios
@@ -85,19 +81,17 @@ const BookTitleShowModule = () => {
   function voteBook(stock_id) {
     axios
       .post(createAPI("voting"), qs.stringify({ stock_id }))
-      .then(() => forceUpdate)
       .catch((error) => console.log(error));
   }
 
   function removeVoteBook(stock_id) {
-    userVotes.find((vote) => {
-      if (vote.stock_id === stock_id) {
-        axios
-          .delete(createAPI("voting/:id", { id: vote.id }))
-          .then(() => forceUpdate)
-          .catch((error) => console.log(error));
-      }
-    });
+    userVotes.find((vote) =>
+      vote.stock_id === stock_id
+        ? axios
+            .delete(createAPI("voting/:id", { id: vote.id }))
+            .catch((error) => console.log(error))
+        : ""
+    );
   }
 
   const items = [

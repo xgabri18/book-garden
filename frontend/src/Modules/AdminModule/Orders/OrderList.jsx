@@ -3,14 +3,7 @@ import axios from "axios";
 import { createAPI } from "../../../api";
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  CogIcon,
-  PencilIcon,
-  PlusIcon,
-  TrashIcon,
-} from "@heroicons/react/outline";
+import { CheckIcon, ChevronLeftIcon } from "@heroicons/react/outline";
 import { Alert } from "../../../Components/Ui/Alert";
 import { PingLoading } from "../../../Components/Ui/PingLoading";
 import {
@@ -32,7 +25,7 @@ export const OrderList = () => {
     axios
       .get(createAPI("order"))
       .then((response) => {
-        response.data.data.map((order) => {
+        response.data.data.map((order) =>
           axios
             .all([
               axios.get(createAPI("booktitle/:id", { id: order.booktitle_id })),
@@ -51,8 +44,8 @@ export const OrderList = () => {
                   console.log(bookTitle.data, library.data);
                 }
               })
-            );
-        });
+            )
+        );
       })
       .catch((error) => console.log(error));
   }, [alert]);

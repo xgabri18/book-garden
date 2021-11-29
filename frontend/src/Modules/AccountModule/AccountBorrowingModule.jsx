@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { createAPI } from "../../api";
-import { Button, ButtonLink } from "../../Components/Ui/Button";
-import { createAdminRoute } from "../../routes";
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  TrashIcon,
-} from "@heroicons/react/outline";
+import { ButtonLink } from "../../Components/Ui/Button";
+import { ChevronLeftIcon } from "@heroicons/react/outline";
 import { Alert } from "../../Components/Ui/Alert";
 import { PingLoading } from "../../Components/Ui/PingLoading";
 import {
@@ -32,7 +27,7 @@ export const AccountBorrowingModule = () => {
       .get(createAPI("borrowing/person/:id", { id: auth.id }))
       .then((response) => {
         if (response.data.status === "success") {
-          response.data.data.map((borrowing) => {
+          response.data.data.map((borrowing) =>
             axios
               .get(createAPI("stockinfo/:id", { id: borrowing.id }))
               .then((response) => {
@@ -40,8 +35,8 @@ export const AccountBorrowingModule = () => {
                   borrowing.stock = response.data.data;
                   setBorrowings((state) => [...state, borrowing]);
                 }
-              });
-          });
+              })
+          );
         } else {
         }
       })

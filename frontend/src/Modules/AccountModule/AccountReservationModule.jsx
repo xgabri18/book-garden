@@ -3,12 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { createAPI } from "../../api";
 import { Button, ButtonLink } from "../../Components/Ui/Button";
-import { createAdminRoute } from "../../routes";
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  TrashIcon,
-} from "@heroicons/react/outline";
+import { ChevronLeftIcon, TrashIcon } from "@heroicons/react/outline";
 import { Alert } from "../../Components/Ui/Alert";
 import { PingLoading } from "../../Components/Ui/PingLoading";
 import {
@@ -32,19 +27,16 @@ export const AccountReservationModule = () => {
     axios
       .get(createAPI("reservation/person/:id", { id: auth.id }))
       .then((response) => {
-        if (response.data.status === "success") {
-          response.data.data.map((reservation) => {
-            axios
-              .get(createAPI("stockinfo/:id", { id: reservation.stock_id }))
-              .then((response) => {
-                if (response.data.status === "success") {
-                  reservation.stock = response.data.data;
-                  setReservations((state) => [...state, reservation]);
-                }
-              });
-          });
-        } else {
-        }
+        response.data.data.map((reservation) =>
+          axios
+            .get(createAPI("stockinfo/:id", { id: reservation.stock_id }))
+            .then((response) => {
+              if (response.data.status === "success") {
+                reservation.stock = response.data.data;
+                setReservations((state) => [...state, reservation]);
+              }
+            })
+        );
       })
       .catch((error) => console.log(error));
   }, [id, alert]);

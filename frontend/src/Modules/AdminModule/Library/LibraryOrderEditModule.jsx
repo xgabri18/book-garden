@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
-import { ChevronLeftIcon, PlusIcon, SaveIcon } from "@heroicons/react/outline";
+import { ChevronLeftIcon, SaveIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { createAPI } from "../../../api";
 import qs from "querystring";
 import { Alert } from "../../../Components/Ui/Alert";
 import FormControl from "../../../Components/Forms/FormControl";
-import Textarea from "../../../Components/Forms/Textarea";
 import { useParams } from "react-router-dom";
-import Select from "react-select";
 
 export const LibraryOrderEditModule = () => {
   const [alert, setAlert] = useState(null);

@@ -37,35 +37,30 @@ export const LibraryReservationModule = () => {
     axios
       .get(createAPI("reservation/of/lib/:id", { id }))
       .then((response) => {
-        if (response.data.status === "success") {
-          response.data.data.map((reservation) => {
-            axios
-              .all([
-                axios.get(
-                  createAPI("person/:id", { id: reservation.person_id })
-                ),
-                axios.get(
-                  createAPI("stockinfo/:id", { id: reservation.stock_id })
-                ),
-              ])
-              .then(
-                axios.spread((person, stockinfo) => {
-                  if (
-                    person.data.status === "success" &&
-                    stockinfo.data.status === "success"
-                  ) {
-                    reservation.user =
-                      person.data.data.name + " " + person.data.data.surname;
-                    reservation.bookTitle = stockinfo.data.data.Book_title;
-                    setReservations((state) => [...state, reservation]);
-                  } else {
-                    console.log(person.data, stockinfo.data);
-                  }
-                })
-              );
-          });
-        } else {
-        }
+        response.data.data.map((reservation) =>
+          axios
+            .all([
+              axios.get(createAPI("person/:id", { id: reservation.person_id })),
+              axios.get(
+                createAPI("stockinfo/:id", { id: reservation.stock_id })
+              ),
+            ])
+            .then(
+              axios.spread((person, stockinfo) => {
+                if (
+                  person.data.status === "success" &&
+                  stockinfo.data.status === "success"
+                ) {
+                  reservation.user =
+                    person.data.data.name + " " + person.data.data.surname;
+                  reservation.bookTitle = stockinfo.data.data.Book_title;
+                  setReservations((state) => [...state, reservation]);
+                } else {
+                  console.log(person.data, stockinfo.data);
+                }
+              })
+            )
+        );
       })
       .catch((error) => console.log(error));
   }, [id, alert]);

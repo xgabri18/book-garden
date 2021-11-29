@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { createAPI } from "../../api";
 import { Button, ButtonLink } from "../../Components/Ui/Button";
-import {
-  CheckIcon,
-  ChevronLeftIcon,
-  ThumbDownIcon,
-  TrashIcon,
-} from "@heroicons/react/outline";
+import { ChevronLeftIcon, ThumbDownIcon } from "@heroicons/react/outline";
 import { Alert } from "../../Components/Ui/Alert";
 import { PingLoading } from "../../Components/Ui/PingLoading";
 import {
@@ -23,35 +18,34 @@ import auth from "../../auth";
 export const AccountVotingModule = () => {
   const [voting, setVoting] = useState([]);
   const [alert, setAlert] = useState(null);
-  const [forceUpdate, setForceUpdate] = useState(null);
 
   useEffect(() => {
     setVoting([]);
 
     axios
       .get(createAPI("voting/votesofperson/:id", { id: auth.id }))
-      .then((response) => {
-        if (response.data.status === "success") {
-          response.data.data.map((voting) => {
-            axios
-              .get(createAPI("stockinfo/:id", { id: voting.id }))
-              .then((response) => {
-                if (response.data.status === "success") {
-                  voting.stock = response.data.data;
-                  setVoting((state) => [...state, voting]);
-                }
-              });
-          });
-        } else {
-        }
-      })
+      .then((response) =>
+        response.data.data.map((voting) =>
+          axios
+            .get(createAPI("stockinfo/:id", { id: voting.id }))
+            .then((response) => {
+              if (response.data.status === "success") {
+                voting.stock = response.data.data;
+                setVoting((state) => [...state, voting]);
+              }
+            })
+        )
+      )
       .catch((error) => console.log(error));
-  }, [alert, forceUpdate]);
+  }, [alert]);
 
   function removeVoteBook(id) {
     axios
       .delete(createAPI("voting/:id", { id: id }))
-      .then(() => forceUpdate)
+      .then(() => {
+        window.scrollTo(0, 0);
+        return setAlert({ message: "Vote has been removed", type: "success" });
+      })
       .catch((error) => console.log(error));
   }
 

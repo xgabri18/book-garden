@@ -16,11 +16,7 @@ const AccountLoginModule = () => {
         method="post"
         onSubmit={(e) => {
           e.preventDefault();
-          auth
-            .login(username, password)
-            .then((loggedIn) =>
-              loggedIn ? history.push("/") : console.log("SHOW ALERT")
-            );
+          auth.login(username, password).then(() => history.push("/account"));
         }}
       >
         <div className="flex flex-col">

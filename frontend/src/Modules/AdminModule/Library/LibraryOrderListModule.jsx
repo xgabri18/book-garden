@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { createAPI } from "../../../api";
-import { Button, ButtonLink } from "../../../Components/Ui/Button";
+import { ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
 import {
-  CheckIcon,
   ChevronLeftIcon,
-  CogIcon,
   PencilIcon,
   PlusIcon,
-  TrashIcon,
 } from "@heroicons/react/outline";
 import { Alert } from "../../../Components/Ui/Alert";
 import { PingLoading } from "../../../Components/Ui/PingLoading";
@@ -41,7 +38,7 @@ export const LibraryOrderListModule = () => {
     axios
       .get(createAPI("order/library/:id", { id }))
       .then((response) => {
-        response.data.data.map((order) => {
+        response.data.data.map((order) =>
           axios
             .all([
               axios.get(createAPI("booktitle/:id", { id: order.booktitle_id })),
@@ -60,34 +57,11 @@ export const LibraryOrderListModule = () => {
                   console.log(bookTitle.data, library.data);
                 }
               })
-            );
-        });
+            )
+        );
       })
       .catch((error) => console.log(error));
-  }, [alert]);
-
-  function confirmOrder(id) {
-    axios
-      .get(createAPI("order/confirm/:id", { id }))
-      .then((response) => {
-        if (response.data.status === "success") {
-          // Book Deleted
-          window.scrollTo(0, 0);
-          setAlert({
-            message: "Order confirmed",
-            type: "success",
-          });
-        } else {
-          // Error
-          window.scrollTo(0, 0);
-          setAlert({
-            message: response.data.message,
-            type: "danger",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
-  }
+  }, [id, alert]);
 
   return (
     <>

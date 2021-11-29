@@ -7,11 +7,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { createAPI } from "../../api";
 
-/**
- * @TODO: Replace select with react-select,
- *        Replace checkboxes with ?react-checkbox?
- */
-
 const BookTitleListModule = () => {
   const [bookTitles, setBookTitles] = useState([]);
   const [genres, setGenres] = useState([]);
@@ -23,7 +18,7 @@ const BookTitleListModule = () => {
       .get(createAPI("booktitle"))
       .then((response) => {
         if (response.data.status === "success") {
-          response.data.data.map((bookTitle) => {
+          response.data.data.map((bookTitle) =>
             axios
               .get(createAPI("stock/filter"), {
                 params: { booktitle_id: bookTitle.id },
@@ -35,8 +30,8 @@ const BookTitleListModule = () => {
                 );
                 bookTitle.stock = response.data.data;
                 setBookTitles((state) => [...state, bookTitle]);
-              });
-          });
+              })
+          );
         }
       })
       .catch((error) => console.log(error));
@@ -46,8 +41,6 @@ const BookTitleListModule = () => {
       .then((response) => setGenres(response.data.data))
       .catch((error) => console.log(error));
   }, []);
-
-  console.log(bookTitles);
 
   return (
     <div className="flex flex-row flex-wrap">

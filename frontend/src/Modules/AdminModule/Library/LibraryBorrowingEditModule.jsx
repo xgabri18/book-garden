@@ -25,7 +25,7 @@ export const LibraryBorrowingEditModule = () => {
       .get(createAPI("borrowing/:id", { id: idBorrowing }))
       .then((response) => setBorrowing(response.data.data))
       .catch((error) => console.log(error));
-  }, [idBorrowing, alert]);
+  }, [idBorrowing, idLibrary, alert]);
 
   function extendTime(idBorrowing) {
     axios
@@ -125,12 +125,10 @@ export const LibraryBorrowingEditModule = () => {
               placeholder="Library"
             />
 
-            <FormControl
-              type="text"
-              label="Date Returned"
-              value={convertDate(borrowing.date_returned)}
-              disabled
-            />
+            <div className="mb-2">
+              <div className="mb-1">Date To Return</div>
+              <div>{convertDate(borrowing.date_returned)}</div>
+            </div>
 
             <div className="flex justify-between">
               <Button

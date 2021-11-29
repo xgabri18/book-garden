@@ -3,12 +3,13 @@ import axios from "axios";
 import { createAPI } from "../../../api";
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
-import { ChevronLeftIcon, PlusIcon } from "@heroicons/react/outline";
+import { ChevronLeftIcon, PlusIcon, SaveIcon } from "@heroicons/react/outline";
 import qs from "querystring";
 import { Alert } from "../../../Components/Ui/Alert";
 import FormControl from "../../../Components/Forms/FormControl";
 import Select from "react-select";
 import Textarea from "../../../Components/Forms/Textarea";
+import auth from "../../../auth";
 
 export const UserEditModule = () => {
   const [alert, setAlert] = useState(null);
@@ -89,6 +90,7 @@ export const UserEditModule = () => {
             name="username"
             label="Username"
             placeholder="Username"
+            value={auth.username}
           />
           <div className="flex flex-row">
             <div className="w-1/2 pr-2">
@@ -98,6 +100,7 @@ export const UserEditModule = () => {
                 name="name"
                 label="First Name"
                 placeholder="Joe"
+                value={auth.name}
               />
             </div>
             <div className="w-1/2 pl-2">
@@ -107,6 +110,7 @@ export const UserEditModule = () => {
                 name="surname"
                 label="Last Name"
                 placeholder="Doe"
+                value={auth.surname}
               />
             </div>
           </div>
@@ -116,6 +120,7 @@ export const UserEditModule = () => {
             name="email"
             placeholder="user@example.com"
             label="Email"
+            value={auth.email}
           />
           <FormControl
             type="password"
@@ -123,12 +128,13 @@ export const UserEditModule = () => {
             name="password"
             placeholder="Password"
             label="Password"
+            value={auth.password}
           />
           <div className="mb-2">
             <div className="mb-1 cursor-default">User type</div>
             <Select
               className="Select"
-              defaultValue={userTypeOptions[0]}
+              defaultValue={userTypeOptions.find((o) => o.value === auth.id)}
               name="user_type"
               options={userTypeOptions}
             />
@@ -137,7 +143,9 @@ export const UserEditModule = () => {
             <div className="mb-1 cursor-default">Librarian</div>
             <Select
               className="Select"
-              defaultValue={libraryOptions[0]}
+              defaultValue={libraryOptions.find(
+                (o) => o.id === auth.library_id
+              )}
               name="library_id"
               options={libraryOptions}
             />
@@ -148,15 +156,16 @@ export const UserEditModule = () => {
             name="profiledesc"
             label="Profile Description"
             placeholder="Lorem ipsum..."
+            value={auth.profiledesc}
           />
 
           <div className="flex items-end">
             <Button
               type="submit"
-              text="Create"
-              variant="green"
+              text="Save"
+              variant="primary"
               className="ml-auto"
-              icon={<PlusIcon className="h-6 mr-1" />}
+              icon={<SaveIcon className="h-6 mr-1" />}
             />
           </div>
         </form>

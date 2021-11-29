@@ -17,8 +17,9 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-AuthService.checkAuthSession().then(() => {
-  ReactDOM.render(
+AuthService.checkAuthSession().then((loggedIn) => {
+  console.log("AUTH STATUS RENDER: " + loggedIn);
+  return ReactDOM.render(
     <React.StrictMode>
       <BrowserRouter>
         <App />

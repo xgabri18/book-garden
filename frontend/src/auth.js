@@ -4,32 +4,31 @@ import { createAPI } from "./api";
 
 class AuthService {
   constructor() {
-    this.checkAuthSession().then((authenticated) => {
-      if (!authenticated) this.init();
-    });
+    this.init();
   }
 
   init() {
-    // this.authenticated = true;
-    // this.id = 1;
-    // this.username = "admin";
-    // this.password = "admin";
-    // this.email = "admin@admin.com";
-    // this.type = "librarian";
-    // this.library_id = 1;
-    // this.name = "Joe";
-    // this.surname = "Doe";
-    // this.profiledesc = "I am gay";
+    this.authenticated = true;
+    this.id = 1;
+    this.username = "admin";
+    this.password = "admin";
+    this.email = "admin@admin.com";
+    this.type = "librarian";
+    this.library_id = 1;
+    this.name = "Joe";
+    this.surname = "Doe";
+    this.profiledesc = "I am gay";
 
-    this.authenticated = false;
-    this.id = null;
-    this.username = "";
-    this.email = "";
-    this.type = "";
-    this.library_id = null;
-    this.name = "";
-    this.surname = "";
-    this.profiledesc = "";
+    // this.authenticated = false;
+    // this.id = null;
+    // this.username = "";
+    // this.password = "";
+    // this.email = "";
+    // this.type = "";
+    // this.library_id = null;
+    // this.name = "";
+    // this.surname = "";
+    // this.profiledesc = "";
   }
 
   register(data) {
@@ -42,16 +41,7 @@ class AuthService {
     // Login
     return axios
       .post(createAPI("session"), qs.stringify({ username, password }))
-      .then((response) => {
-        if (response.data.status === "success") {
-          // TODO: Check if logged in ?
-          // return this.checkAuthSession().then((loggedIn) => loggedIn);
-          return true;
-        } else {
-          console.log(response.data);
-          return false;
-        }
-      })
+      .then((response) => response.data.status === "success")
       .catch((error) => console.log(error));
   }
 
@@ -87,22 +77,22 @@ class AuthService {
               this.surname = response.data.data.surname;
               this.profiledesc = response.data.data.profiledesc;
 
-              console.log("checkAuthSession: " + this.authenticated);
-              return true;
+              // console.log("checkAuthSession: " + this.authenticated);
+              // return true;
             } else {
               console.log("Can not get user info");
             }
           });
       } else {
         this.authenticated = false;
-        console.log("checkAuthSession: " + this.authenticated);
-        return false;
+        // console.log("checkAuthSession: " + this.authenticated);
+        // return false;
       }
 
       // TODO: Comment this in production
-      // this.authenticated = true;
-      // console.log("checkAuthSession: " + this.authenticated);
-      // return true;
+      this.authenticated = true;
+      console.log("checkAuthSession: " + this.authenticated);
+      return true;
     });
   }
 
