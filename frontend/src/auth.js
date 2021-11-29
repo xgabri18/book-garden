@@ -8,27 +8,27 @@ class AuthService {
   }
 
   init() {
-    this.authenticated = true;
-    this.id = 1;
-    this.username = "admin";
-    this.password = "admin";
-    this.email = "admin@admin.com";
-    this.type = "librarian";
-    this.library_id = 1;
-    this.name = "Joe";
-    this.surname = "Doe";
-    this.profiledesc = "I am gay";
+    // this.authenticated = true;
+    // this.id = 1;
+    // this.username = "admin";
+    // this.password = "admin";
+    // this.email = "admin@admin.com";
+    // this.type = "librarian";
+    // this.library_id = 1;
+    // this.name = "Joe";
+    // this.surname = "Doe";
+    // this.profiledesc = "I am gay";
 
-    // this.authenticated = false;
-    // this.id = null;
-    // this.username = "";
-    // this.password = "";
-    // this.email = "";
-    // this.type = "";
-    // this.library_id = null;
-    // this.name = "";
-    // this.surname = "";
-    // this.profiledesc = "";
+    this.authenticated = false;
+    this.id = null;
+    this.username = "";
+    this.password = "";
+    this.email = "";
+    this.type = "";
+    this.library_id = null;
+    this.name = "";
+    this.surname = "";
+    this.profiledesc = "";
   }
 
   register(data) {
@@ -77,16 +77,16 @@ class AuthService {
               this.surname = response.data.data.surname;
               this.profiledesc = response.data.data.profiledesc;
 
-              // console.log("checkAuthSession: " + this.authenticated);
-              // return true;
+              console.log("checkAuthSession: " + this.authenticated);
+              return true;
             } else {
               console.log("Can not get user info");
             }
           });
       } else {
         this.authenticated = false;
-        // console.log("checkAuthSession: " + this.authenticated);
-        // return false;
+        console.log("checkAuthSession: " + this.authenticated);
+        return false;
       }
 
       // TODO: Comment this in production

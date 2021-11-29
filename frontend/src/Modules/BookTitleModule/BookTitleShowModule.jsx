@@ -35,6 +35,8 @@ const BookTitleShowModule = () => {
       .then((response) => {
         setBookTitle(response.data.data);
 
+        let book = response.data.data;
+
         axios
           .get(createAPI("library"))
           .then((response) => {
@@ -43,7 +45,7 @@ const BookTitleShowModule = () => {
                 .get(createAPI("stock/filter"), {
                   params: {
                     library_id: library.id,
-                    booktitle_id: bookTitle.id,
+                    booktitle_id: book.id,
                   },
                 })
                 .then((response) => {
@@ -92,7 +94,7 @@ const BookTitleShowModule = () => {
         if (response.data.status === "success") {
           window.scrollTo(0, 0);
           setAlert({
-            message: "Book reserved",
+            message: "Book voted",
             type: "success",
           });
         } else {
@@ -146,13 +148,6 @@ const BookTitleShowModule = () => {
   return (
     <>
       <Breadcrumb backLink="/book-titles" items={items} />
-      {alert && (
-        <Alert
-          message={alert.message}
-          type={alert.type}
-          onClick={() => setAlert(null)}
-        />
-      )}
       <BookTitle bookTitle={bookTitle} />
       <div className="w-full lg:w-1/2 mx-auto">
         {alert && (
