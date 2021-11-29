@@ -28,10 +28,11 @@ class StockFilterResource(MasterResource):
         genre           = request.args.get('genre')
         name            = request.args.get('name')
 
-        stock = Stock.query.join(BookTitle,  BookTitle.id ==  Stock.booktitle_id).add_columns(BookTitle.name,BookTitle.genre,BookTitle.photo)
-        #print(stock.all()[0][0])
+        stock = Stock.query
+        print(stock.all())
         #print(availability)
         #print(type(availability))
+
         if availability is not None:
             if availability.lower() == "true":
                 stock = stock.filter(Stock.availability.is_(True))
@@ -73,6 +74,7 @@ class StockFilterResource(MasterResource):
 
             stock = stock.filter(Stock.booktitle_id.in_(booktitles_array))
 
+        stock = stock.join(BookTitle,  BookTitle.id ==  Stock.booktitle_id).add_columns(BookTitle.name,BookTitle.genre,BookTitle.photo)
         stock = stock.all()
         #print(stock)
         array = []
