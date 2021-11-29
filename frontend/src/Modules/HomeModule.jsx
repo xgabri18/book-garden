@@ -1,7 +1,6 @@
 import header from "../Assets/header.svg";
 import { ButtonLink } from "../Components/Ui/Button";
-import { BookOpenIcon } from "@heroicons/react/outline";
-import { LibraryIcon } from "@heroicons/react/solid";
+import { BookOpenIcon, LibraryIcon } from "@heroicons/react/outline";
 
 const HomeModule = () => {
   return (
@@ -26,13 +25,13 @@ const HomeModule = () => {
             size="lg"
             icon={<BookOpenIcon className="h-6 w-6 inline pr-1" />}
           />
-          {/*<ButtonLink*/}
-          {/*  to="/libraries"*/}
-          {/*  text="Find a Library"*/}
-          {/*  variant="secondary"*/}
-          {/*  size="lg"*/}
-          {/*  icon={<LibraryIcon className="h-6 w-6 inline pr-1" />}*/}
-          {/*/>*/}
+          <ButtonLink
+            to="/libraries"
+            text="Find a Library"
+            variant="secondary"
+            size="lg"
+            icon={<LibraryIcon className="h-6 w-6 inline pr-1" />}
+          />
         </div>
       </div>
 

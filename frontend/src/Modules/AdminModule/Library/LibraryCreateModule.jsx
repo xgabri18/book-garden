@@ -37,14 +37,12 @@ export const LibraryCreateModule = () => {
               .post(createAPI("library"), qs.stringify({ ...data }))
               .then((response) => {
                 if (response.data.status === "success") {
-                  // Edited
                   window.scrollTo(0, 0);
                   setAlert({
                     message: "Library Created Successfully",
                     type: "success",
                   });
                 } else {
-                  // Error
                   window.scrollTo(0, 0);
                   setAlert({
                     message: response.data.message,

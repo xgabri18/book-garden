@@ -37,14 +37,12 @@ export const LibraryListModule = () => {
       .delete(createAPI("library/:id", { id }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Book Deleted
           window.scrollTo(0, 0);
           setAlert({
             message: "Library Deleted",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,

@@ -7,18 +7,10 @@ class AuthService {
     this.init();
   }
 
+  /**
+   * Hold User Information
+   */
   init() {
-    // this.authenticated = true;
-    // this.id = 1;
-    // this.username = "admin";
-    // this.password = "admin";
-    // this.email = "admin@admin.com";
-    // this.type = "librarian";
-    // this.library_id = 1;
-    // this.name = "Joe";
-    // this.surname = "Doe";
-    // this.profiledesc = "I am gay";
-
     this.authenticated = false;
     this.id = null;
     this.username = "";
@@ -31,14 +23,28 @@ class AuthService {
     this.profiledesc = "";
   }
 
+  /**
+   * Register User
+   *
+   * @param data
+   *
+   * @return {Promise<unknown>}
+   */
   register(data) {
     return axios
       .post(createAPI("person"), qs.stringify({ ...data }))
       .then((response) => response.data);
   }
 
+  /**
+   * Login User
+   *
+   * @param username
+   * @param password
+   *
+   * @return {Promise<unknown | void>}
+   */
   login(username, password) {
-    // Login
     return axios
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
@@ -48,6 +54,11 @@ class AuthService {
       .catch((error) => console.log(error));
   }
 
+  /**
+   * Logout User
+   *
+   * @return {Promise<boolean | void>}
+   */
   logout() {
     return axios
       .delete(createAPI("session"))
@@ -58,6 +69,11 @@ class AuthService {
       .catch((error) => console.log(error));
   }
 
+  /**
+   * Script for checking Auth Session
+   *
+   * @return {Promise<AxiosResponse<unknown>>}
+   */
   checkAuthSession() {
     return axios.get(createAPI("session")).then((session) => {
       if (
@@ -92,11 +108,6 @@ class AuthService {
         console.log("checkAuthSession: " + this.authenticated);
         return false;
       }
-
-      // TODO: Comment this in production
-      this.authenticated = true;
-      console.log("checkAuthSession: " + this.authenticated);
-      return true;
     });
   }
 

@@ -1,6 +1,5 @@
 import "./FilterDropdown.css";
 import { useState } from "react";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/solid";
 
 export const FilterDropdown = ({ children }) => {
   return <div className="FilterDropdown">{children}</div>;

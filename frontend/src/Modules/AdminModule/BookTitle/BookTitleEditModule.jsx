@@ -60,14 +60,12 @@ export const BookTitleEditModule = () => {
                 )
                 .then((response) => {
                   if (response.data.status === "success") {
-                    // Edited
                     window.scrollTo(0, 0);
                     setAlert({
                       message: "Book Title Edited Successfully",
                       type: "success",
                     });
                   } else {
-                    // Error
                     window.scrollTo(0, 0);
                     setAlert({
                       message: response.data.message,

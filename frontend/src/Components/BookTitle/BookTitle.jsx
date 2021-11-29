@@ -1,5 +1,4 @@
 import "./BookTitle.css";
-import { Link } from "react-router-dom";
 import { Rating } from "../Ui/Rating";
 
 export const BookTitle = ({ bookTitle }) => {

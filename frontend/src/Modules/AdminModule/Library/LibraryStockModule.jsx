@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { createAPI } from "../../../api";
-import { Button, ButtonLink } from "../../../Components/Ui/Button";
+import { ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
-import {
-  ChevronLeftIcon,
-  CogIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/react/outline";
+import { ChevronLeftIcon } from "@heroicons/react/outline";
 import { Alert } from "../../../Components/Ui/Alert";
 import {
   Table,
@@ -54,29 +49,6 @@ export const LibraryStockModule = () => {
       })
       .catch((error) => console.log(error));
   }, [id, alert]);
-
-  function deleteStock(id) {
-    axios
-      .delete(createAPI("library/:id", { id }))
-      .then((response) => {
-        if (response.data.status === "success") {
-          // Book Deleted
-          window.scrollTo(0, 0);
-          setAlert({
-            message: "Library Deleted",
-            type: "success",
-          });
-        } else {
-          // Error
-          window.scrollTo(0, 0);
-          setAlert({
-            message: response.data.message,
-            type: "danger",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
-  }
 
   return (
     <>

@@ -1,11 +1,11 @@
-# ########################################
-# Brief: Main script
-# Project: System for libraries
-# File: app.py
-# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>
-#          Roman Országh <xorsza01(at)fit.vutbr.cz>
-#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>
-# ########################################
+# ####################################################### #
+# Brief: Main script                                      #
+# Project: System for libraries                           #
+# File: app.py                                            #
+# Authors: Stanislav Gabriš <xgabri18(at)fit.vutbr.cz>     #
+#          Roman Országh <xorsza01(at)fit.vutbr.cz>        #
+#          Adam Fabo <xfaboa00(at)fit.vutbr.cz>            #
+# ####################################################### #
 
 from flask import Flask,send_from_directory,session
 from flask_restful import Api
@@ -46,72 +46,41 @@ from api.database_reset import DatabaseRestResource
 
 from models.models import BookTitle,Person,Library,Stock,Reservation,Borrowing,Order,Voting
 
-# TODO: Remove after final deploy
-from flask_cors import CORS
-
+# CORS Policy for debugging
+#from flask_cors import CORS
 
 app = Flask(__name__, static_url_path='/', static_folder='frontend/build')
 
-# TODO: Remove after final deploy
-CORS(app)
-
+# CORS Policy for debugging
+#CORS(app)
 
 # username:password@server/db
-#toto mozno do env variable
 app.config['SECRET_KEY'] = 'not_secure'
 app.config['SESSION_TYPE'] = 'sqlalchemy'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://yenewkmhgqretf:34c9ca2c665494adcad3ca82982bd708cf2c19cdf32c9e8597f9b7a0c7f3912e@ec2-34-247-118-233.eu-west-1.compute.amazonaws.com:5432/d4h6icjgreq9p4'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
-
-# toto musi byt pod config
 db.init_app(app)
-admin = Admin(app)
+#admin = Admin(app)
 
 app.config['SESSION_SQLALCHEMY'] = db
 
+# Let React Handle 404 Errors
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
 
+# Let React Handle 500 Errors
 @app.errorhandler(500)
 def internal_error(e):
     return app.send_static_file('index.html')
 
+# Render React production build
 @app.route('/')
 def index():
     return app.send_static_file('index.html')
 
 api = Api(app, prefix="/api")
-
-# Toto fungovalo
-# @app.route("/", defaults={'path':''})
-# def serve(path):
-#     return send_from_directory(app.static_folder, 'index.html')
-
-# @app.route('/jozef')
-# def index():
-#     return "Jozef"
-
-# @app.route("/reset")
-# def reset():
-#     db.drop_all()
-#     db.create_all()
-#     person = Person(email       = "admin@admin.com",
-#                     user_type   = 5,
-#                     username    = "admin",
-#                     password    = "admin")
-#
-#     db.session.add(person)
-#     db.session.commit()
-#
-#     return "resetoval som db"
-
-
-# class PersionView(ModelView):
-#     name = "Person"
-#     column_list = ('email', 'user_type', 'username','password','name','surname')
 
 admin.add_view(ModelView(BookTitle, db.session))
 admin.add_view(ModelView(Person, db.session))
@@ -140,7 +109,6 @@ api.add_resource(ReservationOfLibraryRes,  '/reservation/of/lib/<int:library_id>
 api.add_resource(ReservationConfirmRes, '/reservation/confirm/<int:id>')
 api.add_resource(ReservationInfoResource, '/reservation/info/<int:id>')
 
-
 api.add_resource(BorrowingResource,  '/borrowing', '/borrowing/<int:id>')
 api.add_resource(BorrowingOfPersonRes,  '/borrowing/person/<int:identificator>','/borrowing/person/<string:identificator>')
 api.add_resource(BorrowingOfLibraryRes,  '/borrowing/of/lib/<int:library_id>')
@@ -157,29 +125,6 @@ api.add_resource(VotesFromPersonRes,  '/voting/votesofperson/<int:person_id>')
 api.add_resource(VotesDidPersonVoteStockRes,  '/voting/person/voted/stock/<int:stock_id>')
 
 api.add_resource(DatabaseRestResource, '/database/reset/<int:key>')
-
-
-
-# @app.route('/')
-# def index():
-#     return send_from_directory('frontend/build', 'index.html')
-# #
-
-# @app.route("/reset")
-# def reset():
-#     db.drop_all()
-#     db.create_all()
-#     person = Person(email       = "admin@admin.com",
-#                     user_type   = 5,
-#                     username    = "admin",
-#                     password    = "admin")
-#
-#     db.session.add(person)
-#     db.session.commit()
-#
-#     return "resetoval som db"
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)

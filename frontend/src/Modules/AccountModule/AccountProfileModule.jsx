@@ -15,10 +15,6 @@ import { useState } from "react";
 import { Alert } from "../../Components/Ui/Alert";
 import Textarea from "../../Components/Forms/Textarea";
 
-/**
- * TODO: AFTER REFRESH LOST DATA
- */
-
 const AccountProfileModule = () => {
   const [alert, setAlert] = useState(null);
 

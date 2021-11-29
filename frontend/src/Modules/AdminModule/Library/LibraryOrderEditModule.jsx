@@ -44,14 +44,12 @@ export const LibraryOrderEditModule = () => {
       .put(createAPI("order/:id", { id: idOrder }), qs.stringify({ ...data }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Edited
           window.scrollTo(0, 0);
           setAlert({
             message: "Order Edited Successfully",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,

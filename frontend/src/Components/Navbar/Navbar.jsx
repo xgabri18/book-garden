@@ -1,4 +1,3 @@
-import NavbarSearch from "./NavbarSearch";
 import "./Navbar.css";
 import { Link, useHistory } from "react-router-dom";
 import {

@@ -19,7 +19,8 @@ import {
 } from "../../../Components/Ui/Table";
 import { useParams } from "react-router-dom";
 import { PingLoading } from "../../../Components/Ui/PingLoading";
-import { convertDate, convertPrice } from "../../../middlewares";
+import { convertDate } from "../../../middlewares";
+import auth from "../../../auth";
 
 export const LibraryReservationModule = () => {
   const [reservations, setReservations] = useState([]);
@@ -71,14 +72,12 @@ export const LibraryReservationModule = () => {
       .get(createAPI("reservation/confirm/:id", { id: idReservation }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Book Deleted
           window.scrollTo(0, 0);
           setAlert({
             message: "Reservation confirmed",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,
@@ -94,14 +93,12 @@ export const LibraryReservationModule = () => {
       .delete(createAPI("reservation/:id", { id: idReservation }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Book Deleted
           window.scrollTo(0, 0);
           setAlert({
             message: "Reservation deleted",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,
@@ -165,14 +162,16 @@ export const LibraryReservationModule = () => {
                         showText="md"
                         onClick={() => confirmReservation(reservation.id)}
                       />
-                      <Button
-                        type="button"
-                        variant="red"
-                        icon={<TrashIcon className="h-6 mr-0 md:mr-1" />}
-                        text="Delete"
-                        showText="md"
-                        onClick={() => deleteReservation(reservation.id)}
-                      />
+                      {auth.isAdmin() && (
+                        <Button
+                          type="button"
+                          variant="red"
+                          icon={<TrashIcon className="h-6 mr-0 md:mr-1" />}
+                          text="Delete"
+                          showText="md"
+                          onClick={() => deleteReservation(reservation.id)}
+                        />
+                      )}
                     </div>
                   </TableCol>
                 </TableRow>

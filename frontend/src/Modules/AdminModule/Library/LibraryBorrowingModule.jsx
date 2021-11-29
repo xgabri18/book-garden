@@ -69,17 +69,15 @@ export const LibraryBorrowingModule = () => {
 
   function deleteBorrowing(idBorrowing) {
     axios
-      .delete(createAPI("borrowing/:id", { idBorrowing }))
+      .delete(createAPI("borrowing/:id", { id: idBorrowing }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Borrowing Deleted
           window.scrollTo(0, 0);
           setAlert({
             message: "Borrowing deleted",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,

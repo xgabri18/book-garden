@@ -45,14 +45,12 @@ export const LibraryOrderCreateModule = () => {
       .post(createAPI("order"), qs.stringify({ ...data }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Edited
           window.scrollTo(0, 0);
           setAlert({
             message: "Order Created Successfully",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,

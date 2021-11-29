@@ -37,14 +37,12 @@ export const BookTitleListModule = () => {
       .delete(createAPI("booktitle/:id", { id }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Book Deleted
           window.scrollTo(0, 0);
           setAlert({
             message: "Book Title Deleted",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,
@@ -105,7 +103,6 @@ export const BookTitleListModule = () => {
                   <TableCol>{bookTitle.name}</TableCol>
                   <TableCol>
                     <div className="flex items-center gap-2">
-                      {/*TODO: Set book title dynamically to button links*/}
                       <ButtonLink
                         to={`/book-titles/` + bookTitle.id}
                         variant="primary"

@@ -3,13 +3,12 @@ import axios from "axios";
 import { createAPI } from "../../../api";
 import { Button, ButtonLink } from "../../../Components/Ui/Button";
 import { createAdminRoute } from "../../../routes";
-import { ChevronLeftIcon, PlusIcon, SaveIcon } from "@heroicons/react/outline";
+import { ChevronLeftIcon, SaveIcon } from "@heroicons/react/outline";
 import qs from "querystring";
 import { Alert } from "../../../Components/Ui/Alert";
 import FormControl from "../../../Components/Forms/FormControl";
 import Select from "react-select";
 import Textarea from "../../../Components/Forms/Textarea";
-import auth from "../../../auth";
 import { useParams } from "react-router-dom";
 
 export const UserEditModule = () => {
@@ -65,12 +64,12 @@ export const UserEditModule = () => {
             }
 
             axios
-              .post(createAPI("person"), qs.stringify({ ...data }))
+              .put(createAPI("person/:id", { id }), qs.stringify({ ...data }))
               .then((response) => {
                 if (response.data.status === "success") {
                   window.scrollTo(0, 0);
                   setAlert({
-                    message: "User Created Successfully",
+                    message: "User Updated Successfully",
                     type: "success",
                   });
                 } else {

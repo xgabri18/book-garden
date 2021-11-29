@@ -15,22 +15,6 @@ const BookTitleListModule = () => {
   const [authors, setAuthors] = useState([]);
   const [libraries, setLibraries] = useState([]);
   const [filters, setFilters] = useState({});
-  const [defaultGenre, setDefaultGenre] = useState({
-    value: null,
-    label: "Choose Genre",
-  });
-  const [defaultAuthor, setdefaultAuthor] = useState({
-    value: null,
-    label: "Choose Author",
-  });
-  const [defaultLibrary, setdefaultLibrary] = useState({
-    value: null,
-    label: "Choose Library",
-  });
-  const [defaultAvailability, setdefaultAvailability] = useState({
-    value: null,
-    label: "Choose Availability",
-  });
 
   useEffect(() => {
     setBookTitles([]);
@@ -117,25 +101,41 @@ const BookTitleListModule = () => {
       >
         <FilterDropdown>
           <FilterDropdownItem title="Genres" collapsed>
-            <Select defaultValue={defaultGenre} name="genre" options={genres} />
+            <Select
+              defaultValue={{
+                value: null,
+                label: "Choose Genre",
+              }}
+              name="genre"
+              options={genres}
+            />
           </FilterDropdownItem>
           <FilterDropdownItem title="Authors" collapsed>
             <Select
-              defaultValue={defaultAuthor}
+              defaultValue={{
+                value: null,
+                label: "Choose Author",
+              }}
               name="author"
               options={authors}
             />
           </FilterDropdownItem>
           <FilterDropdownItem title="Libraries" collapsed>
             <Select
-              defaultValue={defaultLibrary}
+              defaultValue={{
+                value: null,
+                label: "Choose Library",
+              }}
               name="library_id"
               options={libraries}
             />
           </FilterDropdownItem>
           <FilterDropdownItem title="Availability" collapsed>
             <Select
-              defaultValue={defaultAvailability}
+              defaultValue={{
+                value: null,
+                label: "Choose Availability",
+              }}
               name="availability"
               options={[
                 { value: true, label: "Available" },

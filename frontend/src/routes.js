@@ -9,8 +9,8 @@ import { LibraryStockModule } from "./Modules/AdminModule/Library/LibraryStockMo
 import { UserListModule } from "./Modules/AdminModule/User/UserListModule";
 import { UserEditModule } from "./Modules/AdminModule/User/UserEditModule";
 import HomeModule from "./Modules/HomeModule";
-import BookTitleModule from "./Modules/BookTitleModule";
 import LibraryModule from "./Modules/LibraryModule";
+import BookTitleModule from "./Modules/BookTitleModule";
 import AccountModule from "./Modules/AccountModule";
 import AdminModule from "./Modules/AdminModule";
 import { DashboardModule } from "./Modules/AdminModule/DashboardModule";
@@ -38,11 +38,11 @@ export const routes = [
     url: "/book-titles",
     component: BookTitleModule,
   },
-  // {
-  //   name: "Library",
-  //   url: "/libraries",
-  //   component: LibraryModule,
-  // },
+  {
+    name: "Library",
+    url: "/libraries",
+    component: LibraryModule,
+  },
   {
     name: "Account",
     url: "/account",

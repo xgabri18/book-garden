@@ -7,6 +7,7 @@
         table { border-collapse: collapse; }
         td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
         dt { font-weight: bold; margin-top: 0.5em; }
+        code { margin: .25rem 0; display: block; font-size: .875em; color: #d63384; word-wrap: break-word; }
     </style>
 </head>
 <body>
@@ -45,16 +46,22 @@
 
 
 <h2>Implementace</h2>
-<p><b>Backend</b> je implementovany v Pythone pomocou Flask-u. Databáza je typu postgresql a je na zvlášť serveri. V zložke /api sú Flask-resources pomocou ktorých užívatelia pristupujú k dátam. Pre prístup
-k databazy využívame ORM pomocou SQLAlchemy. V súbore models.py v zložke /models sú uložené tabulky databázy</p>
-<p>V zložke /fake_data sa nachádza script fake_data.py ktorý nahrá do databázy počiatočné dáta. Script potrebuje k spusteniu mať v zložke chromedriver.exe</p>
-<p>Stručná dokumentace k implementaci, která popisuje, které části projektu (např. PHP skripty) implementují jednotlivé případy pouľití.</p>
+<p>
+    <b>Backend</b> je implementovany v Pythone pomocou Flask-u. Databáza je typu postgresql a je na zvlášť serveri.
+    V zložke /api sú Flask-resources pomocou ktorých užívatelia pristupujú k dátam.
+    Pre prístup k databazy využívame ORM pomocou SQLAlchemy. V súbore models.py v zložke /models sú uložené tabulky databázy
+</p>
+<p>
+    V zložke /fake_data sa nachádza script fake_data.py ktorý nahrá do databázy počiatočné dáta.
+    Script potrebuje k spusteniu mať v zložke chromedriver.exe
+</p>
 <p>
     <b>Frontend</b> je implementovaný pomocou JavaScriptovej knižnice React.js.
     Pre štýlovanie je použity utility-first framework Tailwindcss.
     Routing je vyriešený pomocou React DOM Router, ktorý sa stará o routovanie
     jednotlivých stránok. V zložke frontend/src sú vytvorené všetky komponenty a moduly.
-    Súbor frontend/api
+    Súbor frontend/auth sa stará o autentifikáciu a autorizáciu.
+    API Requesty sa posielajú pomocou Axios (promise-based HTTP Client)
 </p>
 
 <h3>Databáze</h3>
@@ -63,37 +70,69 @@ k databazy využívame ORM pomocou SQLAlchemy. V súbore models.py v zložke /mo
 
 <h2>Instalace</h2>
 
+<p>Postup inštalácie na sever (backend):</p>
+Vytvorenie pipenv enviroment
+<code>pipenv install</code>
+Aktivácia pipenv enviromentu
+<code>pipenv shell</code>
+Spustenie back endu:
+<code>flask run</code>
+<p>Postup inštalácie na sever (frontend):</p>
+Inštalácia node modulov
+<code>npm i</code>
+Vytvorenie produkčného buildu
+<code>npm run build</code>
 
-<p>Požiadavky (prevzaté z pipfile): </p>
-
+<p>Požiadavky Backend (prevzaté z pipfile): </p>
 <p>
-    python_version = "3.9"<br>
-    [packages] gunicorn,
-    flask,
-    pymysql,
-    flask-admin,
-    flask-psycopg2,
-    flask-sqlalchemy,
-    flask-restful,
-    flask-session,
-    requests,
-    faker,
-    selenium,
-    sqlalchemy
-    </p>
+    [requires]<br>
+    python_version = "3.9" <br><br>
+    [packages]<br>
+    gunicorn = "*"<br>
+    flask = "*"<br>
+    pymysql = "*"<br>
+    flask-admin = "*"<br>
+    flask-psycopg2 = "*"<br>
+    flask-sqlalchemy = "*"<br>
+    flask-restful = "*"<br>
+    flask-session = "*"<br>
+    flask-cors = "*"<br>
+    requests = "*"<br>
+    faker = "*"<br>
+    selenium = "*"<br>
+    sqlalchemy = "*"<br>
+</p>
+<p>Požiadavky Frontend (prevzaté z package.json)</p>
+<p>
+    dependencies<br>
+    @craco/craco: ^6.3.0,<br>
+    @heroicons/react: ^1.0.4,<br>
+    @testing-library/jest-dom: ^5.14.1,<br>
+    @testing-library/react: ^11.2.7,<br>
+    @testing-library/user-event: ^12.8.3,<br>
+    axios: ^0.23.0,<br>
+    react: ^17.0.2,<br>
+    react-dom: ^17.0.2,<br>
+    react-router-dom: ^5.3.0,<br>
+    react-scripts: 4.0.3,<br>
+    react-select: ^5.2.1,<br>
+    web-vitals: ^1.1.2<br>
+    <br>devDependencies:<br>
+    autoprefixer: ^9.8.8,<br>
+    cors: ^2.8.5,<br>
+    postcss: ^7.0.39,<br>
+    prettier: ^2.4.1,<br>
+    tailwindcss: npm:@tailwindcss/postcss7-compat@^2.2.16
+</p>
 
 <p>Inicializácia DB: </p>
-<p>Databáza sa resetuje a inicializuje príchodom stránku  [url]/reset, pričom je potrebné byť prihlásený ako admin. Následne je možné spustiť script fake_data.py ktorý naplní databázu dátami</p>
-
-Stručně popiąte:
-<ul>
-    <li>postup instalace na server,</li>
-    <li>softwarové poľadavky (verze PHP apod.),</li>
-    <li>jak rozbalit, konfigurovat, inicializovat databázi, ...</li>
-</ul>
+<p>
+    Databáza sa resetuje a inicializuje príchodom stránku  <b>[url]/api/database/reset/[key]</b> kde key je 12345, pričom je potrebné byť prihlásený ako admin.
+    Následne je možné spustiť script fake_data.py ktorý naplní databázu dátami.
+</p>
 
 <h2>Známé problémy</h2>
-<p>Zde popiąte, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových důvodů nebyla implementována správa uľivatelů.&rdquo; Pomůľete tím zrychlit hodnocení, kdyľ neimplementované funkce nebudeme muset dlouze hledat.</p>
+<p>-</p>
 
 </body>
 </html>

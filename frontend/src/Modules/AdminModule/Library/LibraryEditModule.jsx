@@ -63,14 +63,12 @@ export const LibraryEditModule = () => {
                 )
                 .then((response) => {
                   if (response.data.status === "success") {
-                    // Edited
                     window.scrollTo(0, 0);
                     setAlert({
                       message: "Library Edited Successfully",
                       type: "success",
                     });
                   } else {
-                    // Error
                     window.scrollTo(0, 0);
                     setAlert({
                       message: response.data.message,
