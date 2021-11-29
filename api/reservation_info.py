@@ -25,7 +25,7 @@ class ReservationInfoResource(MasterResource):
     # todo session
     def get(self,id):
         if not (self.is_logged() and self.is_admin()):
-          return self.response_error("Unauthorised action!", "debug")
+            return self.response_error("Unauthorised action!", "debug")
 
         try:
             final = []
@@ -55,7 +55,7 @@ class ReservationInfoResource(MasterResource):
             return self.response_ok(final)
 
         except (sqlalchemy.exc.SQLAlchemyError, AttributeError) as e:
-            return self.response_error("Error", "")
+            return self.response_error("Error",str(e))
 
 
 
