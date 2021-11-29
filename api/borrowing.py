@@ -23,12 +23,14 @@ from models.models import Reservation,Borrowing,Stock
 class BorrowingResource(MasterResource):
 
     # Return list of all existing borrowings from all libraries or a specific borrowing
-    # Can be done by Admin
+    # Can be done by Admin and librarian in his own lib
     def get(self, id=None):
-        if not (self.is_logged() and self.is_admin()):
+        if not (self.is_logged() and self.is_admin() or self.is_librarian()):
             return self.response_error("Unauthorised action!", "")
 
         if id is None:
+            if not self.is_admin():  # only admin can see anyone's info
+                return self.response_error("Unauthorised action!", "")
             borrowing = Borrowing.query.all()
 
             array = []
@@ -43,6 +45,9 @@ class BorrowingResource(MasterResource):
             borrowing = Borrowing.query.filter_by(id=id).all()
 
             if borrowing:
+                if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+                    if borrowing.library_id != self.librarian_in_which_lib(session['user_id']):
+                        return self.response_error("Unauthorised action!", "")
                 borrowing = borrowing[0].__dict__
                 del borrowing["_sa_instance_state"]
 

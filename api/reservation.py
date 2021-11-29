@@ -22,10 +22,12 @@ class ReservationResource(MasterResource):
     # Return list of all existing reservations or a specific reservation
     # Can be done by Admin
     def get(self, id=None):
-        if not (self.is_logged() and self.is_admin()):
+        if not (self.is_logged() and self.is_admin() or self.is_librarian()):
             return self.response_error("Unauthorised action!", "")
 
         if id is None:
+            if not self.is_admin():  # only admin can see anyone's info
+                return self.response_error("Unauthorised action!", "")
             reservation = Reservation.query.all()
 
             array = []
@@ -40,6 +42,9 @@ class ReservationResource(MasterResource):
             reservation = Reservation.query.filter_by(id=id).all()
 
             if reservation:
+                if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+                    if reservation.library_id != self.librarian_in_which_lib(session['user_id']):
+                        return self.response_error("Unauthorised action!", "")
                 reservation = reservation[0].__dict__
                 del reservation["_sa_instance_state"]
 
