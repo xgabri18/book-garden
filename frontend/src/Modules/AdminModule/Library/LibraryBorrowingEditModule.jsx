@@ -13,6 +13,7 @@ import FormControl from "../../../Components/Forms/FormControl";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createAdminRoute } from "../../../routes";
+import { convertDate } from "../../../middlewares";
 
 export const LibraryBorrowingEditModule = () => {
   const { idLibrary, idBorrowing } = useParams();
@@ -56,7 +57,7 @@ export const LibraryBorrowingEditModule = () => {
       <ButtonLink
         to={createAdminRoute("LibraryBorrowing", { id: idLibrary })}
         variant="secondary"
-        icon={<ChevronLeftIcon className="h-6 mr-1" />}
+        icon={<ChevronLeftIcon className="h-6 mr-0 md:mr-1" />}
         text="Back"
       />
       <div className="Content mt-4">
@@ -85,7 +86,7 @@ export const LibraryBorrowingEditModule = () => {
 
               axios
                 .put(
-                  createAPI("library/:id", { id: borrowing.id }),
+                  createAPI("borrowing/:id", { id: idBorrowing }),
                   qs.stringify({ ...data })
                 )
                 .then((response) => {
@@ -93,7 +94,7 @@ export const LibraryBorrowingEditModule = () => {
                     // Edited
                     window.scrollTo(0, 0);
                     setAlert({
-                      message: "Library Edited Successfully",
+                      message: "Borrowing Edited Successfully",
                       type: "success",
                     });
                   } else {
@@ -127,7 +128,7 @@ export const LibraryBorrowingEditModule = () => {
             <FormControl
               type="text"
               label="Date Returned"
-              value={borrowing.date_returned}
+              value={convertDate(borrowing.date_returned)}
               disabled
             />
 
@@ -136,15 +137,15 @@ export const LibraryBorrowingEditModule = () => {
                 type="button"
                 text="Extend"
                 variant="yellow"
-                icon={<ClockIcon className="h-6 mr-1" />}
-                onClick={() => extendTime(borrowing.id)}
+                icon={<ClockIcon className="h-6 mr-0 md:mr-1" />}
+                onClick={() => extendTime(idBorrowing)}
               />
 
               <Button
                 type="submit"
                 text="Save"
                 variant="primary"
-                icon={<SaveIcon className="h-6 mr-1" />}
+                icon={<SaveIcon className="h-6 mr-0 md:mr-1" />}
               />
             </div>
           </form>

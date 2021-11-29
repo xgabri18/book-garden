@@ -8,10 +8,7 @@ const FormControl = ({
   name,
   placeholder,
   hideLabel,
-  onChange,
-  min,
-  max,
-  disabled,
+  ...rest
 }) => {
   return (
     <div className="Form-control">
@@ -27,11 +24,8 @@ const FormControl = ({
         name={name}
         placeholder={placeholder}
         className="Form-control-input"
-        onChange={onChange}
         defaultValue={value}
-        min={min}
-        max={max}
-        disabled={disabled}
+        {...rest}
       />
     </div>
   );

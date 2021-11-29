@@ -9,8 +9,6 @@ export const Rating = ({ rating, className }) => {
 
   const [hoveredItem, setHoveredItem] = useState(null);
 
-  /** @todo: PUT Request: Add rating */
-
   for (let i = 0; i < rating; i++) {
     stars.push(
       <StarIcon

@@ -12,6 +12,57 @@ import AuthService from "../../auth";
 import auth from "../../auth";
 
 export const DashboardModule = () => {
+  const modules = [
+    {
+      name: "Book Titles",
+      url: "/admin/book-titles",
+      icon: <BookOpenIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin", "librarian", "distributor"],
+    },
+    {
+      name: "Libraries",
+      url: "/admin/libraries",
+      icon: <LibraryIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin", "admin"],
+    },
+    {
+      name: "Library",
+      url: "/admin/libraries/" + auth.library_id,
+      icon: <LibraryIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin", "librarian"],
+    },
+    {
+      name: "Reservations",
+      url: "/admin/libraries/" + auth.library_id + "/reservations",
+      icon: <CollectionIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin", "librarian"],
+    },
+    {
+      name: "Borrowings",
+      url: "/admin/libraries/" + auth.library_id + "/borrowings",
+      icon: <TicketIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin", "librarian"],
+    },
+    {
+      name: "Users",
+      url: "/admin/users",
+      icon: <UserIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin"],
+    },
+    {
+      name: "Stock",
+      url: "/admin/libraries/" + auth.library_id + "/stock",
+      icon: <ArchiveIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin", "librarian"],
+    },
+    {
+      name: "Orders",
+      url: "/admin/orders",
+      icon: <CreditCardIcon className="h-12 mx-auto text-indigo-600" />,
+      roles: ["admin", "distributor"],
+    },
+  ];
+
   return (
     <>
       <h1 className="text-2xl text-center font-bold my-8">Welcome back</h1>
@@ -39,54 +90,3 @@ export const DashboardModule = () => {
     </>
   );
 };
-
-export const modules = [
-  {
-    name: "Book Titles",
-    url: "/admin/book-titles",
-    icon: <BookOpenIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["admin", "librarian", "distributor"],
-  },
-  {
-    name: "Libraries",
-    url: "/admin/libraries",
-    icon: <LibraryIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["admin"],
-  },
-  {
-    name: "Library",
-    url: "/admin/libraries/" + auth.library_id,
-    icon: <LibraryIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["librarian"],
-  },
-  {
-    name: "Reservations",
-    url: "/admin/libraries/" + auth.library_id + "/reservations",
-    icon: <CollectionIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["librarian"],
-  },
-  {
-    name: "Borrowings",
-    url: "/admin/libraries/" + auth.library_id + "/borrowings",
-    icon: <TicketIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["librarian"],
-  },
-  {
-    name: "Users",
-    url: "/admin/users",
-    icon: <UserIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["admin"],
-  },
-  {
-    name: "Stock",
-    url: "/admin/libraries/" + auth.library_id + "/stock",
-    icon: <ArchiveIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["librarian"],
-  },
-  {
-    name: "Orders",
-    url: "/admin/orders",
-    icon: <CreditCardIcon className="h-12 mx-auto text-indigo-600" />,
-    roles: ["distributor"],
-  },
-];

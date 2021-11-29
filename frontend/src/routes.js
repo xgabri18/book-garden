@@ -18,6 +18,10 @@ import { BookTitleCreateModule } from "./Modules/AdminModule/BookTitle/BookTitle
 import { LibraryCreateModule } from "./Modules/AdminModule/Library/LibraryCreateModule";
 import { LibraryBorrowingEditModule } from "./Modules/AdminModule/Library/LibraryBorrowingEditModule";
 import { UserCreateModule } from "./Modules/AdminModule/User/UserCreateModule";
+import { OrderList } from "./Modules/AdminModule/Orders/OrderList";
+import { LibraryOrderListModule } from "./Modules/AdminModule/Library/LibraryOrderListModule";
+import { LibraryOrderCreateModule } from "./Modules/AdminModule/Library/LibraryOrderCreateModule";
+import { LibraryOrderEditModule } from "./Modules/AdminModule/Library/LibraryOrderEditModule";
 
 /**
  * Front end routes
@@ -103,12 +107,14 @@ export const adminRoutes = [
     roles: ["admin", "librarian"],
     component: LibraryShowModule,
     exact: true,
+    librarian: true,
   },
   {
     name: "LibraryEdit",
     url: "/libraries/:id/edit",
     roles: ["admin", "librarian"],
     component: LibraryEditModule,
+    librarian: true,
   },
   /** Libraries - Reservations */
   {
@@ -116,6 +122,7 @@ export const adminRoutes = [
     url: "/libraries/:id/reservations",
     roles: ["admin", "librarian"],
     component: LibraryReservationModule,
+    librarian: true,
   },
   /** Libraries - Borrowings */
   {
@@ -124,12 +131,14 @@ export const adminRoutes = [
     roles: ["admin", "librarian"],
     component: LibraryBorrowingModule,
     exact: true,
+    librarian: true,
   },
   {
     name: "LibraryBorrowingEdit",
     url: "/libraries/:idLibrary/borrowings/:idBorrowing/edit",
     roles: ["admin", "librarian"],
     component: LibraryBorrowingEditModule,
+    librarian: true,
   },
   /** Libraries - Stock */
   {
@@ -137,6 +146,29 @@ export const adminRoutes = [
     url: "/libraries/:id/stock",
     roles: ["admin", "librarian"],
     component: LibraryStockModule,
+    librarian: true,
+  },
+  /** Libraries - Orders */
+  {
+    name: "LibraryOrderList",
+    url: "/libraries/:id/orders",
+    roles: ["admin", "librarian"],
+    component: LibraryOrderListModule,
+    exact: true,
+  },
+  {
+    name: "LibraryOrderCreate",
+    url: "/libraries/:id/orders/create",
+    roles: ["admin", "librarian"],
+    component: LibraryOrderCreateModule,
+    exact: true,
+  },
+  {
+    name: "LibraryOrderEdit",
+    url: "/libraries/:idLibrary/orders/:idOrder/edit",
+    roles: ["admin", "librarian"],
+    component: LibraryOrderEditModule,
+    exact: true,
   },
   /** Users */
   {
@@ -157,6 +189,14 @@ export const adminRoutes = [
     url: "/users/:id/edit",
     roles: ["admin"],
     component: UserEditModule,
+  },
+  /** Orders */
+  {
+    name: "OrderDistributorList",
+    url: "/orders",
+    roles: ["admin", "distributor"],
+    component: OrderList,
+    exact: true,
   },
 ];
 

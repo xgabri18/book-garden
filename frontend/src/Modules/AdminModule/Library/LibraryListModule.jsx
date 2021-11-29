@@ -19,6 +19,7 @@ import {
   Tbody,
   Thead,
 } from "../../../Components/Ui/Table";
+import { PingLoading } from "../../../Components/Ui/PingLoading";
 
 export const LibraryListModule = () => {
   const [alert, setAlert] = useState(null);
@@ -60,13 +61,13 @@ export const LibraryListModule = () => {
         <ButtonLink
           to={createAdminRoute("Dashboard")}
           variant="secondary"
-          icon={<ChevronLeftIcon className="h-6 mr-1" />}
+          icon={<ChevronLeftIcon className="h-6 mr-0 md:mr-1" />}
           text="Back"
         />
         <ButtonLink
           to={createAdminRoute("LibraryCreate")}
           variant="green"
-          icon={<PlusIcon className="h-6 mr-1" />}
+          icon={<PlusIcon className="h-6 mr-0 md:mr-1" />}
           text="New Library"
         />
       </div>
@@ -78,7 +79,9 @@ export const LibraryListModule = () => {
             onClick={() => setAlert(null)}
           />
         )}
-        <h1 className="Content-Title">Libraries</h1>
+        <h1 className="Content-Title">
+          Libraries {!libraries.length ? <PingLoading /> : ""}
+        </h1>
 
         <div className="overflow-auto">
           <Table>
@@ -102,21 +105,21 @@ export const LibraryListModule = () => {
                       <ButtonLink
                         to={createAdminRoute("LibraryShow", { id: library.id })}
                         variant="primary"
-                        icon={<CogIcon className="h-6 mr-1" />}
+                        icon={<CogIcon className="h-6 mr-0 md:mr-1" />}
                         text="Manage"
                         showText="md"
                       />
                       <ButtonLink
                         to={createAdminRoute("LibraryEdit", { id: library.id })}
                         variant="yellow"
-                        icon={<PencilIcon className="h-6 mr-1" />}
+                        icon={<PencilIcon className="h-6 mr-0 md:mr-1" />}
                         text="Edit"
                         showText="md"
                       />
                       <Button
                         type="button"
                         variant="red"
-                        icon={<TrashIcon className="h-6 mr-1" />}
+                        icon={<TrashIcon className="h-6 mr-0 md:mr-1" />}
                         text="Delete"
                         showText="md"
                         onClick={() => deleteLibrary(library.id)}

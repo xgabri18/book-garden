@@ -19,6 +19,7 @@ import {
   Tbody,
   Thead,
 } from "../../../Components/Ui/Table";
+import { PingLoading } from "../../../Components/Ui/PingLoading";
 
 export const BookTitleListModule = () => {
   const [alert, setAlert] = useState(null);
@@ -78,7 +79,9 @@ export const BookTitleListModule = () => {
             onClick={() => setAlert(null)}
           />
         )}
-        <h1 className="Content-Title">Book titles</h1>
+        <h1 className="Content-Title">
+          Book titles {!bookTitles.length ? <PingLoading /> : ""}
+        </h1>
 
         <div className="overflow-auto">
           <Table>

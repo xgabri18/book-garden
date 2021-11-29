@@ -37,14 +37,6 @@ export const BookTitle = ({ bookTitle }) => {
         </div>
       </div>
       <div className="border-b border-gray-200 w-1/2 my-4 m-auto" />
-      <div className="BookTitle-libraries">
-        {/*bookTitle.libraries.map((library, index) => (
-          <div key={index} className="flex justify-between">
-            <div className="text-lg font-bold">{library}</div>
-            <ButtonLink to="/" variant="primary" size="sm" text="Order" />
-          </div>
-        ))*/}
-      </div>
     </div>
   );
 };

@@ -17,7 +17,7 @@ export const LibraryCreateModule = () => {
       <ButtonLink
         to={createAdminRoute("LibraryList")}
         variant="secondary"
-        icon={<ChevronLeftIcon className="h-6 mr-1" />}
+        icon={<ChevronLeftIcon className="h-6 mr-0 md:mr-1" />}
         text="Back"
       />
       <div className="Content mt-4">
@@ -34,7 +34,7 @@ export const LibraryCreateModule = () => {
             }
 
             axios
-              .post(createAPI("booktitle"), qs.stringify({ ...data }))
+              .post(createAPI("library"), qs.stringify({ ...data }))
               .then((response) => {
                 if (response.data.status === "success") {
                   // Edited
@@ -105,7 +105,7 @@ export const LibraryCreateModule = () => {
               text="Create"
               variant="green"
               className="ml-auto"
-              icon={<PlusIcon className="h-6 mr-1" />}
+              icon={<PlusIcon className="h-6 mr-0 md:mr-1" />}
             />
           </div>
         </form>

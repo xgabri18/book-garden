@@ -32,6 +32,11 @@
     hover:bg-red-600
 }
 
+.Button.red-light {
+    @apply bg-red-50 text-red-900
+    hover:bg-red-100
+}
+
 .Button.yellow {
     @apply bg-yellow-500 text-yellow-50
     hover:bg-yellow-600

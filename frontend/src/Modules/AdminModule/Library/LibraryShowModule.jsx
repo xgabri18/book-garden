@@ -3,6 +3,7 @@ import {
   ArchiveIcon,
   ChevronLeftIcon,
   CollectionIcon,
+  CreditCardIcon,
   LibraryIcon,
   PencilIcon,
   TicketIcon,
@@ -35,13 +36,13 @@ export const LibraryShowModule = () => {
               : createAdminRoute("Dashboard")
           }
           variant="secondary"
-          icon={<ChevronLeftIcon className="h-6 mr-1" />}
+          icon={<ChevronLeftIcon className="h-6 mr-0 md:mr-1" />}
           text="Back"
         />
         <ButtonLink
           to={createAdminRoute("LibraryEdit", { id: library.id })}
           text="Edit"
-          icon={<PencilIcon className="h-6 mr-1" />}
+          icon={<PencilIcon className="h-6 mr-0 md:mr-1" />}
           variant="yellow"
         />
       </div>
@@ -77,6 +78,13 @@ export const LibraryShowModule = () => {
               to={createAdminRoute("LibraryStock", { id: library.id })}
               text="Stock"
               icon={<ArchiveIcon className="h-12 mr-2 text-indigo-600" />}
+              variant="secondary"
+              className="w-full md:w-1/3"
+            />
+            <ButtonLink
+              to={createAdminRoute("LibraryOrderList", { id: library.id })}
+              text="Orders"
+              icon={<CreditCardIcon className="h-12 mr-2 text-indigo-600" />}
               variant="secondary"
               className="w-full md:w-1/3"
             />

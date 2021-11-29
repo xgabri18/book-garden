@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { createAPI } from "../../../api";
-import { Button, ButtonLink } from "../../../Components/Ui/Button";
-import { createAdminRoute } from "../../../routes";
+import { createAPI } from "../../api";
+import { Button, ButtonLink } from "../../Components/Ui/Button";
+import { createAdminRoute } from "../../routes";
 import {
   CheckIcon,
   ChevronLeftIcon,
   TrashIcon,
 } from "@heroicons/react/outline";
-import { Alert } from "../../../Components/Ui/Alert";
+import { Alert } from "../../Components/Ui/Alert";
+import { PingLoading } from "../../Components/Ui/PingLoading";
 import {
   Table,
   TableCol,
@@ -16,13 +18,11 @@ import {
   TableRow,
   Tbody,
   Thead,
-} from "../../../Components/Ui/Table";
-import { useParams } from "react-router-dom";
-import { PingLoading } from "../../../Components/Ui/PingLoading";
+} from "../../Components/Ui/Table";
+import auth from "../../auth";
 
-export const LibraryReservationModule = () => {
+export const AccountReservationModule = () => {
   const [reservations, setReservations] = useState([]);
-  const [library, setLibrary] = useState([]);
   const [alert, setAlert] = useState(null);
   const { id } = useParams();
 
@@ -30,68 +30,24 @@ export const LibraryReservationModule = () => {
     setReservations([]);
 
     axios
-      .get(createAPI("library/:id", { id }))
-      .then((response) => setLibrary(response.data.data))
-      .catch((error) => console.log(error));
-
-    axios
-      .get(createAPI("reservation/of/lib/:id", { id }))
+      .get(createAPI("reservation/person/:id", { id: auth.id }))
       .then((response) => {
         if (response.data.status === "success") {
           response.data.data.map((reservation) => {
             axios
-              .all([
-                axios.get(
-                  createAPI("person/:id", { id: reservation.person_id })
-                ),
-                axios.get(
-                  createAPI("stockinfo/:id", { id: reservation.stock_id })
-                ),
-              ])
-              .then(
-                axios.spread((person, stockinfo) => {
-                  if (
-                    person.data.status === "success" &&
-                    stockinfo.data.status === "success"
-                  ) {
-                    reservation.user =
-                      person.data.data.name + " " + person.data.data.surname;
-                    reservation.bookTitle = stockinfo.data.data.Book_title;
-                    setReservations((state) => [...state, reservation]);
-                  } else {
-                    console.log(person.data, stockinfo.data);
-                  }
-                })
-              );
+              .get(createAPI("stockinfo/:id", { id: reservation.stock_id }))
+              .then((response) => {
+                if (response.data.status === "success") {
+                  reservation.stock = response.data.data;
+                  setReservations((state) => [...state, reservation]);
+                }
+              });
           });
         } else {
         }
       })
       .catch((error) => console.log(error));
   }, [id, alert]);
-
-  function confirmReservation(idReservation) {
-    axios
-      .get(createAPI("reservation/:id", { id: idReservation }))
-      .then((response) => {
-        if (response.data.status === "success") {
-          // Book Deleted
-          window.scrollTo(0, 0);
-          setAlert({
-            message: "Reservation confirmed",
-            type: "success",
-          });
-        } else {
-          // Error
-          window.scrollTo(0, 0);
-          setAlert({
-            message: response.data.message,
-            type: "danger",
-          });
-        }
-      })
-      .catch((error) => console.log(error));
-  }
 
   function deleteReservation(idReservation) {
     axios
@@ -120,7 +76,7 @@ export const LibraryReservationModule = () => {
     <>
       <div className="flex justify-between">
         <ButtonLink
-          to={createAdminRoute("LibraryShow", { id })}
+          to={"/account/profile"}
           variant="secondary"
           icon={<ChevronLeftIcon className="h-6 mr-0 md:mr-1" />}
           text="Back"
@@ -135,8 +91,7 @@ export const LibraryReservationModule = () => {
           />
         )}
         <h1 className="Content-Title relative">
-          {library.name}'s Reservations{" "}
-          {!reservations.length ? <PingLoading /> : ""}
+          Your Reservations {!reservations.length ? <PingLoading /> : ""}
         </h1>
 
         <div className="overflow-auto">
@@ -144,7 +99,7 @@ export const LibraryReservationModule = () => {
             <Thead>
               <TableRow>
                 <TableColHead>#</TableColHead>
-                <TableColHead>User</TableColHead>
+                <TableColHead>Library</TableColHead>
                 <TableColHead>Book</TableColHead>
                 <TableColHead>Date Reservation</TableColHead>
                 <TableColHead>Actions</TableColHead>
@@ -154,19 +109,11 @@ export const LibraryReservationModule = () => {
               {reservations.map((reservation, index) => (
                 <TableRow key={index} index={index} striped>
                   <TableCol>{reservation.id}</TableCol>
-                  <TableCol>{reservation.user}</TableCol>
-                  <TableCol>{reservation.bookTitle}</TableCol>
+                  <TableCol>{reservation.stock.Library_name}</TableCol>
+                  <TableCol>{reservation.stock.Book_title}</TableCol>
                   <TableCol>{reservation.date_of_reservation}</TableCol>
                   <TableCol>
                     <div className="flex items-center gap-2">
-                      <Button
-                        type="button"
-                        variant="green"
-                        icon={<CheckIcon className="h-6 mr-0 md:mr-1" />}
-                        text="Confirm"
-                        showText="md"
-                        onClick={() => confirmReservation(reservation.id)}
-                      />
                       <Button
                         type="button"
                         variant="red"
