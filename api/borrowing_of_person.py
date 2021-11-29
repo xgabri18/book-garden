@@ -20,7 +20,6 @@ from models.models import Reservation,Borrowing,Person
 
 
 
-# TODO knihovnik by nemal vidiet veci z inych kniznic (vidi len borrowings z jeho kniznice) - potom upravim session
 class BorrowingOfPersonRes(MasterResource):
 
     # either person_id or persons e-mail

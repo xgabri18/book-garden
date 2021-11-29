@@ -20,7 +20,7 @@ class ReservationConfirmRes(MasterResource):
 
     # Confirm the reservation
     # Can be done by Admin and Librarian
-    def get(self, id):  # TODO mozno GET/nieco ine?
+    def get(self, id):
 
         # if not ('user_id' in session and (session['user_type'] == 5 or session['user_type'] == 4)):
         #     return self.response_error("Action not allowed for current session!")

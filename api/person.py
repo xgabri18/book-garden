@@ -57,7 +57,7 @@ class PersonResource(MasterResource):
     # Can be done if no session is active
     def post(self,id= None):
         if self.is_logged() and not self.is_admin():
-            return self.response_error("Can not be done while logged in!", "")  # TODO co tu
+            return self.response_error("Can not be done while logged in!", "")
 
         email       = request.form.get("email")
         if email == "":
@@ -121,7 +121,7 @@ class PersonResource(MasterResource):
 
 
     # Edit user
-    # Can be done by Admin and User(can edit his info) TODO moze user editovat vsetko? (user_type urcite nope)
+    # Can be done by Admin and User(can edit his info)
     def put(self, id):
         if not (self.is_logged() and (self.is_admin() or self.is_user(id))):  # is the right person logged //admin
             return self.response_error("Unauthorised action!", "")

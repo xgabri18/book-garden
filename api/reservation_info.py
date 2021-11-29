@@ -22,7 +22,6 @@ class ReservationInfoResource(MasterResource):
 
     # Return list of all existing reservations
     # Can be done by Admin
-    # todo session
     def get(self,id):
         if not (self.is_logged() and self.is_admin()):
             return self.response_error("Unauthorised action!", "debug")

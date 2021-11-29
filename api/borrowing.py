@@ -14,8 +14,7 @@ from shared_db import db
 from datetime import datetime, timedelta
 
 from models.models import Reservation,Borrowing,Stock
-# TODO ako sa bude riesit zaznam v tabulke pri vymazani stocku
-# TODO resourcy pre knihovnika zvlast alebo sem?
+
 
 # SET response_error a response_ok
 # osetrene

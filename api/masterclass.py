@@ -22,9 +22,8 @@ class MasterResource(Resource):  # subclass
     def response_ok(self, data):
         return jsonify({'status': 'success', 'data': data})
 
-    def add_to_stock(self, stock_id, amount):  # TODO zaporny amount je possible?
+    def add_to_stock(self, stock_id, amount):
         stock = Stock.query.filter_by(id=stock_id).first()
-        # TODO mam kontrolovat ci existuje stock ci fck it?
         stock.amount = stock.amount + amount
         db.session.commit()
         #return True
@@ -40,7 +39,7 @@ class MasterResource(Resource):  # subclass
 
     def make_stock_availiable(self, stock):
         stock.availability = True
-        # TODO Remove votes here
+        # Can remove votes here
         db.session.commit()
 
     def stock_in_which_lib(self, stock_id):
