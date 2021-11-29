@@ -29,10 +29,13 @@ export const LibraryBorrowingEditModule = () => {
 
   function extendTime(idBorrowing, borrowingFine) {
     axios
-      .put(createAPI("borrowing/:id", { id: idBorrowing }), {
-        extend: true,
-        fine: borrowingFine,
-      })
+      .put(
+        createAPI("borrowing/:id", { id: idBorrowing }),
+        qs.stringify({
+          extend: true,
+          fine: borrowingFine,
+        })
+      )
       .then((response) => {
         if (response.data.status === "success") {
           window.scrollTo(0, 0);
