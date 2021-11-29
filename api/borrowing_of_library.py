@@ -46,25 +46,29 @@ class BorrowingOfLibraryRes(MasterResource):
             bor = Borrowing.query.filter(Borrowing.stock_id.in_(stock_id_array)).all()
 
         final = []
-        for borrowing in bor:
-            borrowing = borrowing.__dict__
-            stock = Stock.query.filter_by(id = borrowing["stock_id"]).first().__dict__
+        try:
+            for borrowing in bor:
+                borrowing = borrowing.__dict__
+                stock = Stock.query.filter_by(id = borrowing["stock_id"]).first().__dict__
 
-            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
-            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
+                lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).all()
+                book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).all()
 
-            person = Person.query.filter_by(id=borrowing["person_id"]).first().__dict__
+                person = Person.query.filter_by(id=borrowing["person_id"]).first().__dict__
 
-            name = person["name"]
-            surname = person["surname"]
+                name = person["name"]
+                surname = person["surname"]
 
-            del borrowing["_sa_instance_state"]
-            borrowing["name"] = name
-            borrowing["surname"] = surname
-            borrowing["Library_name"] = lib_name[0][0]
-            borrowing["Book_title"] =  book_title[0][0]
+                del borrowing["_sa_instance_state"]
+                borrowing["name"] = name
+                borrowing["surname"] = surname
+                borrowing["Library_name"] = lib_name[0][0]
+                borrowing["Book_title"] =  book_title[0][0]
 
-            final.append(borrowing)
+                final.append(borrowing)
+        except (AttributeError, IndexError):
+            return self.response_ok({})
+
         return self.response_ok(final)
 
 
