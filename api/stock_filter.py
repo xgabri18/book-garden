@@ -47,7 +47,7 @@ class StockFilterResource(MasterResource):
             stock = stock.filter_by(library_id = library_id)
 
         if booktitle_id is not None:
-            print(booktitle_id)
+            #print(booktitle_id)
             stock = stock.filter_by(booktitle_id = booktitle_id)
 
         if author is not None:
