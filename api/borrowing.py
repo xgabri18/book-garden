@@ -75,13 +75,20 @@ class BorrowingResource(MasterResource):
         return self.response_ok("Committed to db")
 
     # Remove borrowing (user returned a book,...) in any library
-    # Can be done by Admin
+    # Can be done by Admin and Librarian (in his/her library)
     def delete(self, id):
 
-        if not (self.is_logged() and self.is_admin()):
+        if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
             return self.response_error("Unauthorised action!", "")
 
         borrowing = Borrowing.query.filter_by(id=id).first()
+        if not borrowing:
+            return self.response_ok({})
+
+        if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+            if borrowing.library_id != self.librarian_in_which_lib(session['user_id']):
+                return self.response_error("Unauthorised action!", "")
+
         try:
             stock = Stock.query.filter_by(id = borrowing.stock_id).first()
             stock.amount +=1
