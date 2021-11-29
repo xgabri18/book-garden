@@ -23,12 +23,12 @@ class ReservationOfLibraryRes(MasterResource):
     # Admin or Librarian (in his/her own library)
     def get(self, library_id):
 
-        # if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
-        #     return self.response_error("Unauthorised action!", "")
-        #
-        # if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-        #     if library_id != self.librarian_in_which_lib(session['user_id']):
-        #         return self.response_error("Unauthorised action!", "")
+        if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
+            return self.response_error("Unauthorised action!", "")
+
+        if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
+            if library_id != self.librarian_in_which_lib(session['user_id']):
+                return self.response_error("Unauthorised action!", "")
 
 
 
@@ -50,37 +50,37 @@ class ReservationOfLibraryRes(MasterResource):
 
 
         final = []
-        #try:
-        for reservation in res:
-            #print(reservation)
-            reservation = reservation.__dict__
-            stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
+        try:
+            for reservation in res:
+                #print(reservation)
+                reservation = reservation.__dict__
+                stock = Stock.query.filter_by(id = reservation["stock_id"]).first().__dict__
 
-            lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).first()
-            book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).first()
+                lib_name = Library.query.with_entities(Library.name).filter_by(id = stock["library_id"]).first()
+                book_title = BookTitle.query.with_entities(BookTitle.name).filter_by(id = stock["booktitle_id"]).first()
 
-            person = Person.query.filter_by(id=reservation["person_id"]).first()
+                person = Person.query.filter_by(id=reservation["person_id"]).first()
 
 
 
-            if person is None:
-                name = ""
-                surname = ""
-            else:
-                person = person.__dict__
+                if person is None:
+                    name = ""
+                    surname = ""
+                else:
+                    person = person.__dict__
 
-                name = person["name"]
-                surname = person["surname"]
+                    name = person["name"]
+                    surname = person["surname"]
 
-            del reservation["_sa_instance_state"]
-            reservation["name"] = name
-            reservation["surname"] = surname
-            reservation["Library_name"] = lib_name[0][0]
-            reservation["Book_title"] =  book_title[0][0]
+                del reservation["_sa_instance_state"]
+                reservation["name"] = name
+                reservation["surname"] = surname
+                reservation["Library_name"] = lib_name[0][0]
+                reservation["Book_title"] =  book_title[0][0]
 
-            final.append(reservation)
-        #except (AttributeError, IndexError):
-        #    self.response_ok({})
+                final.append(reservation)
+        except (AttributeError, IndexError):
+            return self.response_ok({})
 
         return self.response_ok(final)
 
