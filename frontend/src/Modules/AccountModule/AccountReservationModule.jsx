@@ -46,14 +46,12 @@ export const AccountReservationModule = () => {
       .delete(createAPI("reservation/:id", { id: idReservation }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Book Deleted
           window.scrollTo(0, 0);
           setAlert({
             message: "Reservation deleted",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,

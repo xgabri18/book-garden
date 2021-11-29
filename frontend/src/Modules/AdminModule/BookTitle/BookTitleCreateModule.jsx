@@ -35,14 +35,12 @@ export const BookTitleCreateModule = () => {
               .post(createAPI("booktitle"), qs.stringify({ ...data }))
               .then((response) => {
                 if (response.data.status === "success") {
-                  // Edited
                   window.scrollTo(0, 0);
                   setAlert({
                     message: "Book Title Created Successfully",
                     type: "success",
                   });
                 } else {
-                  // Error
                   window.scrollTo(0, 0);
                   setAlert({
                     message: response.data.message,

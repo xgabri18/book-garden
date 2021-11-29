@@ -27,22 +27,20 @@ export const LibraryBorrowingEditModule = () => {
       .catch((error) => console.log(error));
   }, [idBorrowing, idLibrary, alert]);
 
-  function extendTime(idBorrowing) {
+  function extendTime(idBorrowing, borrowingFine) {
     axios
       .put(createAPI("borrowing/:id", { id: idBorrowing }), {
         extend: true,
-        fine: borrowing.fine,
+        fine: borrowingFine,
       })
       .then((response) => {
         if (response.data.status === "success") {
-          // Borrowing Deleted
           window.scrollTo(0, 0);
           setAlert({
             message: "Borrowing updated",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,
@@ -61,14 +59,6 @@ export const LibraryBorrowingEditModule = () => {
         text="Back"
       />
       <div className="Content mt-4">
-        {alert && (
-          <Alert
-            message={alert.message}
-            type={alert.type}
-            onClick={() => setAlert(null)}
-          />
-        )}
-
         <div className="flex flex-col lg:flex-row items-center">
           <div className="w-full lg:w-6/12 mb-8 lg:mb-0 text-center">
             <TicketIcon className="mx-auto h-32 bg-indigo-600 text-white rounded-full p-4" />
@@ -136,7 +126,7 @@ export const LibraryBorrowingEditModule = () => {
                 text="Extend"
                 variant="yellow"
                 icon={<ClockIcon className="h-6 mr-0 md:mr-1" />}
-                onClick={() => extendTime(idBorrowing)}
+                onClick={() => extendTime(idBorrowing, borrowing.fine)}
               />
 
               <Button

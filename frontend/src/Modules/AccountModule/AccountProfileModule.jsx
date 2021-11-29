@@ -33,14 +33,12 @@ const AccountProfileModule = () => {
       .put(createAPI("person/:id", { id: auth.id }), qs.stringify({ ...data }))
       .then((response) => {
         if (response.data.status === "success") {
-          // Edited
           window.scrollTo(0, 0);
           setAlert({
             message: "Profile Edited Successfully",
             type: "success",
           });
         } else {
-          // Error
           window.scrollTo(0, 0);
           setAlert({
             message: response.data.message,

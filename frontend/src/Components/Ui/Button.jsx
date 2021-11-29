@@ -43,6 +43,7 @@ export const ButtonLink = ({
       {...rest}
     >
       {icon}
+      <span className="hidden md:block" />
       <span className={showText ? "hidden " + showText + ":block" : ""}>
         {text}
       </span>
