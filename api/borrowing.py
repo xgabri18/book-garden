@@ -25,7 +25,7 @@ class BorrowingResource(MasterResource):
     # Return list of all existing borrowings from all libraries or a specific borrowing
     # Can be done by Admin and librarian in his own lib
     def get(self, id=None):
-        if not (self.is_logged() and self.is_admin() or self.is_librarian()):
+        if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
             return self.response_error("Unauthorised action!", "")
 
         if id is None:
@@ -46,8 +46,13 @@ class BorrowingResource(MasterResource):
 
             if borrowing:
                 if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-                    if borrowing.library_id != self.librarian_in_which_lib(session['user_id']):
-                        return self.response_error("Unauthorised action!", "")
+                    stock = Stock.query.filter_by(id=borrowing.stock_id).first()
+                    if stock:
+                        if stock.library_id != self.librarian_in_which_lib(session['user_id']):
+                            return self.response_error("Unauthorised action!", "")
+                    else:
+                        return self.response_ok(borrowing)
+
                 borrowing = borrowing[0].__dict__
                 del borrowing["_sa_instance_state"]
 
