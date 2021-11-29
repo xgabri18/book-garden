@@ -43,7 +43,7 @@ class ReservationResource(MasterResource):
 
             if reservation:
                 if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-                    stock = Stock.query.filter_by(id=reservation.stock_id).first()
+                    stock = Stock.query.filter_by(id=reservation[0].stock_id).first()
                     if stock:
                         if stock.library_id != self.librarian_in_which_lib(session['user_id']):
                             return self.response_error("Unauthorised action!", "")

@@ -46,7 +46,7 @@ class BorrowingResource(MasterResource):
 
             if borrowing:
                 if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-                    stock = Stock.query.filter_by(id=borrowing.stock_id).first()
+                    stock = Stock.query.filter_by(id=borrowing[0].stock_id).first()
                     if stock:
                         if stock.library_id != self.librarian_in_which_lib(session['user_id']):
                             return self.response_error("Unauthorised action!", "")
