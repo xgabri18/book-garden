@@ -150,11 +150,14 @@ class PersonResource(MasterResource):
        #print(library_id)
 
         try:
-            person.email       = email
+            if person.email != email:
+                person.email       = email
             if self.is_admin():
                 person.user_type   = user_type
-            person.username    = username
-            person.password    = password
+            if person.username != username:
+                person.username    = username
+            if person.password != password:
+                person.password    = password
             person.name        = name
             person.surname     = surname
             if self.is_admin():
