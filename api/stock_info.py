@@ -22,8 +22,8 @@ class StockInfoResource(MasterResource):
     def get(self,id):
 
         stock = Stock.query.filter_by(id = id).all()
-
-        if stock is None:
+        #print(stock)
+        if not stock:
             return self.response_ok([])
 
         stock = stock[0].__dict__
