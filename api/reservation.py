@@ -12,7 +12,7 @@ from flask import jsonify,request,session
 from shared_db import db
 from sqlalchemy.exc import DBAPIError
 
-from models.models import Reservation,Borrowing
+from models.models import Reservation,Borrowing,Stock
 
 # SET response_error a response_ok
 
@@ -22,7 +22,7 @@ class ReservationResource(MasterResource):
     # Return list of all existing reservations or a specific reservation
     # Can be done by Admin
     def get(self, id=None):
-        if not (self.is_logged() and self.is_admin() or self.is_librarian()):
+        if not (self.is_logged() and (self.is_admin() or self.is_librarian())):
             return self.response_error("Unauthorised action!", "")
 
         if id is None:
@@ -43,8 +43,13 @@ class ReservationResource(MasterResource):
 
             if reservation:
                 if self.is_librarian():  # check if librarian works in the library where he wants to change stuff
-                    if reservation.library_id != self.librarian_in_which_lib(session['user_id']):
-                        return self.response_error("Unauthorised action!", "")
+                    stock = Stock.query.filter_by(id=reservation.stock_id).first()
+                    if stock:
+                        if stock.library_id != self.librarian_in_which_lib(session['user_id']):
+                            return self.response_error("Unauthorised action!", "")
+                    else:
+                        return self.response_ok(reservation)
+
                 reservation = reservation[0].__dict__
                 del reservation["_sa_instance_state"]
 
