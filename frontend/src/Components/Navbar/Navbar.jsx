@@ -37,7 +37,7 @@ export const Navbar = () => {
                 .logout()
                 .then((loggedOut) =>
                   loggedOut
-                    ? history.push("/")
+                    ? (window.location.href = "/")
                     : console.log("Can not log out.")
                 )
             }

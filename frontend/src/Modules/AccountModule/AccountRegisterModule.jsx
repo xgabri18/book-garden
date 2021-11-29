@@ -21,7 +21,7 @@ const AccountRegisterModule = () => {
       .register(data)
       .then((response) => {
         if (response.status === "success") {
-          history.push("/account/login");
+          window.location.href = "/account/login";
         } else {
           window.scrollTo(0, 0);
           setAlert({ message: response.message, type: "danger" });

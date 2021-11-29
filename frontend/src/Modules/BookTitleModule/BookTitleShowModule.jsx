@@ -115,7 +115,7 @@ const BookTitleShowModule = () => {
             .then((response) => {
               if (response.data.status === "success") {
                 setAlert({
-                  message: "Book reserved",
+                  message: "Vote has been removed",
                   type: "success",
                 });
               } else {
@@ -178,7 +178,7 @@ const BookTitleShowModule = () => {
                   {library.stock.availability ? (
                     <Button
                       type="button"
-                      variant="secondary"
+                      variant="yellow-light"
                       text="Reserve"
                       icon={<TicketIcon className="h-6 mr-1" />}
                       className="min-w-full"
@@ -189,7 +189,7 @@ const BookTitleShowModule = () => {
                     ) ? (
                     <Button
                       type="button"
-                      variant="secondary"
+                      variant="red-light"
                       text="Remove Vote"
                       icon={<ThumbDownIcon className="h-6 mr-1" />}
                       className="min-w-full"

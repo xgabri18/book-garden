@@ -74,6 +74,7 @@ class AuthService {
           .then((response) => {
             if (response.data.status === "success") {
               this.username = response.data.data.username;
+              this.password = response.data.data.password;
               this.email = response.data.data.email;
               this.library_id = response.data.data.library_id;
               this.name = response.data.data.name;

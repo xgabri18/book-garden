@@ -41,3 +41,8 @@
     @apply bg-yellow-500 text-yellow-50
     hover:bg-yellow-600
 }
+
+.Button.yellow-light {
+    @apply bg-yellow-50 text-yellow-900
+    hover:bg-yellow-100
+}

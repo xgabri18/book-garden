@@ -20,7 +20,7 @@ const AccountLoginModule = () => {
           e.preventDefault();
           auth.login(username, password).then((response) => {
             if (response.status === "success") {
-              history.push("/account/profile");
+              window.location.href = "/account/profile";
             } else {
               window.scrollTo(0, 0);
               setAlert({ message: response.message, type: "danger" });

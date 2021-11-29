@@ -12,12 +12,9 @@ export const BookTitle = ({ bookTitle }) => {
       <div className="BookTitle-author">{bookTitle.author}</div>
       <div className="w-full flex flex-row justify-between items-center my-2">
         <div className="BookTitle-genre">
-          <Link
-            to={`/genre/${bookTitle.genre}`}
-            className="Link mr-2 transform hover:scale-105 transition duration-200 ease-linear"
-          >
+          <span className="Link mr-2 transform hover:scale-105 transition duration-200 ease-linear">
             {bookTitle.genre}
-          </Link>
+          </span>
         </div>
         <div className="BookTitle-rating">
           <Rating rating={bookTitle.rating / 2} className="h-6" />
