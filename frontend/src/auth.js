@@ -4,7 +4,9 @@ import { createAPI } from "./api";
 
 class AuthService {
   constructor() {
-    this.init();
+    this.checkAuthSession().then((authenticated) => {
+      if (!authenticated) this.init();
+    });
   }
 
   init() {
@@ -42,7 +44,9 @@ class AuthService {
       .post(createAPI("session"), qs.stringify({ username, password }))
       .then((response) => {
         if (response.data.status === "success") {
-          return this.checkAuthSession().then((loggedIn) => loggedIn);
+          // TODO: Check if logged in ?
+          // return this.checkAuthSession().then((loggedIn) => loggedIn);
+          return true;
         } else {
           console.log(response.data);
           return false;
@@ -72,21 +76,23 @@ class AuthService {
         this.id = session.data.data.user_id;
         this.type = this.convertToUserType(session.data.data.user_type);
 
-        axios.get(createAPI("person/:id", { id: this.id })).then((response) => {
-          if (response.data.status === "success") {
-            this.username = response.data.data.username;
-            this.email = response.data.data.email;
-            this.library_id = response.data.data.library_id;
-            this.name = response.data.data.name;
-            this.surname = response.data.data.surname;
-            this.profiledesc = response.data.data.profiledesc;
+        return axios
+          .get(createAPI("person/:id", { id: this.id }))
+          .then((response) => {
+            if (response.data.status === "success") {
+              this.username = response.data.data.username;
+              this.email = response.data.data.email;
+              this.library_id = response.data.data.library_id;
+              this.name = response.data.data.name;
+              this.surname = response.data.data.surname;
+              this.profiledesc = response.data.data.profiledesc;
 
-            console.log("checkAuthSession: " + this.authenticated);
-            return true;
-          } else {
-            console.log("Can not get user info");
-          }
-        });
+              console.log("checkAuthSession: " + this.authenticated);
+              return true;
+            } else {
+              console.log("Can not get user info");
+            }
+          });
       } else {
         this.authenticated = false;
         console.log("checkAuthSession: " + this.authenticated);

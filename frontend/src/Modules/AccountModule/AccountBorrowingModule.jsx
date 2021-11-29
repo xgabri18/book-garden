@@ -67,7 +67,7 @@ export const AccountBorrowingModule = () => {
           />
         )}
         <h1 className="Content-Title relative">
-          {}'s Reservations {!borrowings.length ? <PingLoading /> : ""}
+          Your Borrowings {!borrowings.length ? <PingLoading /> : ""}
         </h1>
 
         <div className="overflow-auto">

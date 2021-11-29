@@ -29,19 +29,19 @@ export const DashboardModule = () => {
       name: "Library",
       url: "/admin/libraries/" + auth.library_id,
       icon: <LibraryIcon className="h-12 mx-auto text-indigo-600" />,
-      roles: ["admin", "librarian"],
+      roles: ["librarian"],
     },
     {
       name: "Reservations",
       url: "/admin/libraries/" + auth.library_id + "/reservations",
       icon: <CollectionIcon className="h-12 mx-auto text-indigo-600" />,
-      roles: ["admin", "librarian"],
+      roles: ["librarian"],
     },
     {
       name: "Borrowings",
       url: "/admin/libraries/" + auth.library_id + "/borrowings",
       icon: <TicketIcon className="h-12 mx-auto text-indigo-600" />,
-      roles: ["admin", "librarian"],
+      roles: ["librarian"],
     },
     {
       name: "Users",
@@ -53,7 +53,7 @@ export const DashboardModule = () => {
       name: "Stock",
       url: "/admin/libraries/" + auth.library_id + "/stock",
       icon: <ArchiveIcon className="h-12 mx-auto text-indigo-600" />,
-      roles: ["admin", "librarian"],
+      roles: ["librarian"],
     },
     {
       name: "Orders",

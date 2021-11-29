@@ -16,6 +16,10 @@ import { Alert } from "../../Components/Ui/Alert";
 import { Link } from "react-router-dom";
 import Textarea from "../../Components/Forms/Textarea";
 
+/**
+ * TODO: AFTER REFRESH LOST DATA
+ */
+
 const AccountProfileModule = () => {
   const [alert, setAlert] = useState(null);
 
@@ -25,8 +29,6 @@ const AccountProfileModule = () => {
     for (let pair of formData.entries()) {
       data[pair[0]] = pair[1];
     }
-
-    console.log(data);
 
     axios
       .put(createAPI("person/:id", { id: auth.id }), qs.stringify({ ...data }))
