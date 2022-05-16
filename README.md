@@ -29,5 +29,5 @@ This application is only a school project and nothing more. The communication is
 
 ## Additional Information
 
-This application is supposed to represent an information system used by libraries with shared DB. There are 3 types of users: User, Librarian and Admin, each with their own permissions. 
+This application is supposed to represent an information system used by libraries with shared DB. There are 4 types of users: User, Librarian, Distributor and Admin, each with their own permissions. 
 Assignment is thoroughly described in file Zadanie.md.
